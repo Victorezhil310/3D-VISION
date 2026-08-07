@@ -1,5 +1,5 @@
 /* ==========================================================================
-   3D VISION - JARVIS AI, Bat-Tech & Nano Mech Engine (v5.0 Ultra)
+   VERTEX 3D VISION - J.A.R.V.I.S. AI, Mech & Dark Knight Bat-Tech Engine (v5.0)
    ========================================================================== */
 
 // --- 3D Perlin/Simplex Noise Implementation ---
@@ -59,7 +59,7 @@ const Noise3D = (function() {
     function lerp(t, a, b) { return a + t * (b - a); }
 })();
 
-// --- Tactical JARVIS Sci-Fi Audio Synthesizer ---
+// --- J.A.R.V.I.S. Audio Synthesizer ---
 const JarvisAudio = (function() {
     let audioCtx = null;
     let enabled = true;
@@ -76,26 +76,7 @@ const JarvisAudio = (function() {
             enabled = !enabled;
             return enabled;
         },
-        playBeep: function(freq = 880) {
-            if (!enabled) return;
-            init();
-            if (!audioCtx) return;
-
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(freq * 1.2, audioCtx.currentTime + 0.05);
-
-            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.05);
-        },
-        playArcPulse: function() {
+        playJarvisBeep: function(freq = 880) {
             if (!enabled) return;
             init();
             if (!audioCtx) return;
@@ -103,40 +84,60 @@ const JarvisAudio = (function() {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.25);
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.8, audioCtx.currentTime + 0.06);
 
-            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
 
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.25);
+            osc.stop(audioCtx.currentTime + 0.06);
+        },
+        playOverdrive: function() {
+            if (!enabled) return;
+            init();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.5);
+
+            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
         }
     };
 })();
 
 // --- Application State ---
 const state = {
-    modelType: 'jarvis_core',    // jarvis_core, bat_mech, nano_tech, intelligent_bot, mechanic_engine
+    modelType: 'jarvis_arc',     // jarvis_arc, bat_symbol, bionic_hand, nano_grid, ai_chip, mech_drone
     baseColor: '#00f2fe',
-    emissiveColor: '#00a8ff',
+    emissiveColor: '#7928ca',
     emissivePower: 1.2,
     metalness: 0.90,
     roughness: 0.15,
     deform: 0.20,
-    rpmSpeed: 1.5,
+    twist: 0,
+    particleCount: 2500,
 
-    // Tactical Modes
-    arcOverdrive: true,
-    stealthMode: false,
-    nanobotSwarm: false,
-    holoWireframe: false,
-    disassembled: false,
+    // Modes
+    wireframe: false,
+    rainbowMode: false,
+    isExploded: false,
+    overdriveMode: false,
 
-    // Animation Loop
+    // Animation
     animActive: true,
+    animSpeed: 0.8,
     animTime: 0
 };
 
@@ -145,14 +146,14 @@ let scene, camera, renderer, controls;
 let mainMeshGroup, mainMesh;
 let keyLight, fillLight, rimLight, ambientLight;
 let gridHelper, particleSystem;
-let orbitRings = [];
-let nanobotParticles = [];
+let jarvisRings = [];
+let supernovaParticles = [];
 
-// --- Performance Tracking ---
+// --- Performance Tracker ---
 let lastFrameTime = performance.now();
 let frameCount = 0;
 
-// --- Initialize App ---
+// --- Initialize Application ---
 window.addEventListener('DOMContentLoaded', () => {
     safeLucideIcons();
     initThreeJS();
@@ -161,7 +162,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     setupCookieConsent();
     animate();
-    showToast('⚡ 3D VISION: JARVIS ARC Protocol Online');
+    showToast('🤖 J.A.R.V.I.S. AI & Bat-Tech Systems Online 100%');
 });
 
 function safeLucideIcons() {
@@ -174,14 +175,14 @@ function safeLucideIcons() {
     }
 }
 
-// --- Three.js Engine Setup ---
+// --- Three.js Setup ---
 function initThreeJS() {
     const canvas = document.getElementById('three-canvas');
 
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 3, 6.5);
+    camera.position.set(0, 3.2, 6.5);
 
     renderer = new THREE.WebGLRenderer({
         canvas: canvas,
@@ -214,16 +215,16 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// --- Environment & Lighting Engine ---
+// --- Environment & Dynamic Lighting ---
 function createEnvironment() {
     scene.background = new THREE.Color(0x04060a);
     scene.fog = new THREE.FogExp2(0x04060a, 0.03);
 
-    gridHelper = new THREE.GridHelper(24, 48, 0x00f2fe, 0x121a2c);
+    gridHelper = new THREE.GridHelper(26, 52, 0x00f2fe, 0x121b2d);
     gridHelper.position.y = -1.8;
     scene.add(gridHelper);
 
-    ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
     keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
@@ -233,21 +234,21 @@ function createEnvironment() {
     keyLight.shadow.mapSize.height = 2048;
     scene.add(keyLight);
 
-    fillLight = new THREE.PointLight(0x00f2fe, 1.5, 20);
-    fillLight.position.set(-6, 2, -4);
+    fillLight = new THREE.PointLight(0x00f2fe, 1.4, 25);
+    fillLight.position.set(-6, 3, -4);
     scene.add(fillLight);
 
-    rimLight = new THREE.PointLight(0x00a8ff, 1.8, 20);
+    rimLight = new THREE.PointLight(0x7928ca, 1.8, 25);
     rimLight.position.set(0, 5, -6);
     scene.add(rimLight);
 
-    createParticleDust();
+    createNanotechParticles();
 }
 
-function createParticleDust() {
+function createNanotechParticles() {
     if (particleSystem) scene.remove(particleSystem);
 
-    const count = 1800;
+    const count = state.particleCount;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
@@ -255,9 +256,9 @@ function createParticleDust() {
     const baseColor = new THREE.Color(state.baseColor);
 
     for (let i = 0; i < count; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * 26;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 26;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 26;
+        positions[i * 3] = (Math.random() - 0.5) * 30;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 30;
 
         colors[i * 3] = baseColor.r + (Math.random() - 0.5) * 0.2;
         colors[i * 3 + 1] = baseColor.g + (Math.random() - 0.5) * 0.2;
@@ -268,7 +269,7 @@ function createParticleDust() {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-        size: 0.04,
+        size: 0.045,
         vertexColors: true,
         transparent: true,
         opacity: 0.65,
@@ -300,9 +301,9 @@ function mergeGeometries(geometries) {
     return merged;
 }
 
-// --- Procedural Mechanical & AI Models ---
+// --- Procedural 3D Model Generators ---
 function build3DModel() {
-    orbitRings = [];
+    jarvisRings = [];
     while (mainMeshGroup.children.length > 0) {
         const obj = mainMeshGroup.children[0];
         if (obj.geometry) obj.geometry.dispose();
@@ -317,27 +318,30 @@ function build3DModel() {
 
     try {
         switch (state.modelType) {
-            case 'jarvis_core':
+            case 'jarvis_arc':
                 geometry = createJarvisArcGeometry();
                 break;
-            case 'bat_mech':
-                geometry = createBatMechGeometry();
+            case 'bat_symbol':
+                geometry = createBatSymbolGeometry();
                 break;
-            case 'nano_tech':
-                geometry = createNanoMatrixGeometry();
+            case 'bionic_hand':
+                geometry = createBionicHandGeometry();
                 break;
-            case 'intelligent_bot':
-                geometry = createAIBotGeometry();
+            case 'nano_grid':
+                geometry = createNanotubeGeometry();
                 break;
-            case 'mechanic_engine':
-                geometry = createKineticEngineGeometry();
+            case 'ai_chip':
+                geometry = createAIChipGeometry();
+                break;
+            case 'mech_drone':
+                geometry = createMechDroneGeometry();
                 break;
             default:
                 geometry = createJarvisArcGeometry();
         }
     } catch (e) {
-        console.error('Model build fallback:', e);
-        geometry = new THREE.IcosahedronGeometry(1.4, 3);
+        console.error('Geometry build fallback:', e);
+        geometry = new THREE.IcosahedronGeometry(1.5, 2);
     }
 
     applySculptDeformation(geometry);
@@ -349,196 +353,246 @@ function build3DModel() {
     mainMesh.receiveShadow = true;
     mainMeshGroup.add(mainMesh);
 
-    // Additional Magnetic Containment Rings & Glow Halos
-    if (state.modelType === 'jarvis_core') {
-        createJarvisHoloRings();
-    } else if (state.modelType === 'bat_mech') {
-        createBatMechEyes();
+    if (state.modelType === 'jarvis_arc') {
+        buildJarvisHolographicRings();
     }
 
     updateHUDStats(geometry);
 }
 
+// --- J.A.R.V.I.S. & Bat-Tech 3D Geometries ---
 function createJarvisArcGeometry() {
     const list = [];
 
-    // Central Plasma Core
-    const core = new THREE.IcosahedronGeometry(0.8, 3);
+    // Central Core Sphere
+    const core = new THREE.IcosahedronGeometry(0.85, 4);
     list.push(core);
 
-    // Magnet Coils Segmented Ring
-    const ring1 = new THREE.TorusGeometry(1.4, 0.12, 16, 40);
-    list.push(ring1);
+    // Inner Containment Ring
+    const innerRing = new THREE.TorusGeometry(1.3, 0.12, 16, 64);
+    list.push(innerRing);
 
-    const ring2 = new THREE.TorusGeometry(1.8, 0.08, 16, 40);
-    list.push(ring2);
+    // Outer Armor Ring
+    const outerRing = new THREE.TorusGeometry(1.8, 0.18, 16, 64);
+    list.push(outerRing);
 
-    // Segmented Outer Housing Blocks
-    for (let i = 0; i < 8; i++) {
-        const angle = (i / 8) * Math.PI * 2;
-        const block = new THREE.BoxGeometry(0.25, 0.25, 0.4);
-        block.position.set(Math.cos(angle) * 1.4, Math.sin(angle) * 1.4, 0);
-        block.rotation.z = angle;
-        list.push(block);
+    // Radiating Plasma Pillars
+    for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2;
+        const pillar = new THREE.CylinderGeometry(0.06, 0.06, 1.2, 8);
+        pillar.rotation.z = Math.PI / 2;
+        pillar.rotation.y = -angle;
+        pillar.translate(Math.cos(angle) * 1.3, 0, Math.sin(angle) * 1.3);
+        list.push(pillar);
     }
 
     return mergeGeometries(list);
 }
 
-function createJarvisHoloRings() {
+function createBatSymbolGeometry() {
+    const list = [];
+
+    // Central Bat Emblem Body
+    const chest = new THREE.BoxGeometry(0.8, 1.2, 0.4, 4, 4, 4);
+    list.push(chest);
+
+    // Left Wing
+    const wingL1 = new THREE.ConeGeometry(0.6, 2.2, 4);
+    wingL1.rotation.z = Math.PI / 3;
+    wingL1.translate(-1.1, 0.3, 0);
+    list.push(wingL1);
+
+    const wingL2 = new THREE.ConeGeometry(0.4, 1.8, 4);
+    wingL2.rotation.z = Math.PI / 2.2;
+    wingL2.translate(-2.0, -0.2, 0);
+    list.push(wingL2);
+
+    // Right Wing
+    const wingR1 = new THREE.ConeGeometry(0.6, 2.2, 4);
+    wingR1.rotation.z = -Math.PI / 3;
+    wingR1.translate(1.1, 0.3, 0);
+    list.push(wingR1);
+
+    const wingR2 = new THREE.ConeGeometry(0.4, 1.8, 4);
+    wingR2.rotation.z = -Math.PI / 2.2;
+    wingR2.translate(2.0, -0.2, 0);
+    list.push(wingR2);
+
+    // Ears
+    const earL = new THREE.ConeGeometry(0.15, 0.6, 4);
+    earL.translate(-0.35, 0.9, 0);
+    list.push(earL);
+
+    const earR = new THREE.ConeGeometry(0.15, 0.6, 4);
+    earR.translate(0.35, 0.9, 0);
+    list.push(earR);
+
+    return mergeGeometries(list);
+}
+
+function createBionicHandGeometry() {
+    const list = [];
+
+    // Metallic Palm Chassis
+    const palm = new THREE.BoxGeometry(1.2, 1.4, 0.5, 6, 6, 6);
+    palm.translate(0, 0, 0);
+    list.push(palm);
+
+    // Wrist Connector
+    const wrist = new THREE.CylinderGeometry(0.4, 0.5, 1.0, 16);
+    wrist.translate(0, -1.2, 0);
+    list.push(wrist);
+
+    // 4 Segmented Fingers
+    for (let f = 0; f < 4; f++) {
+        const xPos = -0.45 + f * 0.3;
+        for (let seg = 0; seg < 3; seg++) {
+            const joint = new THREE.CylinderGeometry(0.08, 0.08, 0.45, 8);
+            joint.translate(xPos, 0.9 + seg * 0.45, 0);
+            list.push(joint);
+
+            const knuckle = new THREE.SphereGeometry(0.1, 8, 8);
+            knuckle.translate(xPos, 0.7 + seg * 0.45, 0);
+            list.push(knuckle);
+        }
+    }
+
+    // Thumb Joint
+    const thumb1 = new THREE.CylinderGeometry(0.09, 0.09, 0.5, 8);
+    thumb1.rotation.z = Math.PI / 4;
+    thumb1.translate(-0.8, 0.1, 0.2);
+    list.push(thumb1);
+
+    return mergeGeometries(list);
+}
+
+function createNanotubeGeometry() {
+    const list = [];
+    const radius = 1.2;
+    const height = 3.6;
+
+    for (let r = 0; r < 8; r++) {
+        const y = (r / 8 - 0.5) * height;
+        const ring = new THREE.TorusGeometry(radius, 0.06, 8, 32);
+        ring.rotation.x = Math.PI / 2;
+        ring.translate(0, y, 0);
+        list.push(ring);
+    }
+
+    for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * Math.PI * 2;
+        const strut = new THREE.CylinderGeometry(0.04, 0.04, height, 8);
+        strut.translate(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+        list.push(strut);
+    }
+
+    return mergeGeometries(list);
+}
+
+function createAIChipGeometry() {
+    const list = [];
+
+    // Main Silicon Substrate
+    const substrate = new THREE.BoxGeometry(2.4, 0.2, 2.4, 8, 2, 8);
+    list.push(substrate);
+
+    // Heat Spreader Cap
+    const cap = new THREE.BoxGeometry(1.6, 0.3, 1.6, 6, 2, 6);
+    cap.translate(0, 0.2, 0);
+    list.push(cap);
+
+    // Gold Connector Pins Array
+    for (let i = -1.0; i <= 1.0; i += 0.2) {
+        const pin1 = new THREE.BoxGeometry(0.06, 0.08, 0.3);
+        pin1.translate(i, -0.12, 1.3);
+        list.push(pin1);
+
+        const pin2 = new THREE.BoxGeometry(0.06, 0.08, 0.3);
+        pin2.translate(i, -0.12, -1.3);
+        list.push(pin2);
+
+        const pin3 = new THREE.BoxGeometry(0.3, 0.08, 0.06);
+        pin3.translate(1.3, -0.12, i);
+        list.push(pin3);
+
+        const pin4 = new THREE.BoxGeometry(0.3, 0.08, 0.06);
+        pin4.translate(-1.3, -0.12, i);
+        list.push(pin4);
+    }
+
+    return mergeGeometries(list);
+}
+
+function createMechDroneGeometry() {
+    const list = [];
+
+    // Central Stealth Chassis
+    const body = new THREE.ConeGeometry(0.8, 2.6, 4);
+    body.rotation.x = Math.PI / 2;
+    list.push(body);
+
+    // Swept Delta Wings
+    const wingL = new THREE.BoxGeometry(2.2, 0.08, 1.2);
+    wingL.rotation.y = Math.PI / 6;
+    wingL.translate(-1.1, 0, 0.2);
+    list.push(wingL);
+
+    const wingR = new THREE.BoxGeometry(2.2, 0.08, 1.2);
+    wingR.rotation.y = -Math.PI / 6;
+    wingR.translate(1.1, 0, 0.2);
+    list.push(wingR);
+
+    // Dual Thrusters
+    const engine1 = new THREE.CylinderGeometry(0.25, 0.25, 1.2, 16);
+    engine1.rotation.x = Math.PI / 2;
+    engine1.translate(-0.6, 0.1, -1.1);
+    list.push(engine1);
+
+    const engine2 = new THREE.CylinderGeometry(0.25, 0.25, 1.2, 16);
+    engine2.rotation.x = Math.PI / 2;
+    engine2.translate(0.6, 0.1, -1.1);
+    list.push(engine2);
+
+    return mergeGeometries(list);
+}
+
+function buildJarvisHolographicRings() {
     const ringMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(state.baseColor),
         emissive: new THREE.Color(state.emissiveColor),
-        emissiveIntensity: 1.8,
+        emissiveIntensity: 2.0,
         wireframe: true,
         transparent: true,
-        opacity: 0.75
+        opacity: 0.8
     });
 
-    const angles = [
-        { rx: Math.PI / 4, ry: 0, rz: Math.PI / 6 },
-        { rx: -Math.PI / 4, ry: Math.PI / 3, rz: 0 },
-        { rx: 0, ry: -Math.PI / 4, rz: Math.PI / 3 }
-    ];
-
-    angles.forEach((rot, i) => {
-        const ringGeo = new THREE.TorusGeometry(2.2, 0.02, 16, 80);
+    for (let r = 1; r <= 3; r++) {
+        const ringGeo = new THREE.TorusGeometry(r * 0.9, 0.02, 16, 64);
         const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-        ringMesh.rotation.set(rot.rx, rot.ry, rot.rz);
+        ringMesh.rotation.x = (r * Math.PI) / 4;
         mainMeshGroup.add(ringMesh);
-
-        // Orbiting energy node
-        const nodeGeo = new THREE.SphereGeometry(0.12, 16, 16);
-        const nodeMat = new THREE.MeshStandardMaterial({
-            color: 0xffffff,
-            emissive: new THREE.Color(state.emissiveColor),
-            emissiveIntensity: 2.5
-        });
-        const nodeMesh = new THREE.Mesh(nodeGeo, nodeMat);
-        mainMeshGroup.add(nodeMesh);
-
-        orbitRings.push({ mesh: nodeMesh, radius: 2.2, rot: rot, speed: 1.8 + i * 0.4, offset: i * Math.PI * 0.6 });
-    });
-}
-
-function createBatMechGeometry() {
-    const list = [];
-
-    // Stealth Cowl Monolith
-    const cowl = new THREE.IcosahedronGeometry(1.1, 1);
-    list.push(cowl);
-
-    // Angled Swept-back Carbon Wings
-    const wingL = new THREE.ConeGeometry(0.5, 2.2, 4);
-    wingL.rotation.z = -Math.PI / 3;
-    wingL.rotation.x = -0.4;
-    wingL.translate(-1.2, 0.2, -0.4);
-    list.push(wingL);
-
-    const wingR = new THREE.ConeGeometry(0.5, 2.2, 4);
-    wingR.rotation.z = Math.PI / 3;
-    wingR.rotation.x = -0.4;
-    wingR.translate(1.2, 0.2, -0.4);
-    list.push(wingR);
-
-    // Front Stealth Armor Shield
-    const shield = new THREE.BoxGeometry(1.0, 0.8, 1.2, 4, 4, 4);
-    shield.translate(0, -0.3, 0.8);
-    list.push(shield);
-
-    return mergeGeometries(list);
-}
-
-function createBatMechEyes() {
-    const eyeMat = new THREE.MeshStandardMaterial({
-        color: 0xff003c,
-        emissive: 0xff003c,
-        emissiveIntensity: 3.0
-    });
-
-    const eyeL = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.08, 0.2), eyeMat);
-    eyeL.position.set(-0.35, 0.2, 1.1);
-    eyeL.rotation.z = -0.2;
-    mainMeshGroup.add(eyeL);
-
-    const eyeR = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.08, 0.2), eyeMat);
-    eyeR.position.set(0.35, 0.2, 1.1);
-    eyeR.rotation.z = 0.2;
-    mainMeshGroup.add(eyeR);
-}
-
-function createNanoMatrixGeometry() {
-    const list = [];
-    const radius = 1.4;
-    const count = 30;
-
-    for (let i = 0; i < count; i++) {
-        const phi = Math.acos(-1 + (2 * i) / count);
-        const theta = Math.sqrt(count * Math.PI) * phi;
-
-        const x = radius * Math.cos(theta) * Math.sin(phi);
-        const y = radius * Math.sin(theta) * Math.sin(phi);
-        const z = radius * Math.cos(phi);
-
-        const node = new THREE.SphereGeometry(0.12, 8, 8);
-        node.translate(x, y, z);
-        list.push(node);
-
-        if (i > 0) {
-            const bar = new THREE.CylinderGeometry(0.025, 0.025, 0.8, 6);
-            bar.position.set(x * 0.8, y * 0.8, z * 0.8);
-            bar.rotation.x = x;
-            bar.rotation.y = y;
-            list.push(bar);
-        }
+        jarvisRings.push({ mesh: ringMesh, speed: 0.8 + r * 0.4 });
     }
-    return mergeGeometries(list);
-}
-
-function createAIBotGeometry() {
-    const list = [];
-    // Cranium Core
-    const head = new THREE.IcosahedronGeometry(1.0, 2);
-    list.push(head);
-
-    // Quad Optical Lenses
-    const visor = new THREE.BoxGeometry(1.2, 0.4, 0.6);
-    visor.translate(0, 0.1, 0.8);
-    list.push(visor);
-
-    // Neck Actuator Rods
-    const neck = new THREE.CylinderGeometry(0.4, 0.4, 1.0, 12);
-    neck.translate(0, -1.0, 0);
-    list.push(neck);
-
-    return mergeGeometries(list);
-}
-
-function createKineticEngineGeometry() {
-    const list = [];
-
-    // Central Turbine Core
-    const core = new THREE.CylinderGeometry(0.8, 0.8, 2.6, 24);
-    list.push(core);
-
-    // Outer Gear Rings
-    const ring1 = new THREE.TorusGeometry(1.5, 0.18, 16, 32);
-    list.push(ring1);
-
-    const ring2 = new THREE.TorusGeometry(1.8, 0.12, 16, 32);
-    ring2.rotation.x = Math.PI / 2;
-    list.push(ring2);
-
-    return mergeGeometries(list);
 }
 
 function applySculptDeformation(geometry) {
     const pos = geometry.attributes.position;
     const v = new THREE.Vector3();
     const amp = state.deform;
+    const twist = (state.twist * Math.PI) / 180;
 
     for (let i = 0; i < pos.count; i++) {
         v.fromBufferAttribute(pos, i);
+
+        if (twist !== 0) {
+            const angle = v.y * twist * 0.5;
+            const cosA = Math.cos(angle);
+            const sinA = Math.sin(angle);
+            const x = v.x * cosA - v.z * sinA;
+            const z = v.x * sinA + v.z * cosA;
+            v.x = x;
+            v.z = z;
+        }
 
         if (amp > 0) {
             const noiseVal = Noise3D.fbm(v.x * 2.5, v.y * 2.5, v.z * 2.5, 3);
@@ -552,70 +606,53 @@ function applySculptDeformation(geometry) {
 }
 
 function createMaterial() {
-    const colorHex = state.stealthMode ? '#0d0d12' : state.baseColor;
-    const emissiveHex = state.stealthMode ? '#ff003c' : state.emissiveColor;
-
     return new THREE.MeshStandardMaterial({
-        color: new THREE.Color(colorHex),
-        roughness: state.stealthMode ? 0.45 : state.roughness,
-        metalness: state.stealthMode ? 0.95 : state.metalness,
-        emissive: new THREE.Color(emissiveHex),
-        emissiveIntensity: state.arcOverdrive ? state.emissivePower * 1.5 : state.emissivePower,
-        wireframe: state.holoWireframe
+        color: new THREE.Color(state.baseColor),
+        roughness: state.roughness,
+        metalness: state.metalness,
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
     });
 }
 
 // --- Event Listeners Setup ---
 function setupEventListeners() {
-    // Model Tabs
-    document.querySelectorAll('.tech-tab').forEach(tab => {
+    document.querySelectorAll('.model-tab').forEach(tab => {
         tab.addEventListener('click', (e) => {
-            document.querySelectorAll('.tech-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.model-tab').forEach(t => t.classList.remove('active'));
             const target = e.currentTarget;
             target.classList.add('active');
             state.modelType = target.dataset.model;
-            JarvisAudio.playBeep(920);
-
-            // Auto-switch colors for Bat-Tech
-            if (state.modelType === 'bat_mech') {
-                state.stealthMode = true;
-                document.getElementById('hud-protocol').textContent = 'BAT-TECH STEALTH OVERDRIVE';
-            } else {
-                state.stealthMode = false;
-                document.getElementById('hud-protocol').textContent = 'JARVIS ARC ONLINE';
-            }
-
+            JarvisAudio.playJarvisBeep(640);
             build3DModel();
-            showToast(`Engaged Protocol: ${target.textContent.trim()}`);
+            showToast(`J.A.R.V.I.S. System Loaded: ${target.textContent.trim()}`);
         });
     });
 
-    // SFX Toggle
-    const btnSfx = document.getElementById('btn-toggle-sfx');
-    if (btnSfx) {
-        btnSfx.addEventListener('click', () => {
+    const btnSound = document.getElementById('btn-toggle-sound');
+    if (btnSound) {
+        btnSound.addEventListener('click', () => {
             const enabled = JarvisAudio.toggle();
-            const icon = document.getElementById('sfx-icon');
+            const icon = document.getElementById('sound-icon');
             if (icon) icon.setAttribute('data-lucide', enabled ? 'volume-2' : 'volume-x');
             safeLucideIcons();
-            showToast(enabled ? 'JARVIS Audio Synthesizer ON 🔊' : 'Audio SFX Muted 🔇');
+            showToast(enabled ? 'J.A.R.V.I.S. Audio Enabled 🔊' : 'Audio Muted 🔇');
         });
     }
 
-    // Left Panel Toggle
-    const btnTogglePanel = document.getElementById('btn-toggle-panel');
-    const panel = document.getElementById('tactical-panel');
-    if (btnTogglePanel && panel) {
-        btnTogglePanel.addEventListener('click', () => {
-            panel.classList.toggle('collapsed');
-            JarvisAudio.playBeep(450);
+    const btnToggleDrawer = document.getElementById('btn-toggle-drawer');
+    const drawer = document.getElementById('side-drawer');
+    if (btnToggleDrawer && drawer) {
+        btnToggleDrawer.addEventListener('click', () => {
+            drawer.classList.toggle('collapsed');
+            JarvisAudio.playJarvisBeep(450);
         });
     }
 
-    // Color Pickers
-    const pickerBase = document.getElementById('picker-base-color');
-    if (pickerBase) {
-        pickerBase.addEventListener('input', (e) => {
+    const pickerColor = document.getElementById('picker-color');
+    if (pickerColor) {
+        pickerColor.addEventListener('input', (e) => {
             state.baseColor = e.target.value;
             if (mainMesh && mainMesh.material && mainMesh.material.color) {
                 mainMesh.material.color.set(state.baseColor);
@@ -623,7 +660,7 @@ function setupEventListeners() {
         });
     }
 
-    const pickerEmissive = document.getElementById('picker-emissive-color');
+    const pickerEmissive = document.getElementById('picker-emissive');
     if (pickerEmissive) {
         pickerEmissive.addEventListener('input', (e) => {
             state.emissiveColor = e.target.value;
@@ -633,18 +670,17 @@ function setupEventListeners() {
         });
     }
 
-    // Range Sliders
-    bindRange('slider-emissive-power', 'val-emissive-power', v => {
+    bindRange('slider-emissive', 'val-emissive-power', v => {
         state.emissivePower = parseFloat(v);
         if (mainMesh && mainMesh.material) mainMesh.material.emissiveIntensity = state.emissivePower;
     });
 
-    bindRange('slider-metalness', 'val-metalness', v => {
+    bindRange('slider-metal', 'val-metal', v => {
         state.metalness = parseFloat(v);
         if (mainMesh && mainMesh.material) mainMesh.material.metalness = state.metalness;
     });
 
-    bindRange('slider-roughness', 'val-roughness', v => {
+    bindRange('slider-rough', 'val-rough', v => {
         state.roughness = parseFloat(v);
         if (mainMesh && mainMesh.material) mainMesh.material.roughness = state.roughness;
     });
@@ -654,65 +690,89 @@ function setupEventListeners() {
         build3DModel();
     });
 
-    bindRange('slider-rpm', 'val-rpm', v => {
-        state.rpmSpeed = parseFloat(v);
-        document.getElementById('footer-rpm-text').textContent = `Kinetic Rotation Active (${state.rpmSpeed} RPM)`;
-        return v + 'x';
+    bindRange('slider-twist', 'val-twist', v => {
+        state.twist = parseInt(v);
+        build3DModel();
+        return v + '°';
     });
 
-    // Tactical Actions
-    const btnArc = document.getElementById('btn-jarvis-overdrive');
-    if (btnArc) {
-        btnArc.addEventListener('click', (e) => {
-            state.arcOverdrive = !state.arcOverdrive;
-            e.currentTarget.classList.toggle('active', state.arcOverdrive);
-            JarvisAudio.playArcPulse();
+    bindRange('slider-particles', 'val-particles', v => {
+        state.particleCount = parseInt(v);
+        createNanotechParticles();
+    });
+
+    const btnOverdrive = document.getElementById('btn-jarvis-overdrive');
+    if (btnOverdrive) {
+        btnOverdrive.addEventListener('click', (e) => {
+            state.overdriveMode = !state.overdriveMode;
+            e.currentTarget.classList.toggle('active', state.overdriveMode);
+            JarvisAudio.playOverdrive();
+            showToast(state.overdriveMode ? '⚡ J.A.R.V.I.S. OVERDRIVE 200% ACTIVATED' : 'Overdrive Disengaged');
+        });
+    }
+
+    const btnRainbow = document.getElementById('btn-rainbow');
+    if (btnRainbow) {
+        btnRainbow.addEventListener('click', (e) => {
+            state.rainbowMode = !state.rainbowMode;
+            e.currentTarget.classList.toggle('active', state.rainbowMode);
+            JarvisAudio.playJarvisBeep(700);
+            showToast(state.rainbowMode ? '🌈 Holographic Prism Shift ON' : 'Prism Shift OFF');
+        });
+    }
+
+    const btnExplode = document.getElementById('fun-btn-explode');
+    if (btnExplode) {
+        btnExplode.addEventListener('click', () => {
+            state.isExploded = !state.isExploded;
+            JarvisAudio.playOverdrive();
+            showToast(state.isExploded ? '⚙️ Mech Components Disassembled' : 'Mech Reassembled');
+        });
+    }
+
+    const btnSupernova = document.getElementById('btn-supernova');
+    if (btnSupernova) {
+        btnSupernova.addEventListener('click', () => {
+            triggerQuantumBurst();
+            JarvisAudio.playOverdrive();
+            showToast('✨ Quantum Energy Explosion!');
+        });
+    }
+
+    const btnWireframe = document.getElementById('btn-wireframe');
+    if (btnWireframe) {
+        btnWireframe.addEventListener('click', (e) => {
+            state.wireframe = !state.wireframe;
+            e.currentTarget.classList.toggle('active', state.wireframe);
+            if (mainMesh && mainMesh.material) mainMesh.material.wireframe = state.wireframe;
+            JarvisAudio.playJarvisBeep(520);
+            showToast(state.wireframe ? 'Blueprint Wireframe ON' : 'Wireframe OFF');
+        });
+    }
+
+    const btnRandomAll = document.getElementById('btn-random-all');
+    if (btnRandomAll) {
+        btnRandomAll.addEventListener('click', () => {
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            const randomEmissive = '#' + Math.floor(Math.random()*16777215).toString(16);
+            state.baseColor = randomColor;
+            state.emissiveColor = randomEmissive;
+            state.deform = parseFloat((Math.random() * 1.0).toFixed(2));
+            state.twist = Math.floor(Math.random() * 360 - 180);
+
+            document.getElementById('picker-color').value = randomColor;
+            document.getElementById('picker-emissive').value = randomEmissive;
+            document.getElementById('slider-deform').value = state.deform;
+            document.getElementById('val-deform').textContent = state.deform;
+            document.getElementById('slider-twist').value = state.twist;
+            document.getElementById('val-twist').textContent = state.twist + '°';
+
+            JarvisAudio.playJarvisBeep(800);
             build3DModel();
-            showToast(state.arcOverdrive ? '⚡ JARVIS Arc Overdrive Plasma ACTIVE' : 'Plasma Overdrive Standby');
+            showToast('🎲 Random Mech Specification Loaded');
         });
     }
 
-    const btnStealth = document.getElementById('btn-stealth-mode');
-    if (btnStealth) {
-        btnStealth.addEventListener('click', (e) => {
-            state.stealthMode = !state.stealthMode;
-            e.currentTarget.classList.toggle('active', state.stealthMode);
-            JarvisAudio.playArcPulse();
-            build3DModel();
-            showToast(state.stealthMode ? '🦇 Bat-Tech Carbon Stealth ENGAGED' : 'Stealth Deactivated');
-        });
-    }
-
-    const btnNanobot = document.getElementById('btn-nanobot-assembly');
-    if (btnNanobot) {
-        btnNanobot.addEventListener('click', () => {
-            triggerNanobotSwarm();
-            JarvisAudio.playArcPulse();
-            showToast('✨ Nanobot Reconstitution Swarm!');
-        });
-    }
-
-    const btnHoloWire = document.getElementById('btn-holo-wireframe');
-    if (btnHoloWire) {
-        btnHoloWire.addEventListener('click', (e) => {
-            state.holoWireframe = !state.holoWireframe;
-            e.currentTarget.classList.toggle('active', state.holoWireframe);
-            if (mainMesh && mainMesh.material) mainMesh.material.wireframe = state.holoWireframe;
-            JarvisAudio.playBeep(650);
-            showToast(state.holoWireframe ? 'Holographic HUD Wireframe ON' : 'Wireframe OFF');
-        });
-    }
-
-    const btnDisassemble = document.getElementById('btn-disassemble-mech');
-    if (btnDisassemble) {
-        btnDisassemble.addEventListener('click', () => {
-            state.disassembled = !state.disassembled;
-            JarvisAudio.playArcPulse();
-            showToast(state.disassembled ? '⚙️ Mechanical Explode Matrix Engaged' : 'Reassembled Mechanical Module');
-        });
-    }
-
-    // Play Pause Button
     const btnPlayPause = document.getElementById('btn-play-pause');
     if (btnPlayPause) {
         btnPlayPause.addEventListener('click', () => {
@@ -720,11 +780,16 @@ function setupEventListeners() {
             const icon = document.getElementById('play-icon');
             if (icon) icon.setAttribute('data-lucide', state.animActive ? 'pause' : 'play');
             safeLucideIcons();
-            document.getElementById('footer-rpm-text').textContent = state.animActive ? `Kinetic Rotation Active (${state.rpmSpeed} RPM)` : 'Kinetic Rotation Paused';
+            document.getElementById('anim-status-text').textContent = state.animActive ? `Active (${state.animSpeed} RPM)` : 'Paused';
         });
     }
 
-    // Header Actions
+    bindRange('slider-speed', 'val-speed', v => {
+        state.animSpeed = parseFloat(v);
+        document.getElementById('anim-status-text').textContent = state.animActive ? `Active (${state.animSpeed} RPM)` : 'Paused';
+        return v + 'x';
+    });
+
     const btnSnapshot = document.getElementById('btn-snapshot');
     if (btnSnapshot) btnSnapshot.addEventListener('click', openSnapshotModal);
     const modalClose = document.getElementById('modal-close');
@@ -732,8 +797,8 @@ function setupEventListeners() {
     const modalCancel = document.getElementById('modal-cancel');
     if (modalCancel) modalCancel.addEventListener('click', closeSnapshotModal);
 
-    const btnExportObj = document.getElementById('btn-export-obj');
-    if (btnExportObj) btnExportObj.addEventListener('click', exportOBJModel);
+    const btnExport3D = document.getElementById('btn-export-3d');
+    if (btnExport3D) btnExport3D.addEventListener('click', exportOBJModel);
 
     const btnFullscreen = document.getElementById('btn-fullscreen');
     if (btnFullscreen) {
@@ -769,8 +834,8 @@ function bindRange(sliderId, valId, callback) {
     });
 }
 
-function triggerNanobotSwarm() {
-    const count = 250;
+function triggerQuantumBurst() {
+    const count = 350;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
     const velocities = [];
@@ -781,16 +846,16 @@ function triggerNanobotSwarm() {
         positions[i * 3 + 2] = 0;
 
         velocities.push(new THREE.Vector3(
-            (Math.random() - 0.5) * 6,
-            (Math.random() - 0.5) * 6,
-            (Math.random() - 0.5) * 6
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10
         ));
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const mat = new THREE.PointsMaterial({
-        size: 0.1,
-        color: new THREE.Color(state.stealthMode ? '#ff003c' : state.baseColor),
+        size: 0.12,
+        color: new THREE.Color(state.baseColor),
         transparent: true,
         opacity: 1.0,
         blending: THREE.AdditiveBlending
@@ -799,7 +864,7 @@ function triggerNanobotSwarm() {
     const pSystem = new THREE.Points(geometry, mat);
     scene.add(pSystem);
 
-    nanobotParticles.push({ system: pSystem, velocities: velocities, life: 1.0 });
+    supernovaParticles.push({ system: pSystem, velocities: velocities, life: 1.0 });
 }
 
 // --- Main Animation Loop ---
@@ -818,53 +883,51 @@ function animate() {
 
     if (controls) controls.update();
 
+    const currentSpeed = state.overdriveMode ? state.animSpeed * 2.5 : state.animSpeed;
+
     if (state.animActive) {
-        state.animTime += delta * state.rpmSpeed;
-        mainMeshGroup.rotation.y += delta * 0.6 * state.rpmSpeed;
+        state.animTime += delta * currentSpeed;
+        mainMeshGroup.rotation.y += delta * 0.7 * currentSpeed;
     }
 
-    // Explode Disassemble Mode
+    if (state.rainbowMode && mainMesh && mainMesh.material) {
+        const hue = (state.animTime * 0.25) % 1;
+        mainMesh.material.color.setHSL(hue, 1.0, 0.5);
+    }
+
     if (mainMesh) {
-        const targetScale = state.disassembled ? 1.45 : 1.0;
+        const targetScale = state.isExploded ? 1.5 : 1.0;
         mainMesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
     }
 
-    // Orbiting Hologram / Moon Nodes
-    if (orbitRings.length > 0) {
-        orbitRings.forEach(orb => {
-            const angle = state.animTime * orb.speed + orb.offset;
-            const x = Math.cos(angle) * orb.radius;
-            const y = Math.sin(angle) * orb.radius;
-
-            const pos = new THREE.Vector3(x, y, 0);
-            pos.applyEuler(new THREE.Euler(orb.rot.rx, orb.rot.ry, orb.rot.rz));
-            orb.mesh.position.copy(pos);
+    if (jarvisRings.length > 0) {
+        jarvisRings.forEach(ring => {
+            ring.mesh.rotation.z += delta * ring.speed * currentSpeed;
+            ring.mesh.rotation.y += delta * ring.speed * 0.5 * currentSpeed;
         });
     }
 
-    // Particle Dust Drift
     if (particleSystem) {
-        particleSystem.rotation.y += delta * 0.03;
+        particleSystem.rotation.y += delta * 0.03 * currentSpeed;
     }
 
-    // Animate Nanobot Swarms
-    for (let i = nanobotParticles.length - 1; i >= 0; i--) {
-        const swarm = nanobotParticles[i];
-        swarm.life -= delta * 1.5;
-        const pos = swarm.system.geometry.attributes.position;
+    for (let i = supernovaParticles.length - 1; i >= 0; i--) {
+        const burst = supernovaParticles[i];
+        burst.life -= delta * 1.5;
+        const pos = burst.system.geometry.attributes.position;
 
-        for (let j = 0; j < swarm.velocities.length; j++) {
-            const v = swarm.velocities[j];
+        for (let j = 0; j < burst.velocities.length; j++) {
+            const v = burst.velocities[j];
             pos.setXYZ(j, pos.getX(j) + v.x * delta, pos.getY(j) + v.y * delta, pos.getZ(j) + v.z * delta);
         }
         pos.needsUpdate = true;
-        swarm.system.material.opacity = swarm.life;
+        burst.system.material.opacity = burst.life;
 
-        if (swarm.life <= 0) {
-            scene.remove(swarm.system);
-            swarm.system.geometry.dispose();
-            swarm.system.material.dispose();
-            nanobotParticles.splice(i, 1);
+        if (burst.life <= 0) {
+            scene.remove(burst.system);
+            burst.system.geometry.dispose();
+            burst.system.material.dispose();
+            supernovaParticles.splice(i, 1);
         }
     }
 
@@ -894,7 +957,7 @@ function openSnapshotModal() {
     if (previewImg) previewImg.src = dataURL;
     if (downloadLink) downloadLink.href = dataURL;
     if (modal) modal.classList.add('active');
-    JarvisAudio.playBeep(750);
+    JarvisAudio.playJarvisBeep(750);
 }
 
 function closeSnapshotModal() {
@@ -915,11 +978,11 @@ function exportOBJModel() {
         const blob = new Blob([result], { type: 'text/plain' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `3d_vision_${state.modelType}_${Date.now()}.obj`;
+        link.download = `nexus_3d_${state.modelType}_${Date.now()}.obj`;
         link.click();
 
-        showToast('⚡ 3D Mech Exported (.OBJ)');
-        JarvisAudio.playBeep(850);
+        showToast('🤖 J.A.R.V.I.S. 3D Model Exported (.OBJ)');
+        JarvisAudio.playJarvisBeep(850);
     } catch (e) {
         console.error('Export OBJ Error:', e);
         showToast('Export failed, try simple model');
