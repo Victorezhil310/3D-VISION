@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VERTEX 3D VISION - J.A.R.V.I.S. AI, Mech & Dark Knight Bat-Tech Studio</title>
-    <meta name="description" content="View, build, sculpt, and customize high-fidelity 3D mech products, J.A.R.V.I.S. holographic arc reactors, Dark Knight Bat-Tech armor, bionic cyber hands, AI quantum microchips, and carbon nanotech in real-time WebGL.">
+    <title>VERTEX 3D VISION - Cyber Hero Sentinel, J.A.R.V.I.S. & Bat-Tech Studio</title>
+    <meta name="description" content="View, build, sculpt, and customize high-fidelity 3D mech characters, Cyber Sentinel Hero, Android Robot, J.A.R.V.I.S. arc reactors, Dark Knight Bat-Tech armor, bionic cyber hands, AI microchips, and nanotech in WebGL.">
     
-    <!-- Google AdSense Account Verification -->
+    <!-- Google AdSense Verification & Account Script -->
     <meta name="google-adsense-account" content="ca-pub-6751037211810646">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6751037211810646" crossorigin="anonymous"></script>
 
@@ -30,46 +30,49 @@
         <!-- Fullscreen WebGL 3D Canvas -->
         <canvas id="three-canvas"></canvas>
 
-        <!-- Top Glass Navigation Bar -->
+        <!-- Top Navigation Bar -->
         <header class="top-nav">
             <div class="brand">
                 <div class="logo-box">
-                    <i data-lucide="cpu"></i>
+                    <i data-lucide="bot"></i>
                 </div>
                 <div class="brand-info">
-                    <h1>VERTEX <span>3D MECH VISION</span></h1>
-                    <span class="badge"><i data-lucide="zap"></i> J.A.R.V.I.S. & BAT-TECH ENGINE v5.0</span>
+                    <h1>VERTEX <span>3D HERO VISION</span></h1>
+                    <span class="badge"><i data-lucide="shield"></i> CYBER HERO & CHARACTERS v7.0</span>
                 </div>
             </div>
 
-            <!-- Model Switcher Bar -->
+            <!-- Model & Character Switcher Bar -->
             <div class="model-switcher">
-                <button class="model-tab active" data-model="jarvis_arc">
+                <button class="model-tab active" data-model="hero_sentinel">
+                    <i data-lucide="shield"></i> Cyber Hero
+                </button>
+                <button class="model-tab" data-model="android_bot">
+                    <i data-lucide="bot"></i> Android Robot
+                </button>
+                <button class="model-tab" data-model="jarvis_arc">
                     <i data-lucide="aperture"></i> J.A.R.V.I.S. Arc
                 </button>
                 <button class="model-tab" data-model="bat_symbol">
-                    <i data-lucide="shield"></i> Bat-Tech Armor
+                    <i data-lucide="shield"></i> Bat-Armor
                 </button>
                 <button class="model-tab" data-model="bionic_hand">
                     <i data-lucide="hand"></i> Cyber Bionic Arm
                 </button>
-                <button class="model-tab" data-model="nano_grid">
-                    <i data-lucide="atom"></i> Carbon Nanotech
-                </button>
                 <button class="model-tab" data-model="ai_chip">
                     <i data-lucide="cpu"></i> AI Processor
                 </button>
-                <button class="model-tab" data-model="mech_drone">
-                    <i data-lucide="bot"></i> Stealth Drone
+                <button class="model-tab" data-model="nano_grid">
+                    <i data-lucide="atom"></i> Nanotech Grid
                 </button>
             </div>
 
             <!-- Header Quick Actions -->
             <div class="header-actions">
-                <button class="action-btn" id="btn-toggle-sound" title="Toggle J.A.R.V.I.S. High-Tech Audio FX">
+                <button class="action-btn" id="btn-toggle-sound" title="Toggle Audio FX">
                     <i data-lucide="volume-2" id="sound-icon"></i>
                 </button>
-                <button class="action-btn" id="btn-snapshot" title="Take High-Res 3D Snapshot">
+                <button class="action-btn" id="btn-snapshot" title="Take High-Res Snapshot">
                     <i data-lucide="camera"></i> Snapshot
                 </button>
                 <button class="action-btn btn-glow" id="btn-export-3d" title="Export 3D Model (.OBJ)">
@@ -83,7 +86,7 @@
 
         <!-- Right Side Floating Interactive Fun Wheel -->
         <div class="fun-wheel-bar">
-            <button class="fun-btn" id="btn-jarvis-overdrive" title="Activate J.A.R.V.I.S. Overdrive Mode!">
+            <button class="fun-btn" id="btn-jarvis-overdrive" title="Activate Overdrive Mode!">
                 <i data-lucide="zap"></i>
                 <span>Overdrive</span>
             </button>
@@ -91,7 +94,7 @@
                 <i data-lucide="palette"></i>
                 <span>Holo-Shift</span>
             </button>
-            <button class="fun-btn" id="fun-btn-explode" title="Disassemble Mech Components into 3D Space">
+            <button class="fun-btn" id="fun-btn-explode" title="Disassemble Character Armor">
                 <i data-lucide="component"></i>
                 <span>Disassemble</span>
             </button>
@@ -99,7 +102,7 @@
                 <i data-lucide="sparkles"></i>
                 <span>Quantum Burst</span>
             </button>
-            <button class="fun-btn" id="btn-wireframe" title="Toggle Blueprint Wireframe HUD">
+            <button class="fun-btn" id="btn-wireframe" title="Toggle Blueprint HUD">
                 <i data-lucide="grid"></i>
                 <span>Blueprint</span>
             </button>
@@ -112,29 +115,29 @@
             </button>
             
             <div class="drawer-content">
-                <div class="drawer-title"><i data-lucide="settings"></i> Mech Specifications</div>
+                <div class="drawer-title"><i data-lucide="settings"></i> Character Specifications</div>
 
                 <div class="control-row">
-                    <label>Armor Color</label>
+                    <label>Armor Paint</label>
                     <input type="color" id="picker-color" value="#00f2fe" class="color-picker">
                 </div>
 
                 <div class="control-row">
-                    <label>Plasma Energy Glow</label>
-                    <input type="color" id="picker-emissive" value="#7928ca" class="color-picker">
+                    <label>Visor Emissive Glow</label>
+                    <input type="color" id="picker-emissive" value="#ff007f" class="color-picker">
                 </div>
 
                 <div class="control-group">
                     <div class="label-val">
-                        <span>Reactor Core Power</span>
-                        <span id="val-emissive-power">1.2</span>
+                        <span>Energy Core Intensity</span>
+                        <span id="val-emissive-power">1.5</span>
                     </div>
-                    <input type="range" id="slider-emissive" min="0.0" max="4.0" step="0.1" value="1.2">
+                    <input type="range" id="slider-emissive" min="0.0" max="4.0" step="0.1" value="1.5">
                 </div>
 
                 <div class="control-group">
                     <div class="label-val">
-                        <span>Titanium Metallic</span>
+                        <span>Titanium Armor Metallic</span>
                         <span id="val-metal">0.90</span>
                     </div>
                     <input type="range" id="slider-metal" min="0.0" max="1.0" step="0.05" value="0.90">
@@ -142,7 +145,7 @@
 
                 <div class="control-group">
                     <div class="label-val">
-                        <span>Surface Finish / Gloss</span>
+                        <span>Gloss / Reflection</span>
                         <span id="val-rough">0.15</span>
                     </div>
                     <input type="range" id="slider-rough" min="0.0" max="1.0" step="0.05" value="0.15">
@@ -150,10 +153,10 @@
 
                 <div class="control-group">
                     <div class="label-val">
-                        <span>Cyber Deformation</span>
-                        <span id="val-deform">0.20</span>
+                        <span>Sculpt Distortion</span>
+                        <span id="val-deform">0.0</span>
                     </div>
-                    <input type="range" id="slider-deform" min="0.0" max="2.0" step="0.05" value="0.20">
+                    <input type="range" id="slider-deform" min="0.0" max="2.0" step="0.05" value="0.0">
                 </div>
 
                 <div class="control-group">
@@ -174,19 +177,21 @@
 
                 <div class="btn-group mt-2">
                     <button class="btn btn-secondary" id="btn-random-all">
-                        <i data-lucide="dice-5"></i> Randomize Mech Tech
+                        <i data-lucide="dice-5"></i> Randomize Character
                     </button>
                 </div>
 
-                <!-- Google AdSense Container Slot (Sidebar) -->
+                <!-- Google AdSense Exact In-Feed Fluid Ad Slot -->
                 <div class="adsense-slot-sidebar mt-3">
-                    <span class="ad-label">ADVERTISEMENT</span>
+                    <span class="ad-label">SPONSORED CONTENT</span>
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6751037211810646"
+                         crossorigin="anonymous"></script>
                     <ins class="adsbygoogle"
-                         style="display:block; width:100%; height:120px;"
+                         style="display:block"
+                         data-ad-format="fluid"
+                         data-ad-layout-key="-h0-2o+1c-r+av"
                          data-ad-client="ca-pub-6751037211810646"
-                         data-ad-slot="1234567890"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
+                         data-ad-slot="5571821640"></ins>
                     <script>
                          (adsbygoogle = window.adsbygoogle || []).push({});
                     </script>
@@ -194,19 +199,19 @@
             </div>
         </div>
 
-        <!-- Floating J.A.R.V.I.S. Diagnostic Telemetry HUD -->
+        <!-- Floating Diagnostic HUD Bar -->
         <div class="hud-bar">
             <div class="hud-item">
                 <span class="hud-label">FPS RATE</span>
                 <span class="hud-val" id="hud-fps">60</span>
             </div>
             <div class="hud-item">
-                <span class="hud-label">POLYGON MATRIX</span>
-                <span class="hud-val" id="hud-polys">18.4k</span>
+                <span class="hud-label">POLYGONS</span>
+                <span class="hud-val" id="hud-polys">24.8k</span>
             </div>
             <div class="hud-item">
-                <span class="hud-label">J.A.R.V.I.S. STATUS</span>
-                <span class="hud-val" id="hud-jarvis">ONLINE 100%</span>
+                <span class="hud-label">SYSTEM CORE</span>
+                <span class="hud-val" id="hud-jarvis">HERO ACTIVE</span>
             </div>
         </div>
 
@@ -216,7 +221,7 @@
                 <i data-lucide="pause" id="play-icon"></i>
             </button>
             <div class="anim-info">
-                <span class="anim-label">J.A.R.V.I.S. Diagnostic Scan Orbit</span>
+                <span class="anim-label">Cyber Character 360° Diagnostic Orbit</span>
                 <span class="anim-status" id="anim-status-text">Active (0.8 RPM)</span>
             </div>
             <div class="speed-control">
@@ -231,14 +236,14 @@
             </div>
         </footer>
 
-        <!-- Toast Notifications -->
+        <!-- Toast Overlay Container -->
         <div id="toast-container" class="toast-container"></div>
 
         <!-- Snapshot Preview Modal -->
         <div class="modal" id="modal-snapshot">
             <div class="modal-card">
                 <div class="modal-header">
-                    <h3><i data-lucide="camera"></i> 3D Mech Snapshot Captured</h3>
+                    <h3><i data-lucide="camera"></i> 3D Character Snapshot Captured</h3>
                     <button class="btn-close" id="modal-close"><i data-lucide="x"></i></button>
                 </div>
                 <div class="modal-body">
@@ -248,7 +253,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" id="modal-cancel">Close</button>
-                    <a id="link-download-img" class="btn btn-primary" download="nexus_3d_mech_render.png">
+                    <a id="link-download-img" class="btn btn-primary" download="cyber_hero_3d_render.png">
                         <i data-lucide="download"></i> Save PNG Image
                     </a>
                 </div>
@@ -259,7 +264,7 @@
         <div id="cookie-banner" class="cookie-banner">
             <div class="cookie-text">
                 <i data-lucide="shield-check"></i>
-                <span>We use cookies & Google AdSense (Publisher Account: <code>pub-6751037211810646</code>) to personalize content. See our <a href="privacy.html" target="_blank">Privacy Policy</a>.</span>
+                <span>We use cookies & Google AdSense (Account: <code>ca-pub-6751037211810646</code>) to personalize your experience. See our <a href="privacy.html" target="_blank">Privacy Policy</a>.</span>
             </div>
             <div class="cookie-btns">
                 <button class="btn btn-primary" id="btn-accept-cookie">Accept All</button>

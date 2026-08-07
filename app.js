@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VERTEX 3D VISION - Next-Gen Real 3D Mech, J.A.R.V.I.S. & Bat-Tech Engine (v6.0)
+   VERTEX 3D VISION - Cyber Hero Sentinel & J.A.R.V.I.S. Engine (v7.0)
    ========================================================================== */
 
 // --- 3D Perlin/Simplex Noise Generator ---
@@ -119,9 +119,9 @@ const JarvisAudio = (function() {
 
 // --- Application State ---
 const state = {
-    modelType: 'jarvis_arc',     // jarvis_arc, bat_symbol, bionic_hand, nano_grid, ai_chip, mech_drone
+    modelType: 'hero_sentinel',   // hero_sentinel, android_bot, jarvis_arc, bat_symbol, bionic_hand, ai_chip, nano_grid
     baseColor: '#00f2fe',
-    emissiveColor: '#7928ca',
+    emissiveColor: '#ff007f',
     emissivePower: 1.5,
     metalness: 0.90,
     roughness: 0.15,
@@ -147,12 +147,7 @@ let mainMeshGroup;
 let keyLight, fillLight, rimLight, ambientLight;
 let gridHelper, particleSystem;
 let jarvisRings = [];
-let animatedParts = [];
 let supernovaParticles = [];
-
-// --- Performance Tracker ---
-let lastFrameTime = performance.now();
-let frameCount = 0;
 
 // --- Safe Lucide Helper ---
 function safeLucideIcons() {
@@ -174,7 +169,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     setupCookieConsent();
     animate();
-    showToast('🤖 J.A.R.V.I.S. & Bat-Tech Real 3D Studio Online');
+    showToast('🦸‍♂️ Cyber Hero Sentinel & J.A.R.V.I.S. Studio Online');
 });
 
 // --- Three.js Engine Setup ---
@@ -236,7 +231,7 @@ function createEnvironment() {
     keyLight.shadow.mapSize.height = 2048;
     scene.add(keyLight);
 
-    fillLight = new THREE.PointLight(0x00f2fe, 1.6, 25);
+    fillLight = new THREE.PointLight(0x00f2fe, 1.4, 25);
     fillLight.position.set(-6, 3, -4);
     scene.add(fillLight);
 
@@ -274,7 +269,7 @@ function createNanotechParticles() {
         size: 0.045,
         vertexColors: true,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.65,
         blending: THREE.AdditiveBlending
     });
 
@@ -285,9 +280,7 @@ function createNanotechParticles() {
 // --- Main 3D Model Switcher ---
 function build3DModel() {
     jarvisRings = [];
-    animatedParts = [];
     
-    // Clear all existing objects cleanly
     while (mainMeshGroup.children.length > 0) {
         const obj = mainMeshGroup.children[0];
         disposeObjectTree(obj);
@@ -295,6 +288,12 @@ function build3DModel() {
     }
 
     switch (state.modelType) {
+        case 'hero_sentinel':
+            buildCyberHeroSentinel();
+            break;
+        case 'android_bot':
+            buildAndroidRobot();
+            break;
         case 'jarvis_arc':
             buildJarvisArcReactor();
             break;
@@ -304,17 +303,14 @@ function build3DModel() {
         case 'bionic_hand':
             buildBionicCyberArm();
             break;
-        case 'nano_grid':
-            buildCarbonNanotechGrid();
-            break;
         case 'ai_chip':
             buildAIQuantumProcessor();
             break;
-        case 'mech_drone':
-            buildTacticalStealthDrone();
+        case 'nano_grid':
+            buildCarbonNanotechGrid();
             break;
         default:
-            buildJarvisArcReactor();
+            buildCyberHeroSentinel();
     }
 
     updateHUDStats();
@@ -331,9 +327,124 @@ function disposeObjectTree(obj) {
     }
 }
 
-// --- High-Realism 3D Model Composites ---
+// --- High-Realism 3D Characters & Models ---
 
-// 1. J.A.R.V.I.S. Holographic Arc Reactor
+// 1. Cyber Hero Sentinel Character
+function buildCyberHeroSentinel() {
+    const armorMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        metalness: state.metalness,
+        roughness: state.roughness,
+        wireframe: state.wireframe
+    });
+
+    const darkAlloyMat = new THREE.MeshStandardMaterial({
+        color: 0x111622,
+        metalness: 0.95,
+        roughness: 0.2,
+        wireframe: state.wireframe
+    });
+
+    const visorGlowMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.emissiveColor),
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
+    });
+
+    // Helmet Head Chassis
+    const helmet = new THREE.Mesh(new THREE.IcosahedronGeometry(0.85, 2), armorMat);
+    helmet.position.y = 1.1;
+    helmet.castShadow = true;
+    mainMeshGroup.add(helmet);
+
+    // Glowing Holographic Visor Eyes
+    const visor = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.22, 0.5), visorGlowMat);
+    visor.position.set(0, 1.2, 0.45);
+    mainMeshGroup.add(visor);
+
+    // Armored Torso Chassis
+    const torso = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.6, 0.8), darkAlloyMat);
+    torso.position.y = -0.2;
+    torso.castShadow = true;
+    mainMeshGroup.add(torso);
+
+    // Chest Arc Emblem Core
+    const chestCore = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.08, 16, 32), visorGlowMat);
+    chestCore.position.set(0, 0.1, 0.42);
+    mainMeshGroup.add(chestCore);
+
+    // Left & Right Shoulder Pauldrons
+    const shoulderL = new THREE.Mesh(new THREE.IcosahedronGeometry(0.5, 1), armorMat);
+    shoulderL.position.set(-1.1, 0.4, 0);
+    mainMeshGroup.add(shoulderL);
+
+    const shoulderR = new THREE.Mesh(new THREE.IcosahedronGeometry(0.5, 1), armorMat);
+    shoulderR.position.set(1.1, 0.4, 0);
+    mainMeshGroup.add(shoulderR);
+
+    // Plasma Sword Blade
+    const swordBlade = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.08, 3.2, 8), visorGlowMat);
+    swordBlade.position.set(1.5, 0.3, 0);
+    mainMeshGroup.add(swordBlade);
+}
+
+// 2. Android Robot Character
+function buildAndroidRobot() {
+    const chromeMat = new THREE.MeshStandardMaterial({
+        color: 0xe2e8f0,
+        metalness: 0.95,
+        roughness: 0.1,
+        wireframe: state.wireframe
+    });
+
+    const carbonMat = new THREE.MeshStandardMaterial({
+        color: 0x181e29,
+        metalness: 0.85,
+        roughness: 0.3,
+        wireframe: state.wireframe
+    });
+
+    const eyeGlowMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
+    });
+
+    // Robot Cranium
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.85, 32, 32), chromeMat);
+    head.position.y = 1.0;
+    head.castShadow = true;
+    mainMeshGroup.add(head);
+
+    // Dual Glowing Neural Optics
+    const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), eyeGlowMat);
+    eyeL.position.set(-0.3, 1.15, 0.75);
+    mainMeshGroup.add(eyeL);
+
+    const eyeR = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), eyeGlowMat);
+    eyeR.position.set(0.3, 1.15, 0.75);
+    mainMeshGroup.add(eyeR);
+
+    // Jaw Assembly
+    const jaw = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.35, 0.7), carbonMat);
+    jaw.position.set(0, 0.5, 0.1);
+    mainMeshGroup.add(jaw);
+
+    // Neck Cylinder Joints
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.6, 16), carbonMat);
+    neck.position.y = 0.1;
+    mainMeshGroup.add(neck);
+
+    // Robot Torso Frame
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.6, 1.6, 24), chromeMat);
+    torso.position.y = -1.0;
+    torso.castShadow = true;
+    mainMeshGroup.add(torso);
+}
+
+// 3. J.A.R.V.I.S. Holographic Arc Reactor
 function buildJarvisArcReactor() {
     const chromeMat = new THREE.MeshStandardMaterial({
         color: 0xddeeff,
@@ -365,21 +476,17 @@ function buildJarvisArcReactor() {
         wireframe: state.wireframe
     });
 
-    // Central Energetic Core Sphere
     const coreMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(0.75, 4), emissiveMat);
     coreMesh.castShadow = true;
     mainMeshGroup.add(coreMesh);
 
-    // Inner Glass Shield
     const glassSphere = new THREE.Mesh(new THREE.SphereGeometry(0.95, 32, 32), glassMat);
     mainMeshGroup.add(glassSphere);
 
-    // Chrome Chassis Outer Ring
     const outerChassis = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.12, 24, 64), chromeMat);
     outerChassis.castShadow = true;
     mainMeshGroup.add(outerChassis);
 
-    // 10 Copper Electromagnetic Coils around the ring
     for (let i = 0; i < 10; i++) {
         const angle = (i / 10) * Math.PI * 2;
         const coil = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.08, 16, 32), copperMat);
@@ -389,7 +496,6 @@ function buildJarvisArcReactor() {
         mainMeshGroup.add(coil);
     }
 
-    // 3 Concentric Rotating Holographic Accelerator Rings
     for (let r = 1; r <= 3; r++) {
         const ringGeo = new THREE.TorusGeometry(r * 0.75, 0.03, 16, 64);
         const ringMesh = new THREE.Mesh(ringGeo, emissiveMat);
@@ -399,7 +505,7 @@ function buildJarvisArcReactor() {
     }
 }
 
-// 2. Dark Knight Bat-Armor Emblem & Stealth Reactor
+// 4. Dark Knight Bat-Armor Emblem
 function buildBatTechArmorEmblem() {
     const titaniumMat = new THREE.MeshStandardMaterial({
         color: 0x111318,
@@ -423,17 +529,14 @@ function buildBatTechArmorEmblem() {
         wireframe: state.wireframe
     });
 
-    // Central Bat Chest Core Shield
     const chestCore = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.4, 0.4), titaniumMat);
     chestCore.castShadow = true;
     mainMeshGroup.add(chestCore);
 
-    // Glowing Central Bat Reactor Emblem
     const emblemCore = new THREE.Mesh(new THREE.IcosahedronGeometry(0.5, 3), glowCoreMat);
     emblemCore.position.z = 0.25;
     mainMeshGroup.add(emblemCore);
 
-    // Left Swept Wing Blade
     const wingL1 = new THREE.Mesh(new THREE.ConeGeometry(0.7, 2.4, 4), titaniumMat);
     wingL1.rotateZ(Math.PI / 3);
     wingL1.position.set(-1.3, 0.4, 0);
@@ -444,7 +547,6 @@ function buildBatTechArmorEmblem() {
     wingL2.position.set(-2.3, -0.2, 0);
     mainMeshGroup.add(wingL2);
 
-    // Right Swept Wing Blade
     const wingR1 = new THREE.Mesh(new THREE.ConeGeometry(0.7, 2.4, 4), titaniumMat);
     wingR1.rotateZ(-Math.PI / 3);
     wingR1.position.set(1.3, 0.4, 0);
@@ -455,7 +557,6 @@ function buildBatTechArmorEmblem() {
     wingR2.position.set(2.3, -0.2, 0);
     mainMeshGroup.add(wingR2);
 
-    // Tactical Ears
     const earL = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.7, 4), titaniumMat);
     earL.position.set(-0.4, 1.0, 0);
     mainMeshGroup.add(earL);
@@ -465,7 +566,7 @@ function buildBatTechArmorEmblem() {
     mainMeshGroup.add(earR);
 }
 
-// 3. Cyber Bionic Arm & Segmented Hand
+// 5. Cyber Bionic Arm
 function buildBionicCyberArm() {
     const darkAlloyMat = new THREE.MeshStandardMaterial({
         color: 0x1e2430,
@@ -488,23 +589,19 @@ function buildBionicCyberArm() {
         wireframe: state.wireframe
     });
 
-    // Main Palm Chassis
     const palm = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.5, 0.5), darkAlloyMat);
     palm.castShadow = true;
     mainMeshGroup.add(palm);
 
-    // Forearm Wrist Cylinder
     const wrist = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.55, 1.2, 16), darkAlloyMat);
     wrist.position.y = -1.35;
     mainMeshGroup.add(wrist);
 
-    // Wrist Glowing Conduit Ring
     const wristRing = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.06, 16, 32), glowNodeMat);
     wristRing.rotateX(Math.PI / 2);
     wristRing.position.y = -1.0;
     mainMeshGroup.add(wristRing);
 
-    // 4 Articulated Fingers
     for (let f = 0; f < 4; f++) {
         const xPos = -0.45 + f * 0.3;
         for (let seg = 0; seg < 3; seg++) {
@@ -518,59 +615,13 @@ function buildBionicCyberArm() {
         }
     }
 
-    // Thumb Joint
     const thumbSegment = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.6, 12), chromeJointMat);
     thumbSegment.rotateZ(Math.PI / 3.5);
     thumbSegment.position.set(-0.85, 0.15, 0.2);
     mainMeshGroup.add(thumbSegment);
 }
 
-// 4. Carbon Nanotechnology Grid & Molecular Swarm
-function buildCarbonNanotechGrid() {
-    const nanotubeMat = new THREE.MeshStandardMaterial({
-        color: 0x151c28,
-        metalness: 0.92,
-        roughness: 0.25,
-        wireframe: true
-    });
-
-    const nodeGlowMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(state.baseColor),
-        emissive: new THREE.Color(state.emissiveColor),
-        emissiveIntensity: state.emissivePower,
-        wireframe: state.wireframe
-    });
-
-    const radius = 1.3;
-    const height = 3.8;
-
-    // Carbon Nanotube Cylinder Lattice Rings
-    for (let r = 0; r <= 8; r++) {
-        const y = (r / 8 - 0.5) * height;
-        const ring = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.06, 8, 32), nanotubeMat);
-        ring.rotateX(Math.PI / 2);
-        ring.position.y = y;
-        mainMeshGroup.add(ring);
-
-        // Glowing Molecular Nodes
-        for (let i = 0; i < 6; i++) {
-            const angle = (i / 6) * Math.PI * 2;
-            const node = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 12), nodeGlowMat);
-            node.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
-            mainMeshGroup.add(node);
-        }
-    }
-
-    // Longitudinal Struts
-    for (let i = 0; i < 12; i++) {
-        const angle = (i / 12) * Math.PI * 2;
-        const strut = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, height, 8), nanotubeMat);
-        strut.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-        mainMeshGroup.add(strut);
-    }
-}
-
-// 5. AI Quantum Processor & Silicon Microchip
+// 6. AI Quantum Processor
 function buildAIQuantumProcessor() {
     const siliconMat = new THREE.MeshStandardMaterial({
         color: 0x0a0f18,
@@ -593,22 +644,18 @@ function buildAIQuantumProcessor() {
         wireframe: state.wireframe
     });
 
-    // Main Square Silicon Board Substrate
     const substrate = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.2, 2.6), siliconMat);
     substrate.castShadow = true;
     mainMeshGroup.add(substrate);
 
-    // Heat Spreader Cap
     const cap = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.35, 1.8), siliconMat);
     cap.position.y = 0.25;
     mainMeshGroup.add(cap);
 
-    // Central Glowing AI Core Crystal
     const aiCore = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.45, 1.0), aiCoreMat);
     aiCore.position.y = 0.35;
     mainMeshGroup.add(aiCore);
 
-    // Array of 48 Gold Contact Pins Around Board
     for (let i = -1.1; i <= 1.1; i += 0.22) {
         const pin1 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.35), goldPinMat);
         pin1.position.set(i, -0.1, 1.4);
@@ -628,59 +675,46 @@ function buildAIQuantumProcessor() {
     }
 }
 
-// 6. Tactical Stealth Mech Drone
-function buildTacticalStealthDrone() {
-    const stealthMat = new THREE.MeshStandardMaterial({
-        color: 0x121720,
-        metalness: 0.95,
-        roughness: 0.2,
-        wireframe: state.wireframe
+// 7. Carbon Nanotechnology Grid
+function buildCarbonNanotechGrid() {
+    const nanotubeMat = new THREE.MeshStandardMaterial({
+        color: 0x151c28,
+        metalness: 0.92,
+        roughness: 0.25,
+        wireframe: true
     });
 
-    const engineGlowMat = new THREE.MeshStandardMaterial({
+    const nodeGlowMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(state.baseColor),
         emissive: new THREE.Color(state.emissiveColor),
         emissiveIntensity: state.emissivePower,
         wireframe: state.wireframe
     });
 
-    // Fuselage Chassis
-    const fuselage = new THREE.Mesh(new THREE.ConeGeometry(0.85, 2.8, 4), stealthMat);
-    fuselage.rotateX(Math.PI / 2);
-    fuselage.castShadow = true;
-    mainMeshGroup.add(fuselage);
+    const radius = 1.3;
+    const height = 3.8;
 
-    // Swept Delta Wings
-    const wingL = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.1, 1.4), stealthMat);
-    wingL.rotateY(Math.PI / 6);
-    wingL.position.set(-1.2, 0, 0.2);
-    mainMeshGroup.add(wingL);
+    for (let r = 0; r <= 8; r++) {
+        const y = (r / 8 - 0.5) * height;
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.06, 8, 32), nanotubeMat);
+        ring.rotateX(Math.PI / 2);
+        ring.position.y = y;
+        mainMeshGroup.add(ring);
 
-    const wingR = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.1, 1.4), stealthMat);
-    wingR.rotateY(-Math.PI / 6);
-    wingR.position.set(1.2, 0, 0.2);
-    mainMeshGroup.add(wingR);
+        for (let i = 0; i < 6; i++) {
+            const angle = (i / 6) * Math.PI * 2;
+            const node = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 12), nodeGlowMat);
+            node.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+            mainMeshGroup.add(node);
+        }
+    }
 
-    // Dual Plasma Thrusters
-    const engine1 = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 1.4, 16), stealthMat);
-    engine1.rotateX(Math.PI / 2);
-    engine1.position.set(-0.65, 0.1, -1.1);
-    mainMeshGroup.add(engine1);
-
-    const glow1 = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.2, 16), engineGlowMat);
-    glow1.rotateX(Math.PI / 2);
-    glow1.position.set(-0.65, 0.1, -1.8);
-    mainMeshGroup.add(glow1);
-
-    const engine2 = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 1.4, 16), stealthMat);
-    engine2.rotateX(Math.PI / 2);
-    engine2.position.set(0.65, 0.1, -1.1);
-    mainMeshGroup.add(engine2);
-
-    const glow2 = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.2, 16), engineGlowMat);
-    glow2.rotateX(Math.PI / 2);
-    glow2.position.set(0.65, 0.1, -1.8);
-    mainMeshGroup.add(glow2);
+    for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * Math.PI * 2;
+        const strut = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, height, 8), nanotubeMat);
+        strut.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+        mainMeshGroup.add(strut);
+    }
 }
 
 // --- Event Listeners Setup ---
@@ -693,7 +727,7 @@ function setupEventListeners() {
             state.modelType = target.dataset.model;
             JarvisAudio.playJarvisBeep(640);
             build3DModel();
-            showToast(`J.A.R.V.I.S. System Loaded: ${target.textContent.trim()}`);
+            showToast(`Character Loaded: ${target.textContent.trim()}`);
         });
     });
 
@@ -789,7 +823,7 @@ function setupEventListeners() {
         btnExplode.addEventListener('click', () => {
             state.isExploded = !state.isExploded;
             JarvisAudio.playOverdrive();
-            showToast(state.isExploded ? '⚙️ Mech Components Disassembled' : 'Mech Reassembled');
+            showToast(state.isExploded ? '⚙️ Character Armor Disassembled' : 'Armor Reassembled');
         });
     }
 
@@ -820,19 +854,15 @@ function setupEventListeners() {
             const randomEmissive = '#' + Math.floor(Math.random()*16777215).toString(16);
             state.baseColor = randomColor;
             state.emissiveColor = randomEmissive;
-            state.deform = parseFloat((Math.random() * 0.6).toFixed(2));
+            state.deform = 0.0;
             state.twist = Math.floor(Math.random() * 360 - 180);
 
             document.getElementById('picker-color').value = randomColor;
             document.getElementById('picker-emissive').value = randomEmissive;
-            document.getElementById('slider-deform').value = state.deform;
-            document.getElementById('val-deform').textContent = state.deform;
-            document.getElementById('slider-twist').value = state.twist;
-            document.getElementById('val-twist').textContent = state.twist + '°';
 
             JarvisAudio.playJarvisBeep(800);
             build3DModel();
-            showToast('🎲 Random Mech Specification Loaded');
+            showToast('🎲 Random Character Paint Loaded');
         });
     }
 
@@ -1053,7 +1083,7 @@ function exportOBJModel() {
         link.download = `nexus_3d_${state.modelType}_${Date.now()}.obj`;
         link.click();
 
-        showToast('🤖 J.A.R.V.I.S. 3D Model Exported (.OBJ)');
+        showToast('🤖 3D Character Exported (.OBJ)');
         JarvisAudio.playJarvisBeep(850);
     } catch (e) {
         console.error('Export OBJ Error:', e);
