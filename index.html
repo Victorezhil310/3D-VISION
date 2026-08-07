@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTEX 3D VISION - Next-Gen 3D Studio, Quantum Atom & World Sculptor</title>
+    <meta name="description" content="View, build, sculpt, and customize high-fidelity 3D models from quantum atomic particles and microscopic sand grains to massive rocky landscapes, architectural spires, and planetary worlds in real-time WebGL.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Three.js & Extensions CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/OBJExporter.js"></script>
+    
+    <!-- Google AdSense Placeholder Script Tag (Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Top Navigation Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i data-lucide="box"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>VERTEX <span>3D VISION</span></h1>
+                    <span class="version-tag">STUDIO v3.0 ULTRA</span>
+                </div>
+            </div>
+
+            <!-- Scale & Preset Quick Switchers -->
+            <div class="header-center">
+                <div class="pill-selector" id="scale-selector">
+                    <button class="pill-btn" data-scale="atom">
+                        <i data-lucide="atom"></i> Quantum Atom
+                    </button>
+                    <button class="pill-btn active" data-scale="sand">
+                        <i data-lucide="sparkles"></i> Sand Grain
+                    </button>
+                    <button class="pill-btn" data-scale="rock">
+                        <i data-lucide="mountain"></i> Rock Peak
+                    </button>
+                    <button class="pill-btn" data-scale="citadel">
+                        <i data-lucide="building-2"></i> Cyber Citadel
+                    </button>
+                    <button class="pill-btn" data-scale="planet">
+                        <i data-lucide="globe"></i> World Sphere
+                    </button>
+                </div>
+
+                <div class="preset-dropdown-wrap">
+                    <i data-lucide="palette" class="dropdown-icon"></i>
+                    <select id="preset-select" class="custom-select">
+                        <option value="custom">-- Presets Library --</option>
+                        <option value="quantum_atom">Quantum Atomic Core</option>
+                        <option value="quantum_sand">Quantum Sand Crystal</option>
+                        <option value="obsidian_peak">Obsidian Mountain Peak</option>
+                        <option value="neon_nexus">Neon Cyber Citadel</option>
+                        <option value="terra_globe">Terraformed Planet</option>
+                        <option value="gold_dunes">Golden Desert Rock</option>
+                        <option value="crystal_core">Hyperdimensional Core</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Header Action Buttons -->
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="btn-reset-cam" title="Reset Viewport Camera">
+                    <i data-lucide="rotate-ccw"></i> Reset
+                </button>
+                <button class="btn btn-secondary" id="btn-snapshot" title="Take High-Res Canvas Snapshot">
+                    <i data-lucide="camera"></i> Snapshot
+                </button>
+                <button class="btn btn-primary" id="btn-export-obj" title="Export 3D Model (.OBJ)">
+                    <i data-lucide="download"></i> Export 3D
+                </button>
+                <button class="btn btn-icon" id="btn-fullscreen" title="Toggle Fullscreen">
+                    <i data-lucide="maximize-2"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace Grid -->
+        <main class="workspace">
+            <!-- Left Side Control Panel: Geometry & Sculpting -->
+            <aside class="panel panel-left" id="panel-left">
+                <div class="panel-header">
+                    <div class="panel-tabs">
+                        <button class="tab-btn active" data-tab="tab-mesh">
+                            <i data-lucide="shapes"></i> Geometry
+                        </button>
+                        <button class="tab-btn" data-tab="tab-sculpt">
+                            <i data-lucide="wand-2"></i> Sculpt & Noise
+                        </button>
+                    </div>
+                    <button class="btn-collapse" data-target="panel-left">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+                </div>
+
+                <div class="panel-content">
+                    <!-- Tab 1: Geometry & Base Models -->
+                    <div class="tab-pane active" id="tab-mesh">
+                        <div class="section-title">Base Model Preset</div>
+                        <div class="model-cards-grid">
+                            <div class="model-card" data-model="atom_core">
+                                <div class="card-icon"><i data-lucide="atom"></i></div>
+                                <div class="card-title">Atomic Nucleus</div>
+                                <div class="card-desc">Quantum electron orbits</div>
+                            </div>
+                            <div class="model-card active" data-model="sand_grain">
+                                <div class="card-icon"><i data-lucide="gem"></i></div>
+                                <div class="card-title">Sand Crystal</div>
+                                <div class="card-desc">Microscopic faceted mineral</div>
+                            </div>
+                            <div class="model-card" data-model="rock_peak">
+                                <div class="card-icon"><i data-lucide="mountain-snow"></i></div>
+                                <div class="card-title">Rock Mountain</div>
+                                <div class="card-desc">Eroded peak terrain</div>
+                            </div>
+                            <div class="model-card" data-model="cyber_citadel">
+                                <div class="card-icon"><i data-lucide="landmark"></i></div>
+                                <div class="card-title">Cyber Citadel</div>
+                                <div class="card-desc">Futuristic tower matrix</div>
+                            </div>
+                            <div class="model-card" data-model="planet_world">
+                                <div class="card-icon"><i data-lucide="orbit"></i></div>
+                                <div class="card-title">Terra Planet</div>
+                                <div class="card-desc">Cosmic globe & rings</div>
+                            </div>
+                            <div class="model-card" data-model="torus_knot">
+                                <div class="card-icon"><i data-lucide="infinity"></i></div>
+                                <div class="card-title">Torus Knot</div>
+                                <div class="card-desc">Hyper-loop structure</div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Mesh Subdivisions / Detail</span>
+                                <span id="val-subdivision">64</span>
+                            </div>
+                            <input type="range" id="input-subdivision" min="16" max="128" step="4" value="64">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Model Base Scale</span>
+                                <span id="val-scale">1.0x</span>
+                            </div>
+                            <input type="range" id="input-scale" min="0.2" max="3.0" step="0.1" value="1.0">
+                        </div>
+
+                        <!-- Google AdSense Container Slot (Sidebar) -->
+                        <div class="adsense-slot-sidebar mt-3">
+                            <span class="ad-label">ADVERTISEMENT</span>
+                            <ins class="adsbygoogle"
+                                 style="display:block; width: 100%; height: 120px;"
+                                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                                 data-ad-slot="1234567890"
+                                 data-ad-format="auto"
+                                 data-full-width-responsive="true"></ins>
+                            <script>
+                                 (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Sculpting & Procedural Noise -->
+                    <div class="tab-pane" id="tab-sculpt">
+                        <div class="section-title">Procedural Noise & Deform</div>
+                        
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Displacement Strength</span>
+                                <span id="val-noise-amp">0.45</span>
+                            </div>
+                            <input type="range" id="input-noise-amp" min="0.0" max="2.0" step="0.05" value="0.45">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Noise Frequency / Scale</span>
+                                <span id="val-noise-freq">2.2</span>
+                            </div>
+                            <input type="range" id="input-noise-freq" min="0.5" max="10.0" step="0.1" value="2.2">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Ruggedness / Octaves</span>
+                                <span id="val-noise-octaves">3</span>
+                            </div>
+                            <input type="range" id="input-noise-octaves" min="1" max="5" step="1" value="3">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Geometric Twist</span>
+                                <span id="val-twist">0.0°</span>
+                            </div>
+                            <input type="range" id="input-twist" min="-180" max="180" step="5" value="0">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Component Explode Distance</span>
+                                <span id="val-explode">0.0</span>
+                            </div>
+                            <input type="range" id="input-explode" min="0.0" max="3.0" step="0.1" value="0.0">
+                        </div>
+
+                        <div class="btn-grid mt-3">
+                            <button class="btn btn-secondary" id="btn-random-sculpt">
+                                <i data-lucide="dice-5"></i> Randomize Noise
+                            </button>
+                            <button class="btn btn-secondary" id="btn-reset-sculpt">
+                                <i data-lucide="refresh-cw"></i> Reset Sculpt
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center Viewport Area -->
+            <div class="viewport-container">
+                <!-- Top Floating Viewport Toolbar -->
+                <div class="viewport-toolbar">
+                    <div class="toolbar-group">
+                        <span class="toolbar-label">Shading:</span>
+                        <button class="tool-btn active" data-mode="pbr" title="Full PBR Shading">
+                            <i data-lucide="sun"></i> PBR
+                        </button>
+                        <button class="tool-btn" data-mode="clay" title="Clay Sculpting Mode">
+                            <i data-lucide="square"></i> Clay
+                        </button>
+                        <button class="tool-btn" data-mode="wireframe" title="Neon Grid Wireframe">
+                            <i data-lucide="grid"></i> Wireframe
+                        </button>
+                        <button class="tool-btn" data-mode="hologram" title="Cyber Hologram">
+                            <i data-lucide="layers"></i> Hologram
+                        </button>
+                        <button class="tool-btn" data-mode="normals" title="Normal Vector Map">
+                            <i data-lucide="compass"></i> Normals
+                        </button>
+                    </div>
+
+                    <div class="toolbar-separator"></div>
+
+                    <div class="toolbar-group">
+                        <span class="toolbar-label">Camera:</span>
+                        <button class="tool-btn" id="cam-front">Front</button>
+                        <button class="tool-btn" id="cam-top">Top</button>
+                        <button class="tool-btn" id="cam-iso">Isometric</button>
+                    </div>
+
+                    <div class="toolbar-separator"></div>
+
+                    <div class="toolbar-group">
+                        <button class="tool-btn active" id="btn-toggle-grid" title="Toggle Ground Grid">
+                            <i data-lucide="grid-3x3"></i> Grid
+                        </button>
+                        <button class="tool-btn active" id="btn-toggle-shadows" title="Toggle Real-time Shadows">
+                            <i data-lucide="cast"></i> Shadows
+                        </button>
+                    </div>
+                </div>
+
+                <!-- WebGL 3D Canvas -->
+                <canvas id="three-canvas"></canvas>
+
+                <!-- Floating Performance HUD -->
+                <div class="hud-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">FPS</span>
+                        <span class="stat-value" id="hud-fps">60</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Polygons</span>
+                        <span class="stat-value" id="hud-polys">12.4k</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Vertices</span>
+                        <span class="stat-value" id="hud-verts">6.2k</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Draw Calls</span>
+                        <span class="stat-value" id="hud-draws">4</span>
+                    </div>
+                </div>
+
+                <!-- Toast Container -->
+                <div id="toast-container" class="toast-container"></div>
+            </div>
+
+            <!-- Right Side Control Panel: Materials & Environment -->
+            <aside class="panel panel-right" id="panel-right">
+                <div class="panel-header">
+                    <button class="btn-collapse" data-target="panel-right">
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                    <div class="panel-tabs">
+                        <button class="tab-btn active" data-tab="tab-material">
+                            <i data-lucide="palette"></i> Material
+                        </button>
+                        <button class="tab-btn" data-tab="tab-environment">
+                            <i data-lucide="sun-medium"></i> Lighting & FX
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel-content">
+                    <!-- Tab 1: PBR Material Editor -->
+                    <div class="tab-pane active" id="tab-material">
+                        <div class="section-title">Surface PBR Properties</div>
+
+                        <div class="color-picker-row">
+                            <label for="input-base-color">Surface Color</label>
+                            <input type="color" id="input-base-color" value="#00f2fe" class="color-picker-input">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Metallic Roughness</span>
+                                <span id="val-roughness">0.25</span>
+                            </div>
+                            <input type="range" id="input-roughness" min="0.0" max="1.0" step="0.02" value="0.25">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Metalness Reflectivity</span>
+                                <span id="val-metalness">0.80</span>
+                            </div>
+                            <input type="range" id="input-metalness" min="0.0" max="1.0" step="0.02" value="0.80">
+                        </div>
+
+                        <div class="section-title mt-3">Neon Emissive Glow</div>
+
+                        <div class="color-picker-row">
+                            <label for="input-emissive-color">Emissive Color</label>
+                            <input type="color" id="input-emissive-color" value="#7928ca" class="color-picker-input">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Glow Intensity</span>
+                                <span id="val-emissive-intensity">0.60</span>
+                            </div>
+                            <input type="range" id="input-emissive-intensity" min="0.0" max="3.0" step="0.1" value="0.60">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Glass / Transmission Opacity</span>
+                                <span id="val-opacity">1.00</span>
+                            </div>
+                            <input type="range" id="input-opacity" min="0.1" max="1.0" step="0.05" value="1.00">
+                        </div>
+
+                        <div class="section-title mt-3">Texture Bump Overlay</div>
+                        <div class="texture-selector">
+                            <button class="texture-btn active" data-pattern="none">Smooth</button>
+                            <button class="texture-btn" data-pattern="sand_ripples">Sand Ripples</button>
+                            <button class="texture-btn" data-pattern="rock_veins">Rock Veins</button>
+                            <button class="texture-btn" data-pattern="cyber_lattice">Cyber Grid</button>
+                            <button class="texture-btn" data-pattern="hex_mesh">Hex Mesh</button>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Environment, Lighting & Particles -->
+                    <div class="tab-pane" id="tab-environment">
+                        <div class="section-title">Environment Presets</div>
+                        <div class="env-presets-grid">
+                            <button class="env-btn active" data-env="cyberpunk">
+                                <i data-lucide="zap"></i> Cyberpunk Night
+                            </button>
+                            <button class="env-btn" data-env="desert_sun">
+                                <i data-lucide="sun"></i> Desert Gold
+                            </button>
+                            <button class="env-btn" data-env="deep_space">
+                                <i data-lucide="sparkle"></i> Deep Space
+                            </button>
+                            <button class="env-btn" data-env="studio_clean">
+                                <i data-lucide="aperture"></i> Studio White
+                            </button>
+                            <button class="env-btn" data-env="volcanic">
+                                <i data-lucide="flame"></i> Volcanic Abyss
+                            </button>
+                        </div>
+
+                        <div class="section-title mt-3">Dynamic Lighting</div>
+                        
+                        <div class="color-picker-row">
+                            <label for="input-key-light-color">Key Sun Light</label>
+                            <input type="color" id="input-key-light-color" value="#ffffff" class="color-picker-input">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Key Light Intensity</span>
+                                <span id="val-light-intensity">1.8</span>
+                            </div>
+                            <input type="range" id="input-light-intensity" min="0.0" max="4.0" step="0.1" value="1.8">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Sun Position Angle</span>
+                                <span id="val-sun-angle">45°</span>
+                            </div>
+                            <input type="range" id="input-sun-angle" min="0" max="360" step="5" value="45">
+                        </div>
+
+                        <div class="section-title mt-3">Particle Swarm & Atmosphere FX</div>
+                        <div class="toggle-row">
+                            <span>Quantum Particle Swarm</span>
+                            <label class="switch">
+                                <input type="checkbox" id="chk-particles" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Particle Count</span>
+                                <span id="val-particle-count">1500</span>
+                            </div>
+                            <input type="range" id="input-particle-count" min="200" max="5000" step="100" value="1500">
+                        </div>
+
+                        <div class="toggle-row">
+                            <span>Volumetric Fog</span>
+                            <label class="switch">
+                                <input type="checkbox" id="chk-fog" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Bottom Animation & Legal Footer -->
+        <footer class="app-footer">
+            <div class="animation-toolbar">
+                <div class="anim-status">
+                    <button class="btn btn-icon btn-primary" id="btn-play-anim" title="Toggle Auto Animation">
+                        <i data-lucide="play" id="icon-play"></i>
+                    </button>
+                    <div class="anim-meta">
+                        <span class="anim-title">Cinematic Turntable Spin</span>
+                        <span class="anim-sub" id="anim-state-text">Active (0.8 RPM)</span>
+                    </div>
+                </div>
+
+                <div class="anim-presets-group">
+                    <button class="anim-chip active" data-anim="turntable">Turntable Spin</button>
+                    <button class="anim-chip" data-anim="pulse_glow">Quantum Atomic Orbit</button>
+                    <button class="anim-chip" data-anim="vertex_wave">Vertex Wave</button>
+                    <button class="anim-chip" data-anim="camera_fly">Drone Orbit</button>
+                </div>
+
+                <div class="footer-legal-links">
+                    <a href="privacy.html" target="_blank">Privacy Policy</a>
+                    <span class="dot-sep">•</span>
+                    <a href="terms.html" target="_blank">Terms of Service</a>
+                    <span class="dot-sep">•</span>
+                    <span id="btn-cookie-pref" style="cursor:pointer; color: var(--accent-cyan);">Cookie Preferences</span>
+                </div>
+
+                <div class="anim-speed-wrap">
+                    <i data-lucide="gauge"></i>
+                    <span>Speed:</span>
+                    <input type="range" id="input-anim-speed" min="0.1" max="3.0" step="0.1" value="0.8">
+                    <span id="val-anim-speed">0.8x</span>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Modal Dialog: Snapshot Preview & Download -->
+        <div class="modal" id="modal-snapshot">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3><i data-lucide="camera"></i> Viewport Snapshot Captured</h3>
+                    <button class="btn-close" id="modal-snapshot-close"><i data-lucide="x"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="snapshot-preview-frame">
+                        <img id="snapshot-img-preview" src="" alt="3D Viewport Snapshot">
+                    </div>
+                    <div class="modal-options mt-2">
+                        <div class="toggle-row">
+                            <span>Transparent Background</span>
+                            <label class="switch">
+                                <input type="checkbox" id="chk-transparent-bg">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="modal-snapshot-cancel">Cancel</button>
+                    <a id="link-download-snapshot" class="btn btn-primary" download="vertex_3d_snapshot.png">
+                        <i data-lucide="download"></i> Save Image (PNG)
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- GDPR Cookie Consent Banner -->
+        <div id="cookie-banner" class="cookie-banner">
+            <div class="cookie-content">
+                <i data-lucide="shield-check" class="cookie-icon"></i>
+                <p>We use cookies and Google AdSense to personalize content, analyze traffic, and serve advertisements. By clicking "Accept All", you consent to our <a href="privacy.html" target="_blank">Privacy Policy</a> & <a href="terms.html" target="_blank">Terms of Service</a>.</p>
+            </div>
+            <div class="cookie-actions">
+                <button class="btn btn-secondary" id="btn-cookie-decline">Decline Non-Essential</button>
+                <button class="btn btn-primary" id="btn-cookie-accept">Accept All Cookies</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
