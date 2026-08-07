@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default function SingleBlogPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function SingleBlogPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   
   return (
     <div className="max-w-3xl mx-auto py-16 px-6">
