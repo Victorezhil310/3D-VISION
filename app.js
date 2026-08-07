@@ -1,8 +1,8 @@
 /* ==========================================================================
-   VERTEX 3D VISION - Omni 3D Studio & World Sculptor Engine (v4.5 Ultra-Fix)
+   VERTEX 3D VISION - Ultimate 3D World & Quantum Playground Engine
    ========================================================================== */
 
-// --- 3D Perlin/Simplex Noise Generator ---
+// --- 3D Perlin/Simplex Noise Implementation ---
 const Noise3D = (function() {
     function grad3(hash, x, y, z) {
         const h = hash & 15;
@@ -59,125 +59,131 @@ const Noise3D = (function() {
     function lerp(t, a, b) { return a + t * (b - a); }
 })();
 
+// --- Web Audio FX Synthesizer ---
+const SoundFX = (function() {
+    let audioCtx = null;
+    let enabled = true;
+
+    function init() {
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) audioCtx = new AudioContext();
+        }
+    }
+
+    return {
+        toggle: function() {
+            enabled = !enabled;
+            return enabled;
+        },
+        playPop: function(freq = 440) {
+            if (!enabled) return;
+            init();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + 0.08);
+
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
+        },
+        playSupernova: function() {
+            if (!enabled) return;
+            init();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.4);
+
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        }
+    };
+})();
+
 // --- Application State ---
 const state = {
-    modelType: 'sand_grain',
-    scaleCategory: 'sand',
-    subdivision: 64,
-    modelScale: 1.0,
-    
-    // Sculpt Parameters
-    noiseAmp: 0.45,
-    noiseFreq: 2.2,
-    noiseOctaves: 3,
-    twist: 0,
-    explode: 0,
-
-    // Material Parameters
+    modelType: 'planet',         // planet, atom, tree, fruit, dragon, prism, mech
     baseColor: '#00f2fe',
-    roughness: 0.25,
-    metalness: 0.80,
     emissiveColor: '#7928ca',
-    emissiveIntensity: 0.60,
-    opacity: 1.0,
-    texturePattern: 'none',
+    emissivePower: 0.8,
+    metalness: 0.85,
+    roughness: 0.20,
+    deform: 0.30,
+    twist: 0,
+    particleCount: 2000,
 
-    // Viewport Mode
-    shadingMode: 'pbr',
-    showGrid: true,
-    showShadows: true,
+    // Fun FX Modes
+    wireframe: false,
+    rainbowMode: false,
+    discoMode: false,
+    isExploded: false,
 
-    // Environment & Lighting
-    envPreset: 'cyberpunk',
-    keyLightColor: '#ffffff',
-    keyLightIntensity: 1.8,
-    sunAngle: 45,
-    showParticles: true,
-    particleCount: 1500,
-    showFog: true,
-
-    // Animation
+    // Animation Controls
     animActive: true,
-    animType: 'turntable',
     animSpeed: 0.8,
     animTime: 0
-};
-
-// --- Presets Library Config ---
-const PRESETS_LIBRARY = {
-    quantum_atom: {
-        modelType: 'atom_core', scaleCategory: 'nano', baseColor: '#00f2fe', emissiveColor: '#ff007f',
-        noiseAmp: 0.2, noiseFreq: 3.0, roughness: 0.1, metalness: 0.95, envPreset: 'deep_space'
-    },
-    quantum_sand: {
-        modelType: 'sand_grain', scaleCategory: 'sand', baseColor: '#00f2fe', emissiveColor: '#7928ca',
-        noiseAmp: 0.6, noiseFreq: 3.5, roughness: 0.15, metalness: 0.9, envPreset: 'cyberpunk'
-    },
-    obsidian_peak: {
-        modelType: 'rock_peak', scaleCategory: 'macro', baseColor: '#1a1d24', emissiveColor: '#ff0055',
-        noiseAmp: 0.85, noiseFreq: 1.8, roughness: 0.45, metalness: 0.7, envPreset: 'volcanic'
-    },
-    neon_nexus: {
-        modelType: 'cyber_citadel', scaleCategory: 'tech', baseColor: '#0b1021', emissiveColor: '#00f2fe',
-        noiseAmp: 0.2, noiseFreq: 5.0, roughness: 0.2, metalness: 0.85, envPreset: 'cyberpunk'
-    },
-    terra_globe: {
-        modelType: 'planet_world', scaleCategory: 'macro', baseColor: '#1b4965', emissiveColor: '#62b6cb',
-        noiseAmp: 0.35, noiseFreq: 2.0, roughness: 0.6, metalness: 0.3, envPreset: 'deep_space'
-    },
-    gold_dunes: {
-        modelType: 'rock_peak', scaleCategory: 'macro', baseColor: '#e0a96d', emissiveColor: '#ffb703',
-        noiseAmp: 0.5, noiseFreq: 2.5, roughness: 0.3, metalness: 0.4, envPreset: 'desert_sun'
-    }
 };
 
 // --- Three.js Globals ---
 let scene, camera, renderer, controls;
 let mainMeshGroup, mainMesh;
 let keyLight, fillLight, rimLight, ambientLight;
+let discoLight1, discoLight2;
 let gridHelper, particleSystem;
 let electronOrbits = [];
-let proceduralTextures = {};
+let supernovaParticles = [];
 
-// --- Performance Tracker ---
+// --- Performance HUD ---
 let lastFrameTime = performance.now();
 let frameCount = 0;
-let currentFPS = 60;
 
-// --- Safe Lucide Helper ---
+// --- Initialize App ---
+window.addEventListener('DOMContentLoaded', () => {
+    safeLucideIcons();
+    initThreeJS();
+    createEnvironment();
+    build3DModel();
+    setupEventListeners();
+    setupCookieConsent();
+    animate();
+    showToast('✨ 3D Playground Loaded! Click tabs to switch models.');
+});
+
 function safeLucideIcons() {
     try {
         if (window.lucide && typeof window.lucide.createIcons === 'function') {
             window.lucide.createIcons();
         }
     } catch (e) {
-        console.warn('Lucide icons setup deferred:', e);
+        console.warn('Lucide icons deferred:', e);
     }
 }
 
-// --- Initialize App ---
-window.addEventListener('DOMContentLoaded', () => {
-    safeLucideIcons();
-    initThreeJS();
-    generateProceduralTextures();
-    createEnvironment();
-    build3DModel();
-    setupEventListeners();
-    setupSearchFilter();
-    setupCookieConsent();
-    animate();
-    showToast('VERTEX 3D VISION Studio Ready');
-});
-
-// --- Three.js Setup ---
+// --- Three.js Engine Setup ---
 function initThreeJS() {
     const canvas = document.getElementById('three-canvas');
-    const container = canvas.parentElement;
 
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.set(0, 3, 6);
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 3, 6.5);
 
     renderer = new THREE.WebGLRenderer({
         canvas: canvas,
@@ -185,7 +191,7 @@ function initThreeJS() {
         preserveDrawingBuffer: true,
         powerPreference: "high-performance"
     });
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -205,113 +211,51 @@ function initThreeJS() {
 }
 
 function onWindowResize() {
-    const canvas = document.getElementById('three-canvas');
-    const container = canvas.parentElement;
-    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-}
-
-// --- Procedural Canvas Texture Generators ---
-function generateProceduralTextures() {
-    proceduralTextures.none = null;
-    proceduralTextures.sand_ripples = createBumpTexture('sand');
-    proceduralTextures.rock_veins = createBumpTexture('rock');
-    proceduralTextures.cyber_lattice = createBumpTexture('cyber');
-    proceduralTextures.hex_mesh = createBumpTexture('hex');
-}
-
-function createBumpTexture(type) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 512;
-    const ctx = canvas.getContext('2d');
-
-    ctx.fillStyle = '#808080';
-    ctx.fillRect(0, 0, 512, 512);
-
-    if (type === 'sand') {
-        for (let y = 0; y < 512; y += 8) {
-            ctx.fillStyle = y % 16 === 0 ? '#ffffff' : '#333333';
-            ctx.fillRect(0, y + Math.sin(y * 0.05) * 6, 512, 4);
-        }
-    } else if (type === 'rock') {
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
-        for (let i = 0; i < 40; i++) {
-            ctx.beginPath();
-            ctx.moveTo(Math.random() * 512, Math.random() * 512);
-            ctx.lineTo(Math.random() * 512, Math.random() * 512);
-            ctx.stroke();
-        }
-    } else if (type === 'cyber') {
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 4;
-        for (let i = 0; i <= 512; i += 32) {
-            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 512); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(512, i); ctx.stroke();
-        }
-    } else if (type === 'hex') {
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 3;
-        const r = 24;
-        for (let y = 0; y < 512 + r; y += r * 1.5) {
-            for (let x = 0; x < 512 + r; x += r * Math.sqrt(3)) {
-                drawHexagon(ctx, x + (Math.floor(y / (r * 1.5)) % 2) * (r * Math.sqrt(3) / 2), y, r);
-            }
-        }
-    }
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(2, 2);
-    return texture;
-}
-
-function drawHexagon(ctx, x, y, r) {
-    ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-        const angle = i * Math.PI / 3;
-        const px = x + r * Math.cos(angle);
-        const py = y + r * Math.sin(angle);
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-    }
-    ctx.closePath();
-    ctx.stroke();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 // --- Environment & Lighting Engine ---
 function createEnvironment() {
-    gridHelper = new THREE.GridHelper(20, 40, 0x00f2fe, 0x1f293d);
-    gridHelper.position.y = -1.5;
+    scene.background = new THREE.Color(0x05060a);
+    scene.fog = new THREE.FogExp2(0x05060a, 0.035);
+
+    gridHelper = new THREE.GridHelper(24, 48, 0x00f2fe, 0x1f293d);
+    gridHelper.position.y = -1.8;
     scene.add(gridHelper);
 
     ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    keyLight = new THREE.DirectionalLight(0xffffff, state.keyLightIntensity);
+    keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
     keyLight.position.set(5, 8, 5);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
-    keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
 
     fillLight = new THREE.PointLight(0x00f2fe, 1.2, 20);
     fillLight.position.set(-6, 2, -4);
     scene.add(fillLight);
 
-    rimLight = new THREE.PointLight(0x7928ca, 1.5, 20);
+    rimLight = new THREE.PointLight(0xff007f, 1.5, 20);
     rimLight.position.set(0, 5, -6);
     scene.add(rimLight);
 
-    createParticleAtmosphere();
-    updateEnvironmentPreset();
+    // Disco Strobe Lights
+    discoLight1 = new THREE.PointLight(0x00f2fe, 0, 15);
+    discoLight1.position.set(3, 4, 3);
+    scene.add(discoLight1);
+
+    discoLight2 = new THREE.PointLight(0xff007f, 0, 15);
+    discoLight2.position.set(-3, -2, -3);
+    scene.add(discoLight2);
+
+    createCosmicParticles();
 }
 
-function createParticleAtmosphere() {
+function createCosmicParticles() {
     if (particleSystem) scene.remove(particleSystem);
 
     const count = state.particleCount;
@@ -322,9 +266,9 @@ function createParticleAtmosphere() {
     const baseColor = new THREE.Color(state.baseColor);
 
     for (let i = 0; i < count; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * 24;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 24;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 24;
+        positions[i * 3] = (Math.random() - 0.5) * 28;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 28;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 28;
 
         colors[i * 3] = baseColor.r + (Math.random() - 0.5) * 0.2;
         colors[i * 3 + 1] = baseColor.g + (Math.random() - 0.5) * 0.2;
@@ -335,140 +279,18 @@ function createParticleAtmosphere() {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-        size: 0.04,
+        size: 0.045,
         vertexColors: true,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.7,
         blending: THREE.AdditiveBlending
     });
 
     particleSystem = new THREE.Points(geometry, material);
-    particleSystem.visible = state.showParticles;
     scene.add(particleSystem);
 }
 
-function updateEnvironmentPreset() {
-    const p = state.envPreset;
-    if (p === 'cyberpunk') {
-        scene.background = new THREE.Color(0x07080c);
-        scene.fog = state.showFog ? new THREE.FogExp2(0x07080c, 0.04) : null;
-        keyLight.color.setHex(0xffffff);
-        fillLight.color.setHex(0x00f2fe);
-        rimLight.color.setHex(0xff007f);
-    } else if (p === 'desert_sun') {
-        scene.background = new THREE.Color(0x1a120b);
-        scene.fog = state.showFog ? new THREE.FogExp2(0x1a120b, 0.03) : null;
-        keyLight.color.setHex(0xffb703);
-        fillLight.color.setHex(0xfb8500);
-        rimLight.color.setHex(0x023e8a);
-    } else if (p === 'deep_space') {
-        scene.background = new THREE.Color(0x020208);
-        scene.fog = state.showFog ? new THREE.FogExp2(0x020208, 0.02) : null;
-        keyLight.color.setHex(0x9d4edd);
-        fillLight.color.setHex(0x3a0ca3);
-        rimLight.color.setHex(0x4cc9f0);
-    } else if (p === 'studio_clean') {
-        scene.background = new THREE.Color(0x1e222d);
-        scene.fog = null;
-        keyLight.color.setHex(0xffffff);
-        fillLight.color.setHex(0xcccccc);
-        rimLight.color.setHex(0xffffff);
-    } else if (p === 'volcanic') {
-        scene.background = new THREE.Color(0x0f0404);
-        scene.fog = state.showFog ? new THREE.FogExp2(0x0f0404, 0.05) : null;
-        keyLight.color.setHex(0xff3300);
-        fillLight.color.setHex(0xff9900);
-        rimLight.color.setHex(0x660000);
-    }
-}
-
-// --- Procedural 3D Mesh Generator ---
-function build3DModel() {
-    electronOrbits = [];
-    while (mainMeshGroup.children.length > 0) {
-        const obj = mainMeshGroup.children[0];
-        if (obj.geometry) obj.geometry.dispose();
-        if (obj.material) {
-            if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
-            else obj.material.dispose();
-        }
-        mainMeshGroup.remove(obj);
-    }
-
-    let geometry;
-    const sub = state.subdivision;
-
-    try {
-        switch (state.modelType) {
-            case 'atom_core':
-                geometry = new THREE.IcosahedronGeometry(0.9, Math.floor(sub / 12));
-                break;
-            case 'dna_helix':
-                geometry = createDNAHelixGeometry();
-                break;
-            case 'tree_life':
-                geometry = createTreeLifeGeometry();
-                break;
-            case 'fruit_mesh':
-                geometry = createFruitGeometry();
-                break;
-            case 'animal_mesh':
-                geometry = createAnimalGeometry();
-                break;
-            case 'tech_engine':
-                geometry = createTechEngineGeometry(sub);
-                break;
-            case 'sand_grain':
-                geometry = new THREE.IcosahedronGeometry(1.4, Math.floor(sub / 16));
-                break;
-            case 'rock_peak':
-                geometry = new THREE.ConeGeometry(2.0, 2.5, sub, sub);
-                break;
-            case 'cyber_citadel':
-                geometry = createCyberCitadelGeometry(sub);
-                break;
-            case 'planet_world':
-                geometry = new THREE.SphereGeometry(1.6, sub, sub);
-                break;
-            default:
-                geometry = new THREE.IcosahedronGeometry(1.4, 4);
-        }
-    } catch (e) {
-        console.error('Geometry build error, fallback to Icosahedron:', e);
-        geometry = new THREE.IcosahedronGeometry(1.4, 4);
-    }
-
-    applySculptDeformation(geometry);
-    geometry.computeVertexNormals();
-
-    const material = createMaterial();
-    mainMesh = new THREE.Mesh(geometry, material);
-    mainMesh.castShadow = state.showShadows;
-    mainMesh.receiveShadow = state.showShadows;
-    mainMeshGroup.add(mainMesh);
-
-    if (state.modelType === 'atom_core') {
-        createAtomOrbitRings();
-    }
-
-    if (state.modelType === 'planet_world') {
-        const ringGeo = new THREE.RingGeometry(2.0, 3.2, 64);
-        const ringMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(state.emissiveColor),
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.6,
-            wireframe: state.shadingMode === 'wireframe'
-        });
-        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-        ringMesh.rotation.x = Math.PI / 3;
-        mainMeshGroup.add(ringMesh);
-    }
-
-    updateHUDStats(geometry);
-}
-
-// --- Bulletproof Non-Indexed Geometry Merger ---
+// --- Bulletproof Geometry Merger ---
 function mergeGeometries(geometries) {
     const list = geometries.map(g => g.index ? g.toNonIndexed() : g);
     let totalVerts = 0;
@@ -489,64 +311,119 @@ function mergeGeometries(geometries) {
     return merged;
 }
 
-// --- Specialized Procedural Geometry Generators ---
-function createDNAHelixGeometry() {
-    const list = [];
-    const height = 4.0;
-    const radius = 1.0;
-    const turns = 2.5;
-
-    for (let i = 0; i < 40; i++) {
-        const t = i / 40;
-        const angle = t * Math.PI * 2 * turns;
-        const y = (t - 0.5) * height;
-
-        const s1 = new THREE.SphereGeometry(0.12, 12, 12);
-        s1.translate(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
-        list.push(s1);
-
-        const s2 = new THREE.SphereGeometry(0.12, 12, 12);
-        s2.translate(Math.cos(angle + Math.PI) * radius, y, Math.sin(angle + Math.PI) * radius);
-        list.push(s2);
-
-        if (i % 2 === 0) {
-            const bar = new THREE.CylinderGeometry(0.04, 0.04, radius * 2, 8);
-            bar.rotation.z = Math.PI / 2;
-            bar.rotation.y = -angle;
-            bar.translate(0, y, 0);
-            list.push(bar);
+// --- Procedural 3D Model Generators ---
+function build3DModel() {
+    electronOrbits = [];
+    while (mainMeshGroup.children.length > 0) {
+        const obj = mainMeshGroup.children[0];
+        if (obj.geometry) obj.geometry.dispose();
+        if (obj.material) {
+            if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+            else obj.material.dispose();
         }
+        mainMeshGroup.remove(obj);
     }
-    return mergeGeometries(list);
+
+    let geometry;
+
+    try {
+        switch (state.modelType) {
+            case 'planet':
+                geometry = new THREE.SphereGeometry(1.6, 48, 48);
+                break;
+            case 'atom':
+                geometry = new THREE.IcosahedronGeometry(0.9, 4);
+                break;
+            case 'tree':
+                geometry = createTreeGeometry();
+                break;
+            case 'fruit':
+                geometry = createFruitGeometry();
+                break;
+            case 'dragon':
+                geometry = createDragonHeadGeometry();
+                break;
+            case 'prism':
+                geometry = new THREE.IcosahedronGeometry(1.5, 0);
+                break;
+            case 'mech':
+                geometry = createMechGeometry();
+                break;
+            default:
+                geometry = new THREE.SphereGeometry(1.6, 48, 48);
+        }
+    } catch (e) {
+        console.error('Model build fallback:', e);
+        geometry = new THREE.IcosahedronGeometry(1.5, 2);
+    }
+
+    applySculptDeformation(geometry);
+    geometry.computeVertexNormals();
+
+    const material = createMaterial();
+    mainMesh = new THREE.Mesh(geometry, material);
+    mainMesh.castShadow = true;
+    mainMesh.receiveShadow = true;
+    mainMeshGroup.add(mainMesh);
+
+    // Additional Model Specific Accessories
+    if (state.modelType === 'planet') {
+        // Planetary Ring
+        const ringGeo = new THREE.RingGeometry(2.0, 3.2, 64);
+        const ringMat = new THREE.MeshStandardMaterial({
+            color: new THREE.Color(state.emissiveColor),
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.6,
+            wireframe: state.wireframe
+        });
+        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+        ringMesh.rotation.x = Math.PI / 3;
+        mainMeshGroup.add(ringMesh);
+
+        // Orbiting Moon
+        const moonGeo = new THREE.SphereGeometry(0.3, 16, 16);
+        const moonMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.8 });
+        const moonMesh = new THREE.Mesh(moonGeo, moonMat);
+        moonMesh.position.set(3.5, 0, 0);
+        mainMeshGroup.add(moonMesh);
+        electronOrbits.push({ mesh: moonMesh, radius: 3.5, speed: 0.8, rot: { rx: 0.2, ry: 0, rz: 0 }, offset: 0 });
+    }
+
+    if (state.modelType === 'atom') {
+        createAtomOrbitRings();
+    }
+
+    updateHUDStats(geometry);
 }
 
-function createTreeLifeGeometry() {
+function createTreeGeometry() {
     const list = [];
     const trunk = new THREE.CylinderGeometry(0.3, 0.5, 2.5, 12);
     trunk.translate(0, -0.25, 0);
     list.push(trunk);
 
-    const branch1 = new THREE.CylinderGeometry(0.15, 0.25, 1.5, 8);
-    branch1.rotation.z = Math.PI / 4;
-    branch1.translate(0.5, 0.8, 0);
-    list.push(branch1);
+    const b1 = new THREE.CylinderGeometry(0.15, 0.25, 1.5, 8);
+    b1.rotation.z = Math.PI / 4;
+    b1.translate(0.5, 0.8, 0);
+    list.push(b1);
 
-    const branch2 = new THREE.CylinderGeometry(0.15, 0.25, 1.5, 8);
-    branch2.rotation.z = -Math.PI / 4;
-    branch2.translate(-0.5, 0.8, 0);
-    list.push(branch2);
+    const b2 = new THREE.CylinderGeometry(0.15, 0.25, 1.5, 8);
+    b2.rotation.z = -Math.PI / 4;
+    b2.translate(-0.5, 0.8, 0);
+    list.push(b2);
 
-    const canopy1 = new THREE.IcosahedronGeometry(0.9, 2);
-    canopy1.translate(0, 1.8, 0);
-    list.push(canopy1);
+    const c1 = new THREE.IcosahedronGeometry(0.9, 2);
+    c1.translate(0, 1.8, 0);
+    list.push(c1);
 
-    const canopy2 = new THREE.IcosahedronGeometry(0.7, 2);
-    canopy2.translate(0.9, 1.4, 0.4);
-    list.push(canopy2);
+    const c2 = new THREE.IcosahedronGeometry(0.7, 2);
+    c2.translate(0.9, 1.4, 0.4);
+    list.push(c2);
 
-    const canopy3 = new THREE.IcosahedronGeometry(0.7, 2);
-    canopy3.translate(-0.9, 1.4, -0.4);
-    list.push(canopy3);
+    const c3 = new THREE.IcosahedronGeometry(0.7, 2);
+    c3.translate(-0.9, 1.4, -0.4);
+    list.push(c3);
 
     return mergeGeometries(list);
 }
@@ -567,31 +444,31 @@ function createFruitGeometry() {
     return mergeGeometries([fruitGeo, stem]);
 }
 
-function createAnimalGeometry() {
+function createDragonHeadGeometry() {
     const list = [];
     const cranium = new THREE.IcosahedronGeometry(1.1, 1);
     list.push(cranium);
 
-    const snout = new THREE.BoxGeometry(0.8, 0.6, 1.0, 4, 4, 4);
+    const snout = new THREE.BoxGeometry(0.8, 0.6, 1.2, 4, 4, 4);
     snout.translate(0, -0.2, 0.9);
     list.push(snout);
 
-    const earL = new THREE.ConeGeometry(0.3, 0.7, 4);
-    earL.rotation.x = -0.3;
-    earL.translate(-0.6, 1.1, -0.2);
-    list.push(earL);
+    const hornL = new THREE.ConeGeometry(0.25, 1.2, 4);
+    hornL.rotation.x = -0.6;
+    hornL.translate(-0.5, 1.2, -0.4);
+    list.push(hornL);
 
-    const earR = new THREE.ConeGeometry(0.3, 0.7, 4);
-    earR.rotation.x = -0.3;
-    earR.translate(0.6, 1.1, -0.2);
-    list.push(earR);
+    const hornR = new THREE.ConeGeometry(0.25, 1.2, 4);
+    hornR.rotation.x = -0.6;
+    hornR.translate(0.5, 1.2, -0.4);
+    list.push(hornR);
 
     return mergeGeometries(list);
 }
 
-function createTechEngineGeometry(sub) {
+function createMechGeometry() {
     const list = [];
-    const core = new THREE.CylinderGeometry(0.7, 0.7, 2.5, sub / 2);
+    const core = new THREE.CylinderGeometry(0.7, 0.7, 2.5, 16);
     list.push(core);
 
     const ring1 = new THREE.TorusGeometry(1.4, 0.2, 16, 24);
@@ -602,99 +479,6 @@ function createTechEngineGeometry(sub) {
     list.push(ring2);
 
     return mergeGeometries(list);
-}
-
-function createCyberCitadelGeometry(sub) {
-    const baseBox = new THREE.BoxGeometry(0.8, 2.8, 0.8, sub / 2, sub / 2, sub / 2);
-    const towerGeo1 = new THREE.BoxGeometry(0.5, 3.4, 0.5, 16, 16, 16);
-    towerGeo1.translate(0.6, 0.3, 0.6);
-    const towerGeo2 = new THREE.BoxGeometry(0.6, 2.2, 0.6, 16, 16, 16);
-    towerGeo2.translate(-0.6, -0.2, -0.5);
-    const spireGeo = new THREE.CylinderGeometry(0.05, 0.3, 4.0, 16);
-    spireGeo.translate(0, 0.5, 0);
-
-    return mergeGeometries([baseBox, towerGeo1, towerGeo2, spireGeo]);
-}
-
-function applySculptDeformation(geometry) {
-    const pos = geometry.attributes.position;
-    const v = new THREE.Vector3();
-    const amp = state.noiseAmp;
-    const freq = state.noiseFreq;
-    const octaves = state.noiseOctaves;
-    const twist = (state.twist * Math.PI) / 180;
-    const explode = state.explode;
-
-    for (let i = 0; i < pos.count; i++) {
-        v.fromBufferAttribute(pos, i);
-
-        if (twist !== 0) {
-            const angle = v.y * twist * 0.5;
-            const cosA = Math.cos(angle);
-            const sinA = Math.sin(angle);
-            const x = v.x * cosA - v.z * sinA;
-            const z = v.x * sinA + v.z * cosA;
-            v.x = x;
-            v.z = z;
-        }
-
-        const noiseVal = Noise3D.fbm(v.x * freq, v.y * freq, v.z * freq, octaves);
-        const norm = v.clone().normalize();
-
-        if (state.modelType === 'rock_peak') {
-            v.y += noiseVal * amp * 1.5;
-        } else {
-            v.addScaledVector(norm, noiseVal * amp);
-        }
-
-        if (explode > 0) {
-            v.addScaledVector(norm, explode * 0.5);
-        }
-
-        pos.setXYZ(i, v.x, v.y, v.z);
-    }
-    geometry.computeVertexNormals();
-}
-
-function createMaterial() {
-    const mode = state.shadingMode;
-
-    if (mode === 'clay') {
-        return new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.9, metalness: 0.05 });
-    }
-    if (mode === 'wireframe') {
-        return new THREE.MeshBasicMaterial({ color: new THREE.Color(state.baseColor), wireframe: true });
-    }
-    if (mode === 'hologram') {
-        return new THREE.MeshStandardMaterial({
-            color: new THREE.Color(state.baseColor),
-            emissive: new THREE.Color(state.emissiveColor),
-            emissiveIntensity: 1.5,
-            transparent: true,
-            opacity: 0.6,
-            wireframe: true
-        });
-    }
-    if (mode === 'normals') {
-        return new THREE.MeshNormalMaterial();
-    }
-
-    const mat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(state.baseColor),
-        roughness: state.roughness,
-        metalness: state.metalness,
-        emissive: new THREE.Color(state.emissiveColor),
-        emissiveIntensity: state.emissiveIntensity,
-        transparent: state.opacity < 1.0,
-        opacity: state.opacity
-    });
-
-    if (state.texturePattern !== 'none' && proceduralTextures[state.texturePattern]) {
-        mat.bumpMap = proceduralTextures[state.texturePattern];
-        mat.bumpScale = 0.15;
-    }
-
-    return mat;
 }
 
 function createAtomOrbitRings() {
@@ -739,348 +523,240 @@ function createAtomOrbitRings() {
     });
 }
 
-// --- Live Search & Filter Bar Logic ---
-function setupSearchFilter() {
-    const searchInput = document.getElementById('global-3d-search');
-    const clearBtn = document.getElementById('btn-clear-search');
-    const cards = document.querySelectorAll('.model-card');
-    const catChips = document.querySelectorAll('.cat-chip');
+function applySculptDeformation(geometry) {
+    const pos = geometry.attributes.position;
+    const v = new THREE.Vector3();
+    const amp = state.deform;
+    const twist = (state.twist * Math.PI) / 180;
 
-    if (!searchInput) return;
+    for (let i = 0; i < pos.count; i++) {
+        v.fromBufferAttribute(pos, i);
 
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        if (clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+        if (twist !== 0) {
+            const angle = v.y * twist * 0.5;
+            const cosA = Math.cos(angle);
+            const sinA = Math.sin(angle);
+            const x = v.x * cosA - v.z * sinA;
+            const z = v.x * sinA + v.z * cosA;
+            v.x = x;
+            v.z = z;
+        }
 
-        cards.forEach(card => {
-            const title = card.querySelector('.card-title').textContent.toLowerCase();
-            const desc = card.querySelector('.card-desc').textContent.toLowerCase();
-            const tags = card.dataset.tags || '';
+        if (amp > 0) {
+            const noiseVal = Noise3D.fbm(v.x * 2.2, v.y * 2.2, v.z * 2.2, 3);
+            const norm = v.clone().normalize();
+            v.addScaledVector(norm, noiseVal * amp);
+        }
 
-            if (query === '' || title.includes(query) || desc.includes(query) || tags.includes(query)) {
-                card.style.display = 'flex';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    });
-
-    if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-            searchInput.value = '';
-            clearBtn.style.display = 'none';
-            cards.forEach(card => card.style.display = 'flex');
-        });
+        pos.setXYZ(i, v.x, v.y, v.z);
     }
+    geometry.computeVertexNormals();
+}
 
-    catChips.forEach(chip => {
-        chip.addEventListener('click', (e) => {
-            catChips.forEach(c => c.classList.remove('active'));
-            const target = e.currentTarget;
-            target.classList.add('active');
-            const cat = target.dataset.cat;
-
-            cards.forEach(card => {
-                if (cat === 'all' || card.dataset.cat === cat) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
+function createMaterial() {
+    return new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        roughness: state.roughness,
+        metalness: state.metalness,
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
     });
 }
 
 // --- Event Listeners Setup ---
 function setupEventListeners() {
-    document.querySelectorAll('#scale-selector .pill-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('#scale-selector .pill-btn').forEach(b => b.classList.remove('active'));
-            const target = e.currentTarget;
-            target.classList.add('active');
-            state.scaleCategory = target.dataset.scale;
-
-            if (state.scaleCategory === 'nano') state.modelType = 'dna_helix';
-            else if (state.scaleCategory === 'nature') state.modelType = 'tree_life';
-            else if (state.scaleCategory === 'tech') state.modelType = 'tech_engine';
-            else if (state.scaleCategory === 'sand') state.modelType = 'sand_grain';
-            else if (state.scaleCategory === 'planet') state.modelType = 'planet_world';
-
-            syncModelCardUI();
-            build3DModel();
-            showToast(`Category Switched: ${target.textContent.trim()}`);
-        });
-    });
-
-    const presetSelect = document.getElementById('preset-select');
-    if (presetSelect) {
-        presetSelect.addEventListener('change', (e) => {
-            const val = e.target.value;
-            if (PRESETS_LIBRARY[val]) {
-                applyPreset(PRESETS_LIBRARY[val]);
-                showToast(`Preset Loaded: ${e.target.options[e.target.selectedIndex].text}`);
-            }
-        });
-    }
-
-    document.querySelectorAll('.model-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            document.querySelectorAll('.model-card').forEach(c => c.classList.remove('active'));
+    // Model Tabs Switcher
+    document.querySelectorAll('.model-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            document.querySelectorAll('.model-tab').forEach(t => t.classList.remove('active'));
             const target = e.currentTarget;
             target.classList.add('active');
             state.modelType = target.dataset.model;
+            SoundFX.playPop(520);
             build3DModel();
+            showToast(`Loaded: ${target.textContent.trim()}`);
         });
     });
 
-    document.querySelectorAll('.panel-tabs').forEach(tabGroup => {
-        tabGroup.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const target = e.currentTarget;
-                const panel = target.closest('.panel');
-                panel.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                panel.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-
-                target.classList.add('active');
-                panel.querySelector(`#${target.dataset.tab}`).classList.add('active');
-            });
+    // Sound FX Toggle
+    const btnSound = document.getElementById('btn-toggle-sound');
+    if (btnSound) {
+        btnSound.addEventListener('click', () => {
+            const enabled = SoundFX.toggle();
+            const icon = document.getElementById('sound-icon');
+            if (icon) icon.setAttribute('data-lucide', enabled ? 'volume-2' : 'volume-x');
+            safeLucideIcons();
+            showToast(enabled ? 'Sound FX Enabled 🔊' : 'Sound FX Muted 🔇');
         });
-    });
+    }
 
-    document.querySelectorAll('.btn-collapse').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const targetId = e.currentTarget.dataset.target;
-            const panel = document.getElementById(targetId);
-            if (targetId === 'panel-left') panel.classList.toggle('collapsed-left');
-            else if (targetId === 'panel-right') panel.classList.toggle('collapsed-right');
+    // Side Drawer Collapse Toggle
+    const btnToggleDrawer = document.getElementById('btn-toggle-drawer');
+    const drawer = document.getElementById('side-drawer');
+    if (btnToggleDrawer && drawer) {
+        btnToggleDrawer.addEventListener('click', () => {
+            drawer.classList.toggle('collapsed');
+            SoundFX.playPop(350);
         });
-    });
+    }
 
-    bindRangeInput('input-subdivision', 'val-subdivision', v => { state.subdivision = parseInt(v); build3DModel(); });
-    bindRangeInput('input-scale', 'val-scale', v => {
-        state.modelScale = parseFloat(v);
-        mainMeshGroup.scale.setScalar(state.modelScale);
-        return v + 'x';
-    });
-    bindRangeInput('input-noise-amp', 'val-noise-amp', v => { state.noiseAmp = parseFloat(v); build3DModel(); });
-    bindRangeInput('input-noise-freq', 'val-noise-freq', v => { state.noiseFreq = parseFloat(v); build3DModel(); });
-    bindRangeInput('input-noise-octaves', 'val-noise-octaves', v => { state.noiseOctaves = parseInt(v); build3DModel(); });
-    bindRangeInput('input-twist', 'val-twist', v => { state.twist = parseInt(v); build3DModel(); return v + '°'; });
-    bindRangeInput('input-explode', 'val-explode', v => { state.explode = parseFloat(v); build3DModel(); });
-
-    const colorPicker = document.getElementById('input-base-color');
-    if (colorPicker) {
-        colorPicker.addEventListener('input', (e) => {
+    // Color Pickers
+    const pickerColor = document.getElementById('picker-color');
+    if (pickerColor) {
+        pickerColor.addEventListener('input', (e) => {
             state.baseColor = e.target.value;
-            if (mainMesh && mainMesh.material && mainMesh.material.color) mainMesh.material.color.set(state.baseColor);
+            if (mainMesh && mainMesh.material && mainMesh.material.color) {
+                mainMesh.material.color.set(state.baseColor);
+            }
         });
     }
 
-    bindRangeInput('input-roughness', 'val-roughness', v => {
-        state.roughness = parseFloat(v);
-        if (mainMesh && mainMesh.material && mainMesh.material.roughness !== undefined) mainMesh.material.roughness = state.roughness;
-    });
-
-    bindRangeInput('input-metalness', 'val-metalness', v => {
-        state.metalness = parseFloat(v);
-        if (mainMesh && mainMesh.material && mainMesh.material.metalness !== undefined) mainMesh.material.metalness = state.metalness;
-    });
-
-    const emissivePicker = document.getElementById('input-emissive-color');
-    if (emissivePicker) {
-        emissivePicker.addEventListener('input', (e) => {
+    const pickerEmissive = document.getElementById('picker-emissive');
+    if (pickerEmissive) {
+        pickerEmissive.addEventListener('input', (e) => {
             state.emissiveColor = e.target.value;
-            if (mainMesh && mainMesh.material && mainMesh.material.emissive) mainMesh.material.emissive.set(state.emissiveColor);
+            if (mainMesh && mainMesh.material && mainMesh.material.emissive) {
+                mainMesh.material.emissive.set(state.emissiveColor);
+            }
         });
     }
 
-    bindRangeInput('input-emissive-intensity', 'val-emissive-intensity', v => {
-        state.emissiveIntensity = parseFloat(v);
-        if (mainMesh && mainMesh.material && mainMesh.material.emissiveIntensity !== undefined) {
-            mainMesh.material.emissiveIntensity = state.emissiveIntensity;
-        }
+    // Range Sliders
+    bindRange('slider-emissive', 'val-emissive-power', v => {
+        state.emissivePower = parseFloat(v);
+        if (mainMesh && mainMesh.material) mainMesh.material.emissiveIntensity = state.emissivePower;
     });
 
-    bindRangeInput('input-opacity', 'val-opacity', v => {
-        state.opacity = parseFloat(v);
-        if (mainMesh && mainMesh.material) {
-            mainMesh.material.transparent = state.opacity < 1.0;
-            mainMesh.material.opacity = state.opacity;
-        }
+    bindRange('slider-metal', 'val-metal', v => {
+        state.metalness = parseFloat(v);
+        if (mainMesh && mainMesh.material) mainMesh.material.metalness = state.metalness;
     });
 
-    document.querySelectorAll('.texture-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.texture-btn').forEach(b => b.classList.remove('active'));
-            const target = e.currentTarget;
-            target.classList.add('active');
-            state.texturePattern = target.dataset.pattern;
-            build3DModel();
-        });
+    bindRange('slider-rough', 'val-rough', v => {
+        state.roughness = parseFloat(v);
+        if (mainMesh && mainMesh.material) mainMesh.material.roughness = state.roughness;
     });
 
-    const btnRandom = document.getElementById('btn-random-sculpt');
-    if (btnRandom) {
-        btnRandom.addEventListener('click', () => {
-            state.noiseAmp = parseFloat((Math.random() * 1.2 + 0.1).toFixed(2));
-            state.noiseFreq = parseFloat((Math.random() * 6.0 + 1.0).toFixed(1));
-            state.twist = Math.floor(Math.random() * 360 - 180);
-            
-            document.getElementById('input-noise-amp').value = state.noiseAmp;
-            document.getElementById('val-noise-amp').textContent = state.noiseAmp;
-            document.getElementById('input-noise-freq').value = state.noiseFreq;
-            document.getElementById('val-noise-freq').textContent = state.noiseFreq;
-            document.getElementById('input-twist').value = state.twist;
-            document.getElementById('val-twist').textContent = state.twist + '°';
-
-            build3DModel();
-            showToast('Randomized Procedural Sculpt');
-        });
-    }
-
-    const btnResetSculpt = document.getElementById('btn-reset-sculpt');
-    if (btnResetSculpt) {
-        btnResetSculpt.addEventListener('click', () => {
-            state.noiseAmp = 0.45;
-            state.noiseFreq = 2.2;
-            state.twist = 0;
-            state.explode = 0;
-
-            document.getElementById('input-noise-amp').value = 0.45;
-            document.getElementById('val-noise-amp').textContent = '0.45';
-            document.getElementById('input-noise-freq').value = 2.2;
-            document.getElementById('val-noise-freq').textContent = '2.2';
-            document.getElementById('input-twist').value = 0;
-            document.getElementById('val-twist').textContent = '0°';
-            document.getElementById('input-explode').value = 0;
-            document.getElementById('val-explode').textContent = '0.0';
-
-            build3DModel();
-            showToast('Sculpt Reset to Defaults');
-        });
-    }
-
-    document.querySelectorAll('.viewport-toolbar [data-mode]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.viewport-toolbar [data-mode]').forEach(b => b.classList.remove('active'));
-            const target = e.currentTarget;
-            target.classList.add('active');
-            state.shadingMode = target.dataset.mode;
-            build3DModel();
-        });
+    bindRange('slider-deform', 'val-deform', v => {
+        state.deform = parseFloat(v);
+        build3DModel();
     });
 
-    document.querySelectorAll('.env-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.env-btn').forEach(b => b.classList.remove('active'));
-            const target = e.currentTarget;
-            target.classList.add('active');
-            state.envPreset = target.dataset.env;
-            updateEnvironmentPreset();
-        });
-    });
-
-    const keyLightPicker = document.getElementById('input-key-light-color');
-    if (keyLightPicker) {
-        keyLightPicker.addEventListener('input', (e) => {
-            keyLight.color.set(e.target.value);
-        });
-    }
-
-    bindRangeInput('input-light-intensity', 'val-light-intensity', v => {
-        state.keyLightIntensity = parseFloat(v);
-        keyLight.intensity = state.keyLightIntensity;
-    });
-
-    bindRangeInput('input-sun-angle', 'val-sun-angle', v => {
-        const rad = (parseInt(v) * Math.PI) / 180;
-        keyLight.position.x = Math.cos(rad) * 8;
-        keyLight.position.z = Math.sin(rad) * 8;
+    bindRange('slider-twist', 'val-twist', v => {
+        state.twist = parseInt(v);
+        build3DModel();
         return v + '°';
     });
 
-    const btnGrid = document.getElementById('btn-toggle-grid');
-    if (btnGrid) {
-        btnGrid.addEventListener('click', (e) => {
-            state.showGrid = !state.showGrid;
-            gridHelper.visible = state.showGrid;
-            e.currentTarget.classList.toggle('active', state.showGrid);
-        });
-    }
-
-    const btnShadows = document.getElementById('btn-toggle-shadows');
-    if (btnShadows) {
-        btnShadows.addEventListener('click', (e) => {
-            state.showShadows = !state.showShadows;
-            renderer.shadowMap.enabled = state.showShadows;
-            e.currentTarget.classList.toggle('active', state.showShadows);
-            build3DModel();
-        });
-    }
-
-    const chkParticles = document.getElementById('chk-particles');
-    if (chkParticles) {
-        chkParticles.addEventListener('change', (e) => {
-            state.showParticles = e.target.checked;
-            if (particleSystem) particleSystem.visible = state.showParticles;
-        });
-    }
-
-    bindRangeInput('input-particle-count', 'val-particle-count', v => {
+    bindRange('slider-particles', 'val-particles', v => {
         state.particleCount = parseInt(v);
-        createParticleAtmosphere();
+        createCosmicParticles();
     });
 
-    const chkFog = document.getElementById('chk-fog');
-    if (chkFog) {
-        chkFog.addEventListener('change', (e) => {
-            state.showFog = e.target.checked;
-            updateEnvironmentPreset();
+    // Fun Wheel Action Buttons
+    const btnRainbow = document.getElementById('btn-rainbow');
+    if (btnRainbow) {
+        btnRainbow.addEventListener('click', (e) => {
+            state.rainbowMode = !state.rainbowMode;
+            e.currentTarget.classList.toggle('active', state.rainbowMode);
+            SoundFX.playPop(600);
+            showToast(state.rainbowMode ? '🌈 Rainbow Neon Shifter ON' : 'Rainbow Mode OFF');
         });
     }
 
-    const camFront = document.getElementById('cam-front');
-    if (camFront) camFront.addEventListener('click', () => animateCameraPosition(0, 0, 7));
-    const camTop = document.getElementById('cam-top');
-    if (camTop) camTop.addEventListener('click', () => animateCameraPosition(0, 8, 0.1));
-    const camIso = document.getElementById('cam-iso');
-    if (camIso) camIso.addEventListener('click', () => animateCameraPosition(5, 5, 5));
-    const btnResetCam = document.getElementById('btn-reset-cam');
-    if (btnResetCam) btnResetCam.addEventListener('click', () => animateCameraPosition(0, 3, 6));
+    const btnExplode = document.getElementById('fun-btn-explode');
+    if (btnExplode) {
+        btnExplode.addEventListener('click', () => {
+            state.isExploded = !state.isExploded;
+            SoundFX.playSupernova();
+            showToast(state.isExploded ? '💥 Mesh Exploded!' : 'Reconstructed 3D Mesh');
+        });
+    }
 
-    const btnPlayAnim = document.getElementById('btn-play-anim');
-    if (btnPlayAnim) {
-        btnPlayAnim.addEventListener('click', () => {
+    const btnSupernova = document.getElementById('btn-supernova');
+    if (btnSupernova) {
+        btnSupernova.addEventListener('click', () => {
+            triggerSupernovaBurst();
+            SoundFX.playSupernova();
+            showToast('✨ Supernova Particle Burst!');
+        });
+    }
+
+    const btnWireframe = document.getElementById('btn-wireframe');
+    if (btnWireframe) {
+        btnWireframe.addEventListener('click', (e) => {
+            state.wireframe = !state.wireframe;
+            e.currentTarget.classList.toggle('active', state.wireframe);
+            if (mainMesh && mainMesh.material) mainMesh.material.wireframe = state.wireframe;
+            SoundFX.playPop(450);
+            showToast(state.wireframe ? 'Neon Grid Wireframe ON' : 'Wireframe OFF');
+        });
+    }
+
+    const btnDisco = document.getElementById('btn-disco-lights');
+    if (btnDisco) {
+        btnDisco.addEventListener('click', (e) => {
+            state.discoMode = !state.discoMode;
+            e.currentTarget.classList.toggle('active', state.discoMode);
+            discoLight1.intensity = state.discoMode ? 2.5 : 0;
+            discoLight2.intensity = state.discoMode ? 2.5 : 0;
+            SoundFX.playPop(700);
+            showToast(state.discoMode ? '⚡ Disco Cyber Strobes ON' : 'Disco Lights OFF');
+        });
+    }
+
+    const btnRandomAll = document.getElementById('btn-random-all');
+    if (btnRandomAll) {
+        btnRandomAll.addEventListener('click', () => {
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            const randomEmissive = '#' + Math.floor(Math.random()*16777215).toString(16);
+            state.baseColor = randomColor;
+            state.emissiveColor = randomEmissive;
+            state.deform = parseFloat((Math.random() * 1.2).toFixed(2));
+            state.twist = Math.floor(Math.random() * 360 - 180);
+
+            document.getElementById('picker-color').value = randomColor;
+            document.getElementById('picker-emissive').value = randomEmissive;
+            document.getElementById('slider-deform').value = state.deform;
+            document.getElementById('val-deform').textContent = state.deform;
+            document.getElementById('slider-twist').value = state.twist;
+            document.getElementById('val-twist').textContent = state.twist + '°';
+
+            SoundFX.playPop(650);
+            build3DModel();
+            showToast('🎲 Randomized 3D Universe');
+        });
+    }
+
+    // Animation Speed & Play Pause
+    const btnPlayPause = document.getElementById('btn-play-pause');
+    if (btnPlayPause) {
+        btnPlayPause.addEventListener('click', () => {
             state.animActive = !state.animActive;
-            const icon = document.getElementById('icon-play');
-            if (state.animActive) {
-                if (icon) icon.setAttribute('data-lucide', 'pause');
-                document.getElementById('anim-state-text').textContent = `Active (${state.animSpeed} RPM)`;
-            } else {
-                if (icon) icon.setAttribute('data-lucide', 'play');
-                document.getElementById('anim-state-text').textContent = 'Paused';
-            }
+            const icon = document.getElementById('play-icon');
+            if (icon) icon.setAttribute('data-lucide', state.animActive ? 'pause' : 'play');
             safeLucideIcons();
+            document.getElementById('anim-status-text').textContent = state.animActive ? `Active (${state.animSpeed} RPM)` : 'Paused';
         });
     }
 
-    document.querySelectorAll('.anim-chip').forEach(chip => {
-        chip.addEventListener('click', (e) => {
-            document.querySelectorAll('.anim-chip').forEach(c => c.classList.remove('active'));
-            const target = e.currentTarget;
-            target.classList.add('active');
-            state.animType = target.dataset.anim;
-            document.querySelector('.anim-title').textContent = target.textContent;
-        });
-    });
-
-    bindRangeInput('input-anim-speed', 'val-anim-speed', v => {
+    bindRange('slider-speed', 'val-speed', v => {
         state.animSpeed = parseFloat(v);
-        if (state.animActive) {
-            document.getElementById('anim-state-text').textContent = `Active (${state.animSpeed} RPM)`;
-        }
+        document.getElementById('anim-status-text').textContent = state.animActive ? `Active (${state.animSpeed} RPM)` : 'Paused';
         return v + 'x';
     });
+
+    // Header Action Modals
+    const btnSnapshot = document.getElementById('btn-snapshot');
+    if (btnSnapshot) btnSnapshot.addEventListener('click', openSnapshotModal);
+    const modalClose = document.getElementById('modal-close');
+    if (modalClose) modalClose.addEventListener('click', closeSnapshotModal);
+    const modalCancel = document.getElementById('modal-cancel');
+    if (modalCancel) modalCancel.addEventListener('click', closeSnapshotModal);
+
+    const btnExport3D = document.getElementById('btn-export-3d');
+    if (btnExport3D) btnExport3D.addEventListener('click', exportOBJModel);
 
     const btnFullscreen = document.getElementById('btn-fullscreen');
     if (btnFullscreen) {
@@ -1089,55 +765,24 @@ function setupEventListeners() {
             else if (document.exitFullscreen) document.exitFullscreen();
         });
     }
-
-    const btnSnapshot = document.getElementById('btn-snapshot');
-    if (btnSnapshot) btnSnapshot.addEventListener('click', openSnapshotModal);
-    const snapClose = document.getElementById('modal-snapshot-close');
-    if (snapClose) snapClose.addEventListener('click', closeSnapshotModal);
-    const snapCancel = document.getElementById('modal-snapshot-cancel');
-    if (snapCancel) snapCancel.addEventListener('click', closeSnapshotModal);
-
-    const btnExportObj = document.getElementById('btn-export-obj');
-    if (btnExportObj) btnExportObj.addEventListener('click', exportOBJModel);
 }
 
 function setupCookieConsent() {
     const banner = document.getElementById('cookie-banner');
-    const acceptBtn = document.getElementById('btn-cookie-accept');
-    const declineBtn = document.getElementById('btn-cookie-decline');
-    const prefBtn = document.getElementById('btn-cookie-pref');
-
-    if (!banner) return;
-
-    if (!localStorage.getItem('vertex_cookie_consent')) {
+    const btn = document.getElementById('btn-accept-cookie');
+    if (banner && !localStorage.getItem('vertex_cookie_consent')) {
         banner.classList.add('active');
     }
-
-    if (acceptBtn) {
-        acceptBtn.addEventListener('click', () => {
+    if (btn) {
+        btn.addEventListener('click', () => {
             localStorage.setItem('vertex_cookie_consent', 'accepted');
             banner.classList.remove('active');
-            showToast('Cookie Preferences Saved (Accepted)');
-        });
-    }
-
-    if (declineBtn) {
-        declineBtn.addEventListener('click', () => {
-            localStorage.setItem('vertex_cookie_consent', 'declined');
-            banner.classList.remove('active');
-            showToast('Non-Essential Cookies Disabled');
-        });
-    }
-
-    if (prefBtn) {
-        prefBtn.addEventListener('click', () => {
-            banner.classList.add('active');
         });
     }
 }
 
-function bindRangeInput(inputId, valId, callback) {
-    const input = document.getElementById(inputId);
+function bindRange(sliderId, valId, callback) {
+    const input = document.getElementById(sliderId);
     const valDisplay = document.getElementById(valId);
     if (!input || !valDisplay) return;
 
@@ -1147,61 +792,37 @@ function bindRangeInput(inputId, valId, callback) {
     });
 }
 
-function syncModelCardUI() {
-    document.querySelectorAll('.model-card').forEach(card => {
-        card.classList.toggle('active', card.dataset.model === state.modelType);
+function triggerSupernovaBurst() {
+    const count = 300;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(count * 3);
+    const velocities = [];
+
+    for (let i = 0; i < count; i++) {
+        positions[i * 3] = 0;
+        positions[i * 3 + 1] = 0;
+        positions[i * 3 + 2] = 0;
+
+        velocities.push(new THREE.Vector3(
+            (Math.random() - 0.5) * 8,
+            (Math.random() - 0.5) * 8,
+            (Math.random() - 0.5) * 8
+        ));
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const mat = new THREE.PointsMaterial({
+        size: 0.12,
+        color: new THREE.Color(state.baseColor),
+        transparent: true,
+        opacity: 1.0,
+        blending: THREE.AdditiveBlending
     });
-}
 
-function applyPreset(preset) {
-    Object.assign(state, preset);
+    const pSystem = new THREE.Points(geometry, mat);
+    scene.add(pSystem);
 
-    const baseColorInput = document.getElementById('input-base-color');
-    if (baseColorInput) baseColorInput.value = state.baseColor;
-    const emissiveColorInput = document.getElementById('input-emissive-color');
-    if (emissiveColorInput) emissiveColorInput.value = state.emissiveColor;
-
-    const roughnessInput = document.getElementById('input-roughness');
-    if (roughnessInput) {
-        roughnessInput.value = state.roughness;
-        document.getElementById('val-roughness').textContent = state.roughness;
-    }
-
-    const metalnessInput = document.getElementById('input-metalness');
-    if (metalnessInput) {
-        metalnessInput.value = state.metalness;
-        document.getElementById('val-metalness').textContent = state.metalness;
-    }
-
-    const noiseAmpInput = document.getElementById('input-noise-amp');
-    if (noiseAmpInput) {
-        noiseAmpInput.value = state.noiseAmp;
-        document.getElementById('val-noise-amp').textContent = state.noiseAmp;
-    }
-
-    const noiseFreqInput = document.getElementById('input-noise-freq');
-    if (noiseFreqInput) {
-        noiseFreqInput.value = state.noiseFreq;
-        document.getElementById('val-noise-freq').textContent = state.noiseFreq;
-    }
-
-    syncModelCardUI();
-    updateEnvironmentPreset();
-    build3DModel();
-}
-
-function animateCameraPosition(x, y, z) {
-    const start = camera.position.clone();
-    const end = new THREE.Vector3(x, y, z);
-    let progress = 0;
-
-    function step() {
-        progress += 0.05;
-        camera.position.lerpVectors(start, end, progress);
-        camera.lookAt(0, 0, 0);
-        if (progress < 1) requestAnimationFrame(step);
-    }
-    step();
+    supernovaParticles.push({ system: pSystem, velocities: velocities, life: 1.0 });
 }
 
 // --- Main Animation Loop ---
@@ -1212,37 +833,45 @@ function animate() {
     const delta = (now - lastFrameTime) / 1000;
     lastFrameTime = now;
 
+    // Track FPS
     frameCount++;
     if (frameCount % 30 === 0) {
-        currentFPS = Math.round(1 / delta);
         const fpsEl = document.getElementById('hud-fps');
-        if (fpsEl) fpsEl.textContent = currentFPS;
+        if (fpsEl) fpsEl.textContent = Math.round(1 / delta);
     }
 
     if (controls) controls.update();
 
+    // Auto Spin & Animations
     if (state.animActive) {
         state.animTime += delta * state.animSpeed;
-
-        if (state.animType === 'turntable') {
-            mainMeshGroup.rotation.y += delta * 0.5 * state.animSpeed;
-        } else if (state.animType === 'pulse_glow') {
-            if (mainMesh && mainMesh.material && mainMesh.material.emissiveIntensity !== undefined) {
-                mainMesh.material.emissiveIntensity = state.emissiveIntensity + Math.sin(state.animTime * 3) * 0.4;
-            }
-        } else if (state.animType === 'vertex_wave') {
-            mainMeshGroup.rotation.y += delta * 0.2 * state.animSpeed;
-            mainMeshGroup.position.y = Math.sin(state.animTime * 2) * 0.2;
-        } else if (state.animType === 'camera_fly') {
-            const radius = 6;
-            camera.position.x = Math.sin(state.animTime * 0.5) * radius;
-            camera.position.z = Math.cos(state.animTime * 0.5) * radius;
-            camera.lookAt(0, 0, 0);
-        }
+        mainMeshGroup.rotation.y += delta * 0.6 * state.animSpeed;
     }
 
+    // Rainbow Color Shift Mode
+    if (state.rainbowMode && mainMesh && mainMesh.material) {
+        const hue = (state.animTime * 0.2) % 1;
+        mainMesh.material.color.setHSL(hue, 1.0, 0.5);
+    }
+
+    // Disco Strobe Lights Mode
+    if (state.discoMode) {
+        const time = performance.now() * 0.003;
+        discoLight1.position.x = Math.sin(time) * 5;
+        discoLight1.position.z = Math.cos(time) * 5;
+        discoLight2.position.x = Math.cos(time * 0.8) * 5;
+        discoLight2.position.z = Math.sin(time * 0.8) * 5;
+    }
+
+    // Explode Mesh Effect
+    if (mainMesh) {
+        const targetScale = state.isExploded ? 1.4 : 1.0;
+        mainMesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+    }
+
+    // Animate Electron / Moon Orbits
     if (electronOrbits.length > 0) {
-        electronOrbits.forEach((orb) => {
+        electronOrbits.forEach(orb => {
             const angle = state.animTime * orb.speed + orb.offset;
             const x = Math.cos(angle) * orb.radius;
             const y = Math.sin(angle) * orb.radius;
@@ -1253,8 +882,30 @@ function animate() {
         });
     }
 
-    if (particleSystem && state.showParticles) {
-        particleSystem.rotation.y += delta * 0.02;
+    // Animate Cosmic Particle Atmosphere
+    if (particleSystem) {
+        particleSystem.rotation.y += delta * 0.03;
+    }
+
+    // Animate Supernova Bursts
+    for (let i = supernovaParticles.length - 1; i >= 0; i--) {
+        const burst = supernovaParticles[i];
+        burst.life -= delta * 1.5;
+        const pos = burst.system.geometry.attributes.position;
+
+        for (let j = 0; j < burst.velocities.length; j++) {
+            const v = burst.velocities[j];
+            pos.setXYZ(j, pos.getX(j) + v.x * delta, pos.getY(j) + v.y * delta, pos.getZ(j) + v.z * delta);
+        }
+        pos.needsUpdate = true;
+        burst.system.material.opacity = burst.life;
+
+        if (burst.life <= 0) {
+            scene.remove(burst.system);
+            burst.system.geometry.dispose();
+            burst.system.material.dispose();
+            supernovaParticles.splice(i, 1);
+        }
     }
 
     if (renderer && scene && camera) {
@@ -1264,18 +915,11 @@ function animate() {
 
 function updateHUDStats(geometry) {
     let polyCount = 0;
-    let vertCount = geometry.attributes.position ? geometry.attributes.position.count : 0;
-
     if (geometry.index) polyCount = geometry.index.count / 3;
-    else polyCount = vertCount / 3;
+    else if (geometry.attributes.position) polyCount = geometry.attributes.position.count / 3;
 
     const polysEl = document.getElementById('hud-polys');
-    const vertsEl = document.getElementById('hud-verts');
-    const drawsEl = document.getElementById('hud-draws');
-
-    if (polysEl) polysEl.textContent = polyCount > 1000 ? (polyCount / 1000).toFixed(1) + 'k' : polyCount;
-    if (vertsEl) vertsEl.textContent = vertCount > 1000 ? (vertCount / 1000).toFixed(1) + 'k' : vertCount;
-    if (drawsEl && renderer) drawsEl.textContent = renderer.info.render.calls;
+    if (polysEl) polysEl.textContent = polyCount > 1000 ? (polyCount / 1000).toFixed(1) + 'k' : Math.round(polyCount);
 }
 
 function openSnapshotModal() {
@@ -1284,12 +928,13 @@ function openSnapshotModal() {
     const dataURL = renderer.domElement.toDataURL('image/png');
 
     const modal = document.getElementById('modal-snapshot');
-    const previewImg = document.getElementById('snapshot-img-preview');
-    const downloadLink = document.getElementById('link-download-snapshot');
+    const previewImg = document.getElementById('snapshot-preview-img');
+    const downloadLink = document.getElementById('link-download-img');
 
     if (previewImg) previewImg.src = dataURL;
     if (downloadLink) downloadLink.href = dataURL;
     if (modal) modal.classList.add('active');
+    SoundFX.playPop(600);
 }
 
 function closeSnapshotModal() {
@@ -1313,10 +958,11 @@ function exportOBJModel() {
         link.download = `vertex_3d_${state.modelType}_${Date.now()}.obj`;
         link.click();
 
-        showToast('3D Model Exported (.OBJ)');
+        showToast('🎉 3D Model Exported (.OBJ)');
+        SoundFX.playPop(700);
     } catch (e) {
         console.error('Export OBJ Error:', e);
-        showToast('Export failed, try simple model');
+        showToast('Export failed, try again');
     }
 }
 
@@ -1332,5 +978,5 @@ function showToast(message) {
     setTimeout(() => {
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    }, 2800);
 }
