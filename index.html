@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VERTEX 3D VISION - Ultimate Interactive 3D World & Quantum Playground</title>
-    <meta name="description" content="An immersive, ultra-fun WebGL 3D playground featuring interactive quantum atoms, cosmic planets, enchanted trees, cyber mechs, diamond prisms, particle explosions, and sound FX.">
+    <title>3D VISION - JARVIS AI, Bat-Tech & Nano Mech Studio</title>
+    <meta name="description" content="Explore real 3D vision mechanical systems, JARVIS AI arc reactors, Bat-Tech mech modules, nanotechnology matrix arrays, and intelligent robotic products in real-time WebGL.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,204 +26,193 @@
         <!-- Background 3D Viewport Canvas -->
         <canvas id="three-canvas"></canvas>
 
-        <!-- Top Floating Glass Navigation Header -->
-        <header class="top-nav">
+        <!-- Top Tactical JARVIS HUD Header -->
+        <header class="hud-header">
             <div class="brand">
-                <div class="logo-box">
-                    <i data-lucide="box"></i>
+                <div class="arc-reactor-logo">
+                    <i data-lucide="cpu"></i>
                 </div>
-                <div class="brand-info">
-                    <h1>VERTEX <span>3D PLAYGROUND</span></h1>
-                    <span class="badge">INTERACTIVE REAL-TIME 3D</span>
+                <div class="brand-text">
+                    <h1>3D VISION <span>NEXUS ARC</span></h1>
+                    <span class="hud-status-tag">JARVIS AI v5.0 • BAT-TECH MECH SYSTEMS</span>
                 </div>
             </div>
 
-            <!-- Model Quick Switcher Carousel -->
-            <div class="model-switcher">
-                <button class="model-tab active" data-model="planet">
-                    <i data-lucide="globe"></i> Earth Globe
+            <!-- Mechanical & AI Model Selector -->
+            <div class="model-selector-bar">
+                <button class="tech-tab active" data-model="jarvis_core">
+                    <i data-lucide="aperture"></i> JARVIS Arc Core
                 </button>
-                <button class="model-tab" data-model="atom">
-                    <i data-lucide="atom"></i> Quantum Atom
+                <button class="tech-tab" data-model="bat_mech">
+                    <i data-lucide="shield"></i> Bat-Tech Stealth
                 </button>
-                <button class="model-tab" data-model="tree">
-                    <i data-lucide="trees"></i> Magic Tree
+                <button class="tech-tab" data-model="nano_tech">
+                    <i data-lucide="atom"></i> Nano Matrix
                 </button>
-                <button class="model-tab" data-model="fruit">
-                    <i data-lucide="apple"></i> Gold Apple
+                <button class="tech-tab" data-model="intelligent_bot">
+                    <i data-lucide="bot"></i> AI Autonomous Bot
                 </button>
-                <button class="model-tab" data-model="dragon">
-                    <i data-lucide="sparkles"></i> Cyber Dragon
-                </button>
-                <button class="model-tab" data-model="prism">
-                    <i data-lucide="gem"></i> Diamond Prism
-                </button>
-                <button class="model-tab" data-model="mech">
-                    <i data-lucide="cpu"></i> Mech Reactor
+                <button class="tech-tab" data-model="mechanic_engine">
+                    <i data-lucide="cog"></i> Kinetic Turbine Engine
                 </button>
             </div>
 
-            <!-- Header Quick Actions -->
+            <!-- Header Action Controls -->
             <div class="header-actions">
-                <button class="action-btn" id="btn-toggle-sound" title="Toggle Synthesized Web Audio FX">
-                    <i data-lucide="volume-2" id="sound-icon"></i>
+                <button class="btn btn-hud" id="btn-toggle-sfx" title="Toggle JARVIS Sci-Fi Audio Synthesizer">
+                    <i data-lucide="volume-2" id="sfx-icon"></i> SFX
                 </button>
-                <button class="action-btn" id="btn-snapshot" title="Take High-Res 3D Snapshot">
+                <button class="btn btn-hud" id="btn-snapshot" title="Capture High-Res 3D Snapshot">
                     <i data-lucide="camera"></i> Snapshot
                 </button>
-                <button class="action-btn btn-glow" id="btn-export-3d" title="Export 3D Model (.OBJ)">
+                <button class="btn btn-primary" id="btn-export-obj" title="Export 3D Model (.OBJ)">
                     <i data-lucide="download"></i> Export OBJ
                 </button>
-                <button class="action-btn" id="btn-fullscreen" title="Fullscreen">
+                <button class="btn btn-icon" id="btn-fullscreen" title="Fullscreen Mode">
                     <i data-lucide="maximize-2"></i>
                 </button>
             </div>
         </header>
 
-        <!-- Right Side Floating Interactive Fun Wheel Controls -->
-        <div class="fun-wheel-bar">
-            <button class="fun-btn" id="btn-rainbow" title="Rainbow Neon Auto-Glow Shift">
-                <i data-lucide="palette"></i>
-                <span>Rainbow</span>
-            </button>
-            <button class="fun-btn" id="fun-btn-explode" title="Explode 3D Mesh into Floating Particles!">
-                <i data-lucide="bomb"></i>
-                <span>Explode</span>
-            </button>
-            <button class="fun-btn" id="btn-supernova" title="Trigger Particle Supernova Burst!">
-                <i data-lucide="sparkle"></i>
-                <span>Supernova</span>
-            </button>
-            <button class="fun-btn" id="btn-wireframe" title="Toggle Neon Grid Wireframe Mode">
-                <i data-lucide="grid"></i>
-                <span>Wireframe</span>
-            </button>
-            <button class="fun-btn" id="btn-disco-lights" title="Toggle Dynamic Cyber Strobe Lights">
+        <!-- Tactical Action Wheel (Right Side) -->
+        <div class="tactical-action-bar">
+            <button class="action-card active" id="btn-jarvis-overdrive" title="Engage JARVIS Arc Overdrive Plasma">
                 <i data-lucide="zap"></i>
-                <span>Disco FX</span>
+                <span>Arc Plasma</span>
+            </button>
+            <button class="action-card" id="btn-stealth-mode" title="Toggle Bat-Tech Carbon Fiber Stealth">
+                <i data-lucide="eye-off"></i>
+                <span>Bat Stealth</span>
+            </button>
+            <button class="action-card" id="btn-nanobot-assembly" title="Trigger Nanobot Assembly Swarm">
+                <i data-lucide="sparkles"></i>
+                <span>Nanobots</span>
+            </button>
+            <button class="action-card" id="btn-holo-wireframe" title="Toggle Holographic HUD Wireframe">
+                <i data-lucide="grid"></i>
+                <span>Holo Wire</span>
+            </button>
+            <button class="action-card" id="btn-disassemble-mech" title="Explode Mechanical Components in 3D">
+                <i data-lucide="layers"></i>
+                <span>Disassemble</span>
             </button>
         </div>
 
-        <!-- Left Side Collapsible Customizer Drawer -->
-        <div class="side-drawer" id="side-drawer">
-            <button class="drawer-toggle" id="btn-toggle-drawer">
-                <i data-lucide="sliders" id="drawer-icon"></i>
+        <!-- Left Side Tactical Mechanics Customizer Panel -->
+        <div class="tactical-panel" id="tactical-panel">
+            <button class="panel-toggle-btn" id="btn-toggle-panel">
+                <i data-lucide="sliders" id="panel-icon"></i>
             </button>
-            
-            <div class="drawer-content">
-                <div class="drawer-title"><i data-lucide="settings"></i> 3D Customizer</div>
+
+            <div class="panel-body">
+                <div class="panel-head"><i data-lucide="wrench"></i> MECH & NANO CONTROLS</div>
 
                 <div class="control-row">
-                    <label>Surface Color</label>
-                    <input type="color" id="picker-color" value="#00f2fe" class="color-picker">
+                    <label>Armor Color</label>
+                    <input type="color" id="picker-base-color" value="#00f2fe" class="color-picker">
                 </div>
 
                 <div class="control-row">
-                    <label>Neon Glow Color</label>
-                    <input type="color" id="picker-emissive" value="#7928ca" class="color-picker">
+                    <label>Arc Laser Color</label>
+                    <input type="color" id="picker-emissive-color" value="#00a8ff" class="color-picker">
                 </div>
 
                 <div class="control-group">
-                    <div class="label-val">
-                        <span>Glow Power</span>
-                        <span id="val-emissive-power">0.8</span>
+                    <div class="label-box">
+                        <span>Reactor Glow Power</span>
+                        <span id="val-emissive-power">1.2</span>
                     </div>
-                    <input type="range" id="slider-emissive" min="0.0" max="3.0" step="0.1" value="0.8">
+                    <input type="range" id="slider-emissive-power" min="0.0" max="4.0" step="0.1" value="1.2">
                 </div>
 
                 <div class="control-group">
-                    <div class="label-val">
-                        <span>Metallic Shine</span>
-                        <span id="val-metal">0.85</span>
+                    <div class="label-box">
+                        <span>Carbon Metalness</span>
+                        <span id="val-metalness">0.90</span>
                     </div>
-                    <input type="range" id="slider-metal" min="0.0" max="1.0" step="0.05" value="0.85">
+                    <input type="range" id="slider-metalness" min="0.0" max="1.0" step="0.05" value="0.90">
                 </div>
 
                 <div class="control-group">
-                    <div class="label-val">
-                        <span>Roughness</span>
-                        <span id="val-rough">0.20</span>
+                    <div class="label-box">
+                        <span>Surface Roughness</span>
+                        <span id="val-roughness">0.15</span>
                     </div>
-                    <input type="range" id="slider-rough" min="0.0" max="1.0" step="0.05" value="0.20">
+                    <input type="range" id="slider-roughness" min="0.0" max="1.0" step="0.05" value="0.15">
                 </div>
 
                 <div class="control-group">
-                    <div class="label-val">
-                        <span>Sculpt Distortion</span>
-                        <span id="val-deform">0.30</span>
+                    <div class="label-box">
+                        <span>Mechanical Deform</span>
+                        <span id="val-deform">0.20</span>
                     </div>
-                    <input type="range" id="slider-deform" min="0.0" max="2.0" step="0.05" value="0.30">
+                    <input type="range" id="slider-deform" min="0.0" max="2.0" step="0.05" value="0.20">
                 </div>
 
                 <div class="control-group">
-                    <div class="label-val">
-                        <span>Twist Rotation</span>
-                        <span id="val-twist">0°</span>
+                    <div class="label-box">
+                        <span>Kinetic RPM Speed</span>
+                        <span id="val-rpm">1.5x</span>
                     </div>
-                    <input type="range" id="slider-twist" min="-180" max="180" step="5" value="0">
+                    <input type="range" id="slider-rpm" min="0.1" max="4.0" step="0.1" value="1.5">
                 </div>
 
-                <div class="control-group">
-                    <div class="label-val">
-                        <span>Cosmic Particles</span>
-                        <span id="val-particles">2000</span>
-                    </div>
-                    <input type="range" id="slider-particles" min="200" max="5000" step="200" value="2000">
-                </div>
-
-                <div class="btn-group mt-2">
-                    <button class="btn btn-secondary" id="btn-random-all">
-                        <i data-lucide="dice-5"></i> Randomize All
-                    </button>
+                <!-- Google AdSense Placement Slot -->
+                <div class="adsense-slot mt-3">
+                    <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
+                    <ins class="adsbygoogle"
+                         style="display:block; width: 100%; height: 100px;"
+                         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
             </div>
         </div>
 
-        <!-- Floating Performance & Telemetry HUD -->
-        <div class="hud-bar">
-            <div class="hud-item">
-                <span class="hud-label">FPS</span>
-                <span class="hud-val" id="hud-fps">60</span>
+        <!-- Real-Time Telemetry HUD Overlay -->
+        <div class="telemetry-hud">
+            <div class="telemetry-item">
+                <span class="telemetry-label">SYSTEM FPS</span>
+                <span class="telemetry-val" id="hud-fps">60</span>
             </div>
-            <div class="hud-item">
-                <span class="hud-label">Polygons</span>
-                <span class="hud-val" id="hud-polys">15.2k</span>
+            <div class="telemetry-item">
+                <span class="telemetry-label">MECH POLYS</span>
+                <span class="telemetry-val" id="hud-polys">18.4k</span>
             </div>
-            <div class="hud-item">
-                <span class="hud-label">Mode</span>
-                <span class="hud-val" id="hud-mode">PBR Real 3D</span>
+            <div class="telemetry-item">
+                <span class="telemetry-label">PROTOCOLS</span>
+                <span class="telemetry-val" id="hud-protocol">JARVIS ARC ONLINE</span>
             </div>
         </div>
 
-        <!-- Bottom Animation Control Dock -->
-        <footer class="bottom-dock">
-            <button class="btn-play" id="btn-play-pause">
+        <!-- Bottom Timeline Control Bar -->
+        <footer class="hud-footer">
+            <button class="btn-play-pause" id="btn-play-pause">
                 <i data-lucide="pause" id="play-icon"></i>
             </button>
-            <div class="anim-info">
-                <span class="anim-label">Continuous Turntable Orbit</span>
-                <span class="anim-status" id="anim-status-text">Active (0.8 RPM)</span>
+            <div class="footer-meta">
+                <span class="meta-title">JARVIS AI Magnetic Containment Orbit</span>
+                <span class="meta-sub" id="footer-rpm-text">Kinetic Rotation Active (1.5 RPM)</span>
             </div>
-            <div class="speed-control">
-                <i data-lucide="gauge"></i>
-                <span>Speed:</span>
-                <input type="range" id="slider-speed" min="0.1" max="3.0" step="0.1" value="0.8">
-                <span id="val-speed">0.8x</span>
-            </div>
-            <div class="footer-legal">
-                <a href="privacy.html" target="_blank">Privacy</a> • 
-                <a href="terms.html" target="_blank">Terms</a>
+            <div class="legal-links">
+                <a href="privacy.html" target="_blank">Privacy Policy</a>
+                <span class="sep">•</span>
+                <a href="terms.html" target="_blank">Terms of Service</a>
             </div>
         </footer>
 
-        <!-- Toast Overlay Container -->
+        <!-- Toast Notification Container -->
         <div id="toast-container" class="toast-container"></div>
 
         <!-- Snapshot Preview Modal -->
         <div class="modal" id="modal-snapshot">
             <div class="modal-card">
                 <div class="modal-header">
-                    <h3><i data-lucide="camera"></i> 3D Snapshot Captured</h3>
+                    <h3><i data-lucide="camera"></i> Tactical 3D Snapshot Render</h3>
                     <button class="btn-close" id="modal-close"><i data-lucide="x"></i></button>
                 </div>
                 <div class="modal-body">
@@ -232,19 +221,19 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" id="modal-cancel">Close</button>
-                    <a id="link-download-img" class="btn btn-primary" download="vertex_3d_render.png">
+                    <button class="btn btn-hud" id="modal-cancel">Close</button>
+                    <a id="link-download-img" class="btn btn-primary" download="jarvis_3d_vision_render.png">
                         <i data-lucide="download"></i> Save PNG Image
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- GDPR Cookie Banner -->
+        <!-- GDPR Cookie Consent Banner -->
         <div id="cookie-banner" class="cookie-banner">
             <div class="cookie-text">
                 <i data-lucide="shield-check"></i>
-                <span>We use cookies & Google AdSense to personalize your 3D experience. See our <a href="privacy.html" target="_blank">Privacy Policy</a>.</span>
+                <span>We use cookies & Google AdSense for personalized 3D mech experiences. See our <a href="privacy.html" target="_blank">Privacy Policy</a>.</span>
             </div>
             <div class="cookie-btns">
                 <button class="btn btn-primary" id="btn-accept-cookie">Accept All</button>
@@ -252,7 +241,7 @@
         </div>
     </div>
 
-    <!-- Main Application JavaScript -->
+    <!-- Main JavaScript Logic -->
     <script src="app.js"></script>
 </body>
 </html>
