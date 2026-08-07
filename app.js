@@ -1,8 +1,8 @@
 /* ==========================================================================
-   VERTEX 3D VISION - Omni 3D Studio & World Sculptor Engine (v4.0 Omni)
+   VERTEX 3D VISION - Omni 3D Studio & World Sculptor Engine (v4.5 Ultra-Fix)
    ========================================================================== */
 
-// --- Simple 3D Perlin/Simplex Noise Implementation ---
+// --- 3D Perlin/Simplex Noise Generator ---
 const Noise3D = (function() {
     function grad3(hash, x, y, z) {
         const h = hash & 15;
@@ -61,8 +61,8 @@ const Noise3D = (function() {
 
 // --- Application State ---
 const state = {
-    modelType: 'sand_grain',      // atom_core, dna_helix, tree_life, fruit_mesh, animal_mesh, tech_engine, cyber_citadel, sand_grain, rock_peak, planet_world
-    scaleCategory: 'sand',        // nano, nature, tech, sand, planet
+    modelType: 'sand_grain',
+    scaleCategory: 'sand',
     subdivision: 64,
     modelScale: 1.0,
     
@@ -83,12 +83,12 @@ const state = {
     texturePattern: 'none',
 
     // Viewport Mode
-    shadingMode: 'pbr',          // pbr, clay, wireframe, hologram, normals
+    shadingMode: 'pbr',
     showGrid: true,
     showShadows: true,
 
     // Environment & Lighting
-    envPreset: 'cyberpunk',      // cyberpunk, desert_sun, deep_space, studio_clean, volcanic
+    envPreset: 'cyberpunk',
     keyLightColor: '#ffffff',
     keyLightIntensity: 1.8,
     sunAngle: 45,
@@ -98,7 +98,7 @@ const state = {
 
     // Animation
     animActive: true,
-    animType: 'turntable',       // turntable, pulse_glow, vertex_wave, camera_fly
+    animType: 'turntable',
     animSpeed: 0.8,
     animTime: 0
 };
@@ -144,9 +144,20 @@ let lastFrameTime = performance.now();
 let frameCount = 0;
 let currentFPS = 60;
 
+// --- Safe Lucide Helper ---
+function safeLucideIcons() {
+    try {
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
+    } catch (e) {
+        console.warn('Lucide icons setup deferred:', e);
+    }
+}
+
 // --- Initialize App ---
 window.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
+    safeLucideIcons();
     initThreeJS();
     generateProceduralTextures();
     createEnvironment();
@@ -155,7 +166,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setupSearchFilter();
     setupCookieConsent();
     animate();
-    showToast('VERTEX 3D VISION v4.0 Omni Initialized');
+    showToast('VERTEX 3D VISION Studio Ready');
 });
 
 // --- Three.js Setup ---
@@ -277,7 +288,7 @@ function createEnvironment() {
     gridHelper.position.y = -1.5;
     scene.add(gridHelper);
 
-    ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
     keyLight = new THREE.DirectionalLight(0xffffff, state.keyLightIntensity);
@@ -288,7 +299,7 @@ function createEnvironment() {
     keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
 
-    fillLight = new THREE.PointLight(0x00f2fe, 1.0, 20);
+    fillLight = new THREE.PointLight(0x00f2fe, 1.2, 20);
     fillLight.position.set(-6, 2, -4);
     scene.add(fillLight);
 
@@ -387,39 +398,44 @@ function build3DModel() {
     let geometry;
     const sub = state.subdivision;
 
-    switch (state.modelType) {
-        case 'atom_core':
-            geometry = new THREE.IcosahedronGeometry(0.9, Math.floor(sub / 12));
-            break;
-        case 'dna_helix':
-            geometry = createDNAHelixGeometry();
-            break;
-        case 'tree_life':
-            geometry = createTreeLifeGeometry();
-            break;
-        case 'fruit_mesh':
-            geometry = createFruitGeometry();
-            break;
-        case 'animal_mesh':
-            geometry = createAnimalGeometry();
-            break;
-        case 'tech_engine':
-            geometry = createTechEngineGeometry(sub);
-            break;
-        case 'sand_grain':
-            geometry = new THREE.IcosahedronGeometry(1.4, Math.floor(sub / 16));
-            break;
-        case 'rock_peak':
-            geometry = new THREE.ConeGeometry(2.0, 2.5, sub, sub);
-            break;
-        case 'cyber_citadel':
-            geometry = createCyberCitadelGeometry(sub);
-            break;
-        case 'planet_world':
-            geometry = new THREE.SphereGeometry(1.6, sub, sub);
-            break;
-        default:
-            geometry = new THREE.IcosahedronGeometry(1.4, 4);
+    try {
+        switch (state.modelType) {
+            case 'atom_core':
+                geometry = new THREE.IcosahedronGeometry(0.9, Math.floor(sub / 12));
+                break;
+            case 'dna_helix':
+                geometry = createDNAHelixGeometry();
+                break;
+            case 'tree_life':
+                geometry = createTreeLifeGeometry();
+                break;
+            case 'fruit_mesh':
+                geometry = createFruitGeometry();
+                break;
+            case 'animal_mesh':
+                geometry = createAnimalGeometry();
+                break;
+            case 'tech_engine':
+                geometry = createTechEngineGeometry(sub);
+                break;
+            case 'sand_grain':
+                geometry = new THREE.IcosahedronGeometry(1.4, Math.floor(sub / 16));
+                break;
+            case 'rock_peak':
+                geometry = new THREE.ConeGeometry(2.0, 2.5, sub, sub);
+                break;
+            case 'cyber_citadel':
+                geometry = createCyberCitadelGeometry(sub);
+                break;
+            case 'planet_world':
+                geometry = new THREE.SphereGeometry(1.6, sub, sub);
+                break;
+            default:
+                geometry = new THREE.IcosahedronGeometry(1.4, 4);
+        }
+    } catch (e) {
+        console.error('Geometry build error, fallback to Icosahedron:', e);
+        geometry = new THREE.IcosahedronGeometry(1.4, 4);
     }
 
     applySculptDeformation(geometry);
@@ -452,6 +468,27 @@ function build3DModel() {
     updateHUDStats(geometry);
 }
 
+// --- Bulletproof Non-Indexed Geometry Merger ---
+function mergeGeometries(geometries) {
+    const list = geometries.map(g => g.index ? g.toNonIndexed() : g);
+    let totalVerts = 0;
+    list.forEach(g => totalVerts += g.attributes.position.count);
+
+    const pos = new Float32Array(totalVerts * 3);
+    let offset = 0;
+
+    list.forEach(g => {
+        const p = g.attributes.position.array;
+        pos.set(p, offset * 3);
+        offset += g.attributes.position.count;
+    });
+
+    const merged = new THREE.BufferGeometry();
+    merged.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    merged.computeVertexNormals();
+    return merged;
+}
+
 // --- Specialized Procedural Geometry Generators ---
 function createDNAHelixGeometry() {
     const list = [];
@@ -464,19 +501,16 @@ function createDNAHelixGeometry() {
         const angle = t * Math.PI * 2 * turns;
         const y = (t - 0.5) * height;
 
-        // Strand 1
-        const s1 = new THREE.SphereGeometry(0.1, 8, 8);
+        const s1 = new THREE.SphereGeometry(0.12, 12, 12);
         s1.translate(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
         list.push(s1);
 
-        // Strand 2 (180 deg opposite)
-        const s2 = new THREE.SphereGeometry(0.1, 8, 8);
+        const s2 = new THREE.SphereGeometry(0.12, 12, 12);
         s2.translate(Math.cos(angle + Math.PI) * radius, y, Math.sin(angle + Math.PI) * radius);
         list.push(s2);
 
-        // Connector rung every 2 steps
         if (i % 2 === 0) {
-            const bar = new THREE.CylinderGeometry(0.03, 0.03, radius * 2, 8);
+            const bar = new THREE.CylinderGeometry(0.04, 0.04, radius * 2, 8);
             bar.rotation.z = Math.PI / 2;
             bar.rotation.y = -angle;
             bar.translate(0, y, 0);
@@ -488,12 +522,10 @@ function createDNAHelixGeometry() {
 
 function createTreeLifeGeometry() {
     const list = [];
-    // Trunk
     const trunk = new THREE.CylinderGeometry(0.3, 0.5, 2.5, 12);
     trunk.translate(0, -0.25, 0);
     list.push(trunk);
 
-    // Branches & Foliage Canopies
     const branch1 = new THREE.CylinderGeometry(0.15, 0.25, 1.5, 8);
     branch1.rotation.z = Math.PI / 4;
     branch1.translate(0.5, 0.8, 0);
@@ -504,7 +536,6 @@ function createTreeLifeGeometry() {
     branch2.translate(-0.5, 0.8, 0);
     list.push(branch2);
 
-    // Canopy spheres
     const canopy1 = new THREE.IcosahedronGeometry(0.9, 2);
     canopy1.translate(0, 1.8, 0);
     list.push(canopy1);
@@ -521,19 +552,14 @@ function createTreeLifeGeometry() {
 }
 
 function createFruitGeometry() {
-    // Organic apple/pear mesh
     const fruitGeo = new THREE.SphereGeometry(1.3, 32, 32);
     const pos = fruitGeo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
         const y = pos.getY(i);
-        const x = pos.getX(i);
-        const z = pos.getZ(i);
-        // Dimple top and bottom
         if (y > 0.8) pos.setY(i, y - (y - 0.8) * 0.5);
         if (y < -0.8) pos.setY(i, y + (-0.8 - y) * 0.4);
     }
 
-    // Stem
     const stem = new THREE.CylinderGeometry(0.04, 0.03, 0.6, 8);
     stem.rotation.z = 0.2;
     stem.translate(0.05, 1.3, 0);
@@ -542,7 +568,6 @@ function createFruitGeometry() {
 }
 
 function createAnimalGeometry() {
-    // Faceted geometric panther/creature head
     const list = [];
     const cranium = new THREE.IcosahedronGeometry(1.1, 1);
     list.push(cranium);
@@ -566,15 +591,12 @@ function createAnimalGeometry() {
 
 function createTechEngineGeometry(sub) {
     const list = [];
-    // Central reactor tube
     const core = new THREE.CylinderGeometry(0.7, 0.7, 2.5, sub / 2);
     list.push(core);
 
-    // Gear Ring 1
     const ring1 = new THREE.TorusGeometry(1.4, 0.2, 16, 24);
     list.push(ring1);
 
-    // Gear Ring 2 (vertical)
     const ring2 = new THREE.TorusGeometry(1.6, 0.15, 16, 24);
     ring2.rotation.x = Math.PI / 2;
     list.push(ring2);
@@ -592,28 +614,6 @@ function createCyberCitadelGeometry(sub) {
     spireGeo.translate(0, 0.5, 0);
 
     return mergeGeometries([baseBox, towerGeo1, towerGeo2, spireGeo]);
-}
-
-function mergeGeometries(geometries) {
-    let totalVerts = 0;
-    geometries.forEach(g => totalVerts += g.attributes.position.count);
-
-    const pos = new Float32Array(totalVerts * 3);
-    const norm = new Float32Array(totalVerts * 3);
-    let offset = 0;
-
-    geometries.forEach(g => {
-        const p = g.attributes.position.array;
-        const n = g.attributes.normal ? g.attributes.normal.array : new Float32Array(p.length);
-        pos.set(p, offset * 3);
-        norm.set(n, offset * 3);
-        offset += g.attributes.position.count;
-    });
-
-    const merged = new THREE.BufferGeometry();
-    merged.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    merged.setAttribute('normal', new THREE.BufferAttribute(norm, 3));
-    return merged;
 }
 
 function applySculptDeformation(geometry) {
@@ -746,10 +746,11 @@ function setupSearchFilter() {
     const cards = document.querySelectorAll('.model-card');
     const catChips = document.querySelectorAll('.cat-chip');
 
-    // Live search input handler
+    if (!searchInput) return;
+
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
-        clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+        if (clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
 
         cards.forEach(card => {
             const title = card.querySelector('.card-title').textContent.toLowerCase();
@@ -764,13 +765,14 @@ function setupSearchFilter() {
         });
     });
 
-    clearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        clearBtn.style.display = 'none';
-        cards.forEach(card => card.style.display = 'flex');
-    });
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearBtn.style.display = 'none';
+            cards.forEach(card => card.style.display = 'flex');
+        });
+    }
 
-    // Category filter chips
     catChips.forEach(chip => {
         chip.addEventListener('click', (e) => {
             catChips.forEach(c => c.classList.remove('active'));
@@ -810,13 +812,16 @@ function setupEventListeners() {
         });
     });
 
-    document.getElementById('preset-select').addEventListener('change', (e) => {
-        const val = e.target.value;
-        if (PRESETS_LIBRARY[val]) {
-            applyPreset(PRESETS_LIBRARY[val]);
-            showToast(`Preset Loaded: ${e.target.options[e.target.selectedIndex].text}`);
-        }
-    });
+    const presetSelect = document.getElementById('preset-select');
+    if (presetSelect) {
+        presetSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (PRESETS_LIBRARY[val]) {
+                applyPreset(PRESETS_LIBRARY[val]);
+                showToast(`Preset Loaded: ${e.target.options[e.target.selectedIndex].text}`);
+            }
+        });
+    }
 
     document.querySelectorAll('.model-card').forEach(card => {
         card.addEventListener('click', (e) => {
@@ -863,25 +868,31 @@ function setupEventListeners() {
     bindRangeInput('input-twist', 'val-twist', v => { state.twist = parseInt(v); build3DModel(); return v + '°'; });
     bindRangeInput('input-explode', 'val-explode', v => { state.explode = parseFloat(v); build3DModel(); });
 
-    document.getElementById('input-base-color').addEventListener('input', (e) => {
-        state.baseColor = e.target.value;
-        if (mainMesh && mainMesh.material && mainMesh.material.color) mainMesh.material.color.set(state.baseColor);
-    });
+    const colorPicker = document.getElementById('input-base-color');
+    if (colorPicker) {
+        colorPicker.addEventListener('input', (e) => {
+            state.baseColor = e.target.value;
+            if (mainMesh && mainMesh.material && mainMesh.material.color) mainMesh.material.color.set(state.baseColor);
+        });
+    }
 
     bindRangeInput('input-roughness', 'val-roughness', v => {
         state.roughness = parseFloat(v);
-        if (mainMesh && mainMesh.material.roughness !== undefined) mainMesh.material.roughness = state.roughness;
+        if (mainMesh && mainMesh.material && mainMesh.material.roughness !== undefined) mainMesh.material.roughness = state.roughness;
     });
 
     bindRangeInput('input-metalness', 'val-metalness', v => {
         state.metalness = parseFloat(v);
-        if (mainMesh && mainMesh.material.metalness !== undefined) mainMesh.material.metalness = state.metalness;
+        if (mainMesh && mainMesh.material && mainMesh.material.metalness !== undefined) mainMesh.material.metalness = state.metalness;
     });
 
-    document.getElementById('input-emissive-color').addEventListener('input', (e) => {
-        state.emissiveColor = e.target.value;
-        if (mainMesh && mainMesh.material && mainMesh.material.emissive) mainMesh.material.emissive.set(state.emissiveColor);
-    });
+    const emissivePicker = document.getElementById('input-emissive-color');
+    if (emissivePicker) {
+        emissivePicker.addEventListener('input', (e) => {
+            state.emissiveColor = e.target.value;
+            if (mainMesh && mainMesh.material && mainMesh.material.emissive) mainMesh.material.emissive.set(state.emissiveColor);
+        });
+    }
 
     bindRangeInput('input-emissive-intensity', 'val-emissive-intensity', v => {
         state.emissiveIntensity = parseFloat(v);
@@ -908,40 +919,46 @@ function setupEventListeners() {
         });
     });
 
-    document.getElementById('btn-random-sculpt').addEventListener('click', () => {
-        state.noiseAmp = parseFloat((Math.random() * 1.2 + 0.1).toFixed(2));
-        state.noiseFreq = parseFloat((Math.random() * 6.0 + 1.0).toFixed(1));
-        state.twist = Math.floor(Math.random() * 360 - 180);
-        
-        document.getElementById('input-noise-amp').value = state.noiseAmp;
-        document.getElementById('val-noise-amp').textContent = state.noiseAmp;
-        document.getElementById('input-noise-freq').value = state.noiseFreq;
-        document.getElementById('val-noise-freq').textContent = state.noiseFreq;
-        document.getElementById('input-twist').value = state.twist;
-        document.getElementById('val-twist').textContent = state.twist + '°';
+    const btnRandom = document.getElementById('btn-random-sculpt');
+    if (btnRandom) {
+        btnRandom.addEventListener('click', () => {
+            state.noiseAmp = parseFloat((Math.random() * 1.2 + 0.1).toFixed(2));
+            state.noiseFreq = parseFloat((Math.random() * 6.0 + 1.0).toFixed(1));
+            state.twist = Math.floor(Math.random() * 360 - 180);
+            
+            document.getElementById('input-noise-amp').value = state.noiseAmp;
+            document.getElementById('val-noise-amp').textContent = state.noiseAmp;
+            document.getElementById('input-noise-freq').value = state.noiseFreq;
+            document.getElementById('val-noise-freq').textContent = state.noiseFreq;
+            document.getElementById('input-twist').value = state.twist;
+            document.getElementById('val-twist').textContent = state.twist + '°';
 
-        build3DModel();
-        showToast('Randomized Procedural Sculpt');
-    });
+            build3DModel();
+            showToast('Randomized Procedural Sculpt');
+        });
+    }
 
-    document.getElementById('btn-reset-sculpt').addEventListener('click', () => {
-        state.noiseAmp = 0.45;
-        state.noiseFreq = 2.2;
-        state.twist = 0;
-        state.explode = 0;
+    const btnResetSculpt = document.getElementById('btn-reset-sculpt');
+    if (btnResetSculpt) {
+        btnResetSculpt.addEventListener('click', () => {
+            state.noiseAmp = 0.45;
+            state.noiseFreq = 2.2;
+            state.twist = 0;
+            state.explode = 0;
 
-        document.getElementById('input-noise-amp').value = 0.45;
-        document.getElementById('val-noise-amp').textContent = '0.45';
-        document.getElementById('input-noise-freq').value = 2.2;
-        document.getElementById('val-noise-freq').textContent = '2.2';
-        document.getElementById('input-twist').value = 0;
-        document.getElementById('val-twist').textContent = '0°';
-        document.getElementById('input-explode').value = 0;
-        document.getElementById('val-explode').textContent = '0.0';
+            document.getElementById('input-noise-amp').value = 0.45;
+            document.getElementById('val-noise-amp').textContent = '0.45';
+            document.getElementById('input-noise-freq').value = 2.2;
+            document.getElementById('val-noise-freq').textContent = '2.2';
+            document.getElementById('input-twist').value = 0;
+            document.getElementById('val-twist').textContent = '0°';
+            document.getElementById('input-explode').value = 0;
+            document.getElementById('val-explode').textContent = '0.0';
 
-        build3DModel();
-        showToast('Sculpt Reset to Defaults');
-    });
+            build3DModel();
+            showToast('Sculpt Reset to Defaults');
+        });
+    }
 
     document.querySelectorAll('.viewport-toolbar [data-mode]').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -963,9 +980,12 @@ function setupEventListeners() {
         });
     });
 
-    document.getElementById('input-key-light-color').addEventListener('input', (e) => {
-        keyLight.color.set(e.target.value);
-    });
+    const keyLightPicker = document.getElementById('input-key-light-color');
+    if (keyLightPicker) {
+        keyLightPicker.addEventListener('input', (e) => {
+            keyLight.color.set(e.target.value);
+        });
+    }
 
     bindRangeInput('input-light-intensity', 'val-light-intensity', v => {
         state.keyLightIntensity = parseFloat(v);
@@ -979,51 +999,70 @@ function setupEventListeners() {
         return v + '°';
     });
 
-    document.getElementById('btn-toggle-grid').addEventListener('click', (e) => {
-        state.showGrid = !state.showGrid;
-        gridHelper.visible = state.showGrid;
-        e.currentTarget.classList.toggle('active', state.showGrid);
-    });
+    const btnGrid = document.getElementById('btn-toggle-grid');
+    if (btnGrid) {
+        btnGrid.addEventListener('click', (e) => {
+            state.showGrid = !state.showGrid;
+            gridHelper.visible = state.showGrid;
+            e.currentTarget.classList.toggle('active', state.showGrid);
+        });
+    }
 
-    document.getElementById('btn-toggle-shadows').addEventListener('click', (e) => {
-        state.showShadows = !state.showShadows;
-        renderer.shadowMap.enabled = state.showShadows;
-        e.currentTarget.classList.toggle('active', state.showShadows);
-        build3DModel();
-    });
+    const btnShadows = document.getElementById('btn-toggle-shadows');
+    if (btnShadows) {
+        btnShadows.addEventListener('click', (e) => {
+            state.showShadows = !state.showShadows;
+            renderer.shadowMap.enabled = state.showShadows;
+            e.currentTarget.classList.toggle('active', state.showShadows);
+            build3DModel();
+        });
+    }
 
-    document.getElementById('chk-particles').addEventListener('change', (e) => {
-        state.showParticles = e.target.checked;
-        if (particleSystem) particleSystem.visible = state.showParticles;
-    });
+    const chkParticles = document.getElementById('chk-particles');
+    if (chkParticles) {
+        chkParticles.addEventListener('change', (e) => {
+            state.showParticles = e.target.checked;
+            if (particleSystem) particleSystem.visible = state.showParticles;
+        });
+    }
 
     bindRangeInput('input-particle-count', 'val-particle-count', v => {
         state.particleCount = parseInt(v);
         createParticleAtmosphere();
     });
 
-    document.getElementById('chk-fog').addEventListener('change', (e) => {
-        state.showFog = e.target.checked;
-        updateEnvironmentPreset();
-    });
+    const chkFog = document.getElementById('chk-fog');
+    if (chkFog) {
+        chkFog.addEventListener('change', (e) => {
+            state.showFog = e.target.checked;
+            updateEnvironmentPreset();
+        });
+    }
 
-    document.getElementById('cam-front').addEventListener('click', () => animateCameraPosition(0, 0, 7));
-    document.getElementById('cam-top').addEventListener('click', () => animateCameraPosition(0, 8, 0.1));
-    document.getElementById('cam-iso').addEventListener('click', () => animateCameraPosition(5, 5, 5));
-    document.getElementById('btn-reset-cam').addEventListener('click', () => animateCameraPosition(0, 3, 6));
+    const camFront = document.getElementById('cam-front');
+    if (camFront) camFront.addEventListener('click', () => animateCameraPosition(0, 0, 7));
+    const camTop = document.getElementById('cam-top');
+    if (camTop) camTop.addEventListener('click', () => animateCameraPosition(0, 8, 0.1));
+    const camIso = document.getElementById('cam-iso');
+    if (camIso) camIso.addEventListener('click', () => animateCameraPosition(5, 5, 5));
+    const btnResetCam = document.getElementById('btn-reset-cam');
+    if (btnResetCam) btnResetCam.addEventListener('click', () => animateCameraPosition(0, 3, 6));
 
-    document.getElementById('btn-play-anim').addEventListener('click', () => {
-        state.animActive = !state.animActive;
-        const icon = document.getElementById('icon-play');
-        if (state.animActive) {
-            icon.setAttribute('data-lucide', 'pause');
-            document.getElementById('anim-state-text').textContent = `Active (${state.animSpeed} RPM)`;
-        } else {
-            icon.setAttribute('data-lucide', 'play');
-            document.getElementById('anim-state-text').textContent = 'Paused';
-        }
-        lucide.createIcons();
-    });
+    const btnPlayAnim = document.getElementById('btn-play-anim');
+    if (btnPlayAnim) {
+        btnPlayAnim.addEventListener('click', () => {
+            state.animActive = !state.animActive;
+            const icon = document.getElementById('icon-play');
+            if (state.animActive) {
+                if (icon) icon.setAttribute('data-lucide', 'pause');
+                document.getElementById('anim-state-text').textContent = `Active (${state.animSpeed} RPM)`;
+            } else {
+                if (icon) icon.setAttribute('data-lucide', 'play');
+                document.getElementById('anim-state-text').textContent = 'Paused';
+            }
+            safeLucideIcons();
+        });
+    }
 
     document.querySelectorAll('.anim-chip').forEach(chip => {
         chip.addEventListener('click', (e) => {
@@ -1043,16 +1082,23 @@ function setupEventListeners() {
         return v + 'x';
     });
 
-    document.getElementById('btn-fullscreen').addEventListener('click', () => {
-        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-        else if (document.exitFullscreen) document.exitFullscreen();
-    });
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    if (btnFullscreen) {
+        btnFullscreen.addEventListener('click', () => {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else if (document.exitFullscreen) document.exitFullscreen();
+        });
+    }
 
-    document.getElementById('btn-snapshot').addEventListener('click', openSnapshotModal);
-    document.getElementById('modal-snapshot-close').addEventListener('click', closeSnapshotModal);
-    document.getElementById('modal-snapshot-cancel').addEventListener('click', closeSnapshotModal);
+    const btnSnapshot = document.getElementById('btn-snapshot');
+    if (btnSnapshot) btnSnapshot.addEventListener('click', openSnapshotModal);
+    const snapClose = document.getElementById('modal-snapshot-close');
+    if (snapClose) snapClose.addEventListener('click', closeSnapshotModal);
+    const snapCancel = document.getElementById('modal-snapshot-cancel');
+    if (snapCancel) snapCancel.addEventListener('click', closeSnapshotModal);
 
-    document.getElementById('btn-export-obj').addEventListener('click', exportOBJModel);
+    const btnExportObj = document.getElementById('btn-export-obj');
+    if (btnExportObj) btnExportObj.addEventListener('click', exportOBJModel);
 }
 
 function setupCookieConsent() {
@@ -1061,21 +1107,27 @@ function setupCookieConsent() {
     const declineBtn = document.getElementById('btn-cookie-decline');
     const prefBtn = document.getElementById('btn-cookie-pref');
 
+    if (!banner) return;
+
     if (!localStorage.getItem('vertex_cookie_consent')) {
         banner.classList.add('active');
     }
 
-    acceptBtn.addEventListener('click', () => {
-        localStorage.setItem('vertex_cookie_consent', 'accepted');
-        banner.classList.remove('active');
-        showToast('Cookie Preferences Saved (Accepted)');
-    });
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', () => {
+            localStorage.setItem('vertex_cookie_consent', 'accepted');
+            banner.classList.remove('active');
+            showToast('Cookie Preferences Saved (Accepted)');
+        });
+    }
 
-    declineBtn.addEventListener('click', () => {
-        localStorage.setItem('vertex_cookie_consent', 'declined');
-        banner.classList.remove('active');
-        showToast('Non-Essential Cookies Disabled');
-    });
+    if (declineBtn) {
+        declineBtn.addEventListener('click', () => {
+            localStorage.setItem('vertex_cookie_consent', 'declined');
+            banner.classList.remove('active');
+            showToast('Non-Essential Cookies Disabled');
+        });
+    }
 
     if (prefBtn) {
         prefBtn.addEventListener('click', () => {
@@ -1087,6 +1139,8 @@ function setupCookieConsent() {
 function bindRangeInput(inputId, valId, callback) {
     const input = document.getElementById(inputId);
     const valDisplay = document.getElementById(valId);
+    if (!input || !valDisplay) return;
+
     input.addEventListener('input', (e) => {
         const res = callback(e.target.value);
         valDisplay.textContent = res !== undefined ? res : e.target.value;
@@ -1102,17 +1156,34 @@ function syncModelCardUI() {
 function applyPreset(preset) {
     Object.assign(state, preset);
 
-    document.getElementById('input-base-color').value = state.baseColor;
-    document.getElementById('input-emissive-color').value = state.emissiveColor;
-    document.getElementById('input-roughness').value = state.roughness;
-    document.getElementById('val-roughness').textContent = state.roughness;
-    document.getElementById('input-metalness').value = state.metalness;
-    document.getElementById('val-metalness').textContent = state.metalness;
+    const baseColorInput = document.getElementById('input-base-color');
+    if (baseColorInput) baseColorInput.value = state.baseColor;
+    const emissiveColorInput = document.getElementById('input-emissive-color');
+    if (emissiveColorInput) emissiveColorInput.value = state.emissiveColor;
 
-    document.getElementById('input-noise-amp').value = state.noiseAmp;
-    document.getElementById('val-noise-amp').textContent = state.noiseAmp;
-    document.getElementById('input-noise-freq').value = state.noiseFreq;
-    document.getElementById('val-noise-freq').textContent = state.noiseFreq;
+    const roughnessInput = document.getElementById('input-roughness');
+    if (roughnessInput) {
+        roughnessInput.value = state.roughness;
+        document.getElementById('val-roughness').textContent = state.roughness;
+    }
+
+    const metalnessInput = document.getElementById('input-metalness');
+    if (metalnessInput) {
+        metalnessInput.value = state.metalness;
+        document.getElementById('val-metalness').textContent = state.metalness;
+    }
+
+    const noiseAmpInput = document.getElementById('input-noise-amp');
+    if (noiseAmpInput) {
+        noiseAmpInput.value = state.noiseAmp;
+        document.getElementById('val-noise-amp').textContent = state.noiseAmp;
+    }
+
+    const noiseFreqInput = document.getElementById('input-noise-freq');
+    if (noiseFreqInput) {
+        noiseFreqInput.value = state.noiseFreq;
+        document.getElementById('val-noise-freq').textContent = state.noiseFreq;
+    }
 
     syncModelCardUI();
     updateEnvironmentPreset();
@@ -1144,10 +1215,11 @@ function animate() {
     frameCount++;
     if (frameCount % 30 === 0) {
         currentFPS = Math.round(1 / delta);
-        document.getElementById('hud-fps').textContent = currentFPS;
+        const fpsEl = document.getElementById('hud-fps');
+        if (fpsEl) fpsEl.textContent = currentFPS;
     }
 
-    controls.update();
+    if (controls) controls.update();
 
     if (state.animActive) {
         state.animTime += delta * state.animSpeed;
@@ -1185,22 +1257,29 @@ function animate() {
         particleSystem.rotation.y += delta * 0.02;
     }
 
-    renderer.render(scene, camera);
+    if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+    }
 }
 
 function updateHUDStats(geometry) {
     let polyCount = 0;
-    let vertCount = geometry.attributes.position.count;
+    let vertCount = geometry.attributes.position ? geometry.attributes.position.count : 0;
 
     if (geometry.index) polyCount = geometry.index.count / 3;
     else polyCount = vertCount / 3;
 
-    document.getElementById('hud-polys').textContent = polyCount > 1000 ? (polyCount / 1000).toFixed(1) + 'k' : polyCount;
-    document.getElementById('hud-verts').textContent = vertCount > 1000 ? (vertCount / 1000).toFixed(1) + 'k' : vertCount;
-    document.getElementById('hud-draws').textContent = renderer.info.render.calls;
+    const polysEl = document.getElementById('hud-polys');
+    const vertsEl = document.getElementById('hud-verts');
+    const drawsEl = document.getElementById('hud-draws');
+
+    if (polysEl) polysEl.textContent = polyCount > 1000 ? (polyCount / 1000).toFixed(1) + 'k' : polyCount;
+    if (vertsEl) vertsEl.textContent = vertCount > 1000 ? (vertCount / 1000).toFixed(1) + 'k' : vertCount;
+    if (drawsEl && renderer) drawsEl.textContent = renderer.info.render.calls;
 }
 
 function openSnapshotModal() {
+    if (!renderer) return;
     renderer.render(scene, camera);
     const dataURL = renderer.domElement.toDataURL('image/png');
 
@@ -1208,35 +1287,43 @@ function openSnapshotModal() {
     const previewImg = document.getElementById('snapshot-img-preview');
     const downloadLink = document.getElementById('link-download-snapshot');
 
-    previewImg.src = dataURL;
-    downloadLink.href = dataURL;
-    modal.classList.add('active');
+    if (previewImg) previewImg.src = dataURL;
+    if (downloadLink) downloadLink.href = dataURL;
+    if (modal) modal.classList.add('active');
 }
 
 function closeSnapshotModal() {
-    document.getElementById('modal-snapshot').classList.remove('active');
+    const modal = document.getElementById('modal-snapshot');
+    if (modal) modal.classList.remove('active');
 }
 
 function exportOBJModel() {
     if (typeof THREE.OBJExporter === 'undefined') {
-        showToast('Exporter loading... try again in a moment');
+        showToast('OBJ Exporter loading... try again');
         return;
     }
 
-    const exporter = new THREE.OBJExporter();
-    const result = exporter.parse(mainMeshGroup);
+    try {
+        const exporter = new THREE.OBJExporter();
+        const result = exporter.parse(mainMeshGroup);
 
-    const blob = new Blob([result], { type: 'text/plain' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `vertex_3d_${state.modelType}_${Date.now()}.obj`;
-    link.click();
+        const blob = new Blob([result], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `vertex_3d_${state.modelType}_${Date.now()}.obj`;
+        link.click();
 
-    showToast('3D Model Exported (.OBJ)');
+        showToast('3D Model Exported (.OBJ)');
+    } catch (e) {
+        console.error('Export OBJ Error:', e);
+        showToast('Export failed, try simple model');
+    }
 }
 
 function showToast(message) {
     const container = document.getElementById('toast-container');
+    if (!container) return;
+
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = message;
