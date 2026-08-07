@@ -1,0 +1,18 @@
+{
+  "id": "model-42",
+  "title": "Earth Model 42",
+  "categoryId": "earth",
+  "description": "This is a high-fidelity educational 3D model representing Earth. Use our interactive viewer to zoom, pan, and learn.",
+  "specifications": {
+    "Polygons": 23790,
+    "Materials": "PBR 4K",
+    "Animated": true
+  },
+  "educationalInfo": "Learn about the intricate details of Earth. This model demonstrates the core principles of its structure and function.",
+  "facts": [
+    "This model uses a photorealistic PBR workflow.",
+    "It is optimized for WebGL viewing.",
+    "Real-world scaling is applied."
+  ],
+  "downloads": 168
+}

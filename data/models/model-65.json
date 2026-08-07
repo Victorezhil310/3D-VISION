@@ -1,0 +1,18 @@
+{
+  "id": "model-65",
+  "title": "Cars Model 65",
+  "categoryId": "cars",
+  "description": "This is a high-fidelity educational 3D model representing Cars. Use our interactive viewer to zoom, pan, and learn.",
+  "specifications": {
+    "Polygons": 39692,
+    "Materials": "PBR 4K",
+    "Animated": false
+  },
+  "educationalInfo": "Learn about the intricate details of Cars. This model demonstrates the core principles of its structure and function.",
+  "facts": [
+    "This model uses a photorealistic PBR workflow.",
+    "It is optimized for WebGL viewing.",
+    "Real-world scaling is applied."
+  ],
+  "downloads": 32
+}

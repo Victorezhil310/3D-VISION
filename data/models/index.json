@@ -1,0 +1,1802 @@
+[
+  {
+    "id": "model-1",
+    "title": "Solar System Model 1",
+    "categoryId": "solar-system",
+    "description": "This is a high-fidelity educational 3D model representing Solar System. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 27819,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Solar System. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 688
+  },
+  {
+    "id": "model-2",
+    "title": "Earth Model 2",
+    "categoryId": "earth",
+    "description": "This is a high-fidelity educational 3D model representing Earth. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 44995,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Earth. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 869
+  },
+  {
+    "id": "model-3",
+    "title": "Human Anatomy Model 3",
+    "categoryId": "human-anatomy",
+    "description": "This is a high-fidelity educational 3D model representing Human Anatomy. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 23057,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Human Anatomy. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 445
+  },
+  {
+    "id": "model-4",
+    "title": "Animals Model 4",
+    "categoryId": "animals",
+    "description": "This is a high-fidelity educational 3D model representing Animals. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 22520,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Animals. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 998
+  },
+  {
+    "id": "model-5",
+    "title": "Cars Model 5",
+    "categoryId": "cars",
+    "description": "This is a high-fidelity educational 3D model representing Cars. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 37066,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Cars. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 224
+  },
+  {
+    "id": "model-6",
+    "title": "Bikes Model 6",
+    "categoryId": "bikes",
+    "description": "This is a high-fidelity educational 3D model representing Bikes. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 40598,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Bikes. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 279
+  },
+  {
+    "id": "model-7",
+    "title": "Aircraft Model 7",
+    "categoryId": "aircraft",
+    "description": "This is a high-fidelity educational 3D model representing Aircraft. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 16239,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Aircraft. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 737
+  },
+  {
+    "id": "model-8",
+    "title": "Ships Model 8",
+    "categoryId": "ships",
+    "description": "This is a high-fidelity educational 3D model representing Ships. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 10378,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Ships. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 869
+  },
+  {
+    "id": "model-9",
+    "title": "Architecture Model 9",
+    "categoryId": "architecture",
+    "description": "This is a high-fidelity educational 3D model representing Architecture. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 59573,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Architecture. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 54
+  },
+  {
+    "id": "model-10",
+    "title": "Electronics Model 10",
+    "categoryId": "electronics",
+    "description": "This is a high-fidelity educational 3D model representing Electronics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 53055,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Electronics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 321
+  },
+  {
+    "id": "model-11",
+    "title": "Computer Parts Model 11",
+    "categoryId": "computer-parts",
+    "description": "This is a high-fidelity educational 3D model representing Computer Parts. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 15870,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Computer Parts. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 829
+  },
+  {
+    "id": "model-12",
+    "title": "Physics Model 12",
+    "categoryId": "physics",
+    "description": "This is a high-fidelity educational 3D model representing Physics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 48528,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Physics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 728
+  },
+  {
+    "id": "model-13",
+    "title": "Chemistry Model 13",
+    "categoryId": "chemistry",
+    "description": "This is a high-fidelity educational 3D model representing Chemistry. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 39801,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Chemistry. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 659
+  },
+  {
+    "id": "model-14",
+    "title": "Biology Model 14",
+    "categoryId": "biology",
+    "description": "This is a high-fidelity educational 3D model representing Biology. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 52776,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Biology. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 509
+  },
+  {
+    "id": "model-15",
+    "title": "Engineering Model 15",
+    "categoryId": "engineering",
+    "description": "This is a high-fidelity educational 3D model representing Engineering. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 30996,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Engineering. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 712
+  },
+  {
+    "id": "model-16",
+    "title": "Mathematics Model 16",
+    "categoryId": "mathematics",
+    "description": "This is a high-fidelity educational 3D model representing Mathematics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 23360,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Mathematics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 994
+  },
+  {
+    "id": "model-17",
+    "title": "History Model 17",
+    "categoryId": "history",
+    "description": "This is a high-fidelity educational 3D model representing History. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 48627,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of History. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 654
+  },
+  {
+    "id": "model-18",
+    "title": "Art Model 18",
+    "categoryId": "art",
+    "description": "This is a high-fidelity educational 3D model representing Art. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 53491,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Art. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 839
+  },
+  {
+    "id": "model-19",
+    "title": "Gaming Assets Model 19",
+    "categoryId": "gaming-assets",
+    "description": "This is a high-fidelity educational 3D model representing Gaming Assets. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 19605,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Gaming Assets. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 53
+  },
+  {
+    "id": "model-20",
+    "title": "Space Model 20",
+    "categoryId": "space",
+    "description": "This is a high-fidelity educational 3D model representing Space. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 40123,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Space. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 104
+  },
+  {
+    "id": "model-21",
+    "title": "Solar System Model 21",
+    "categoryId": "solar-system",
+    "description": "This is a high-fidelity educational 3D model representing Solar System. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 28921,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Solar System. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 268
+  },
+  {
+    "id": "model-22",
+    "title": "Earth Model 22",
+    "categoryId": "earth",
+    "description": "This is a high-fidelity educational 3D model representing Earth. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 58814,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Earth. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 61
+  },
+  {
+    "id": "model-23",
+    "title": "Human Anatomy Model 23",
+    "categoryId": "human-anatomy",
+    "description": "This is a high-fidelity educational 3D model representing Human Anatomy. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 31734,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Human Anatomy. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 55
+  },
+  {
+    "id": "model-24",
+    "title": "Animals Model 24",
+    "categoryId": "animals",
+    "description": "This is a high-fidelity educational 3D model representing Animals. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 48301,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Animals. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 54
+  },
+  {
+    "id": "model-25",
+    "title": "Cars Model 25",
+    "categoryId": "cars",
+    "description": "This is a high-fidelity educational 3D model representing Cars. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 50777,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Cars. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 64
+  },
+  {
+    "id": "model-26",
+    "title": "Bikes Model 26",
+    "categoryId": "bikes",
+    "description": "This is a high-fidelity educational 3D model representing Bikes. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 24100,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Bikes. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 235
+  },
+  {
+    "id": "model-27",
+    "title": "Aircraft Model 27",
+    "categoryId": "aircraft",
+    "description": "This is a high-fidelity educational 3D model representing Aircraft. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 38596,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Aircraft. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 14
+  },
+  {
+    "id": "model-28",
+    "title": "Ships Model 28",
+    "categoryId": "ships",
+    "description": "This is a high-fidelity educational 3D model representing Ships. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 31061,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Ships. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 647
+  },
+  {
+    "id": "model-29",
+    "title": "Architecture Model 29",
+    "categoryId": "architecture",
+    "description": "This is a high-fidelity educational 3D model representing Architecture. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 12024,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Architecture. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 661
+  },
+  {
+    "id": "model-30",
+    "title": "Electronics Model 30",
+    "categoryId": "electronics",
+    "description": "This is a high-fidelity educational 3D model representing Electronics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 54604,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Electronics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 835
+  },
+  {
+    "id": "model-31",
+    "title": "Computer Parts Model 31",
+    "categoryId": "computer-parts",
+    "description": "This is a high-fidelity educational 3D model representing Computer Parts. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 39901,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Computer Parts. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 421
+  },
+  {
+    "id": "model-32",
+    "title": "Physics Model 32",
+    "categoryId": "physics",
+    "description": "This is a high-fidelity educational 3D model representing Physics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 31085,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Physics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 772
+  },
+  {
+    "id": "model-33",
+    "title": "Chemistry Model 33",
+    "categoryId": "chemistry",
+    "description": "This is a high-fidelity educational 3D model representing Chemistry. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 16758,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Chemistry. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 618
+  },
+  {
+    "id": "model-34",
+    "title": "Biology Model 34",
+    "categoryId": "biology",
+    "description": "This is a high-fidelity educational 3D model representing Biology. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 36573,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Biology. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 544
+  },
+  {
+    "id": "model-35",
+    "title": "Engineering Model 35",
+    "categoryId": "engineering",
+    "description": "This is a high-fidelity educational 3D model representing Engineering. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 30547,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Engineering. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 380
+  },
+  {
+    "id": "model-36",
+    "title": "Mathematics Model 36",
+    "categoryId": "mathematics",
+    "description": "This is a high-fidelity educational 3D model representing Mathematics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 18650,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Mathematics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 417
+  },
+  {
+    "id": "model-37",
+    "title": "History Model 37",
+    "categoryId": "history",
+    "description": "This is a high-fidelity educational 3D model representing History. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 10059,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of History. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 734
+  },
+  {
+    "id": "model-38",
+    "title": "Art Model 38",
+    "categoryId": "art",
+    "description": "This is a high-fidelity educational 3D model representing Art. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 12118,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Art. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 570
+  },
+  {
+    "id": "model-39",
+    "title": "Gaming Assets Model 39",
+    "categoryId": "gaming-assets",
+    "description": "This is a high-fidelity educational 3D model representing Gaming Assets. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 42314,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Gaming Assets. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 133
+  },
+  {
+    "id": "model-40",
+    "title": "Space Model 40",
+    "categoryId": "space",
+    "description": "This is a high-fidelity educational 3D model representing Space. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 11124,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Space. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 224
+  },
+  {
+    "id": "model-41",
+    "title": "Solar System Model 41",
+    "categoryId": "solar-system",
+    "description": "This is a high-fidelity educational 3D model representing Solar System. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 15067,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Solar System. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 374
+  },
+  {
+    "id": "model-42",
+    "title": "Earth Model 42",
+    "categoryId": "earth",
+    "description": "This is a high-fidelity educational 3D model representing Earth. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 23790,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Earth. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 168
+  },
+  {
+    "id": "model-43",
+    "title": "Human Anatomy Model 43",
+    "categoryId": "human-anatomy",
+    "description": "This is a high-fidelity educational 3D model representing Human Anatomy. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 37445,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Human Anatomy. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 826
+  },
+  {
+    "id": "model-44",
+    "title": "Animals Model 44",
+    "categoryId": "animals",
+    "description": "This is a high-fidelity educational 3D model representing Animals. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 41879,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Animals. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 915
+  },
+  {
+    "id": "model-45",
+    "title": "Cars Model 45",
+    "categoryId": "cars",
+    "description": "This is a high-fidelity educational 3D model representing Cars. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 32033,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Cars. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 207
+  },
+  {
+    "id": "model-46",
+    "title": "Bikes Model 46",
+    "categoryId": "bikes",
+    "description": "This is a high-fidelity educational 3D model representing Bikes. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 31420,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Bikes. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 848
+  },
+  {
+    "id": "model-47",
+    "title": "Aircraft Model 47",
+    "categoryId": "aircraft",
+    "description": "This is a high-fidelity educational 3D model representing Aircraft. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 33879,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Aircraft. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 532
+  },
+  {
+    "id": "model-48",
+    "title": "Ships Model 48",
+    "categoryId": "ships",
+    "description": "This is a high-fidelity educational 3D model representing Ships. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 48706,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Ships. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 932
+  },
+  {
+    "id": "model-49",
+    "title": "Architecture Model 49",
+    "categoryId": "architecture",
+    "description": "This is a high-fidelity educational 3D model representing Architecture. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 51946,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Architecture. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 143
+  },
+  {
+    "id": "model-50",
+    "title": "Electronics Model 50",
+    "categoryId": "electronics",
+    "description": "This is a high-fidelity educational 3D model representing Electronics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 44181,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Electronics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 970
+  },
+  {
+    "id": "model-51",
+    "title": "Computer Parts Model 51",
+    "categoryId": "computer-parts",
+    "description": "This is a high-fidelity educational 3D model representing Computer Parts. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 54788,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Computer Parts. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 225
+  },
+  {
+    "id": "model-52",
+    "title": "Physics Model 52",
+    "categoryId": "physics",
+    "description": "This is a high-fidelity educational 3D model representing Physics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 32369,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Physics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 76
+  },
+  {
+    "id": "model-53",
+    "title": "Chemistry Model 53",
+    "categoryId": "chemistry",
+    "description": "This is a high-fidelity educational 3D model representing Chemistry. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 46842,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Chemistry. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 783
+  },
+  {
+    "id": "model-54",
+    "title": "Biology Model 54",
+    "categoryId": "biology",
+    "description": "This is a high-fidelity educational 3D model representing Biology. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 30506,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Biology. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 812
+  },
+  {
+    "id": "model-55",
+    "title": "Engineering Model 55",
+    "categoryId": "engineering",
+    "description": "This is a high-fidelity educational 3D model representing Engineering. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 41182,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Engineering. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 517
+  },
+  {
+    "id": "model-56",
+    "title": "Mathematics Model 56",
+    "categoryId": "mathematics",
+    "description": "This is a high-fidelity educational 3D model representing Mathematics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 39416,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Mathematics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 474
+  },
+  {
+    "id": "model-57",
+    "title": "History Model 57",
+    "categoryId": "history",
+    "description": "This is a high-fidelity educational 3D model representing History. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 13560,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of History. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 650
+  },
+  {
+    "id": "model-58",
+    "title": "Art Model 58",
+    "categoryId": "art",
+    "description": "This is a high-fidelity educational 3D model representing Art. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 51804,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Art. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 48
+  },
+  {
+    "id": "model-59",
+    "title": "Gaming Assets Model 59",
+    "categoryId": "gaming-assets",
+    "description": "This is a high-fidelity educational 3D model representing Gaming Assets. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 47136,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Gaming Assets. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 76
+  },
+  {
+    "id": "model-60",
+    "title": "Space Model 60",
+    "categoryId": "space",
+    "description": "This is a high-fidelity educational 3D model representing Space. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 47438,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Space. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 602
+  },
+  {
+    "id": "model-61",
+    "title": "Solar System Model 61",
+    "categoryId": "solar-system",
+    "description": "This is a high-fidelity educational 3D model representing Solar System. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 10347,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Solar System. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 681
+  },
+  {
+    "id": "model-62",
+    "title": "Earth Model 62",
+    "categoryId": "earth",
+    "description": "This is a high-fidelity educational 3D model representing Earth. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 31436,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Earth. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 702
+  },
+  {
+    "id": "model-63",
+    "title": "Human Anatomy Model 63",
+    "categoryId": "human-anatomy",
+    "description": "This is a high-fidelity educational 3D model representing Human Anatomy. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 57483,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Human Anatomy. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 614
+  },
+  {
+    "id": "model-64",
+    "title": "Animals Model 64",
+    "categoryId": "animals",
+    "description": "This is a high-fidelity educational 3D model representing Animals. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 38301,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Animals. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 484
+  },
+  {
+    "id": "model-65",
+    "title": "Cars Model 65",
+    "categoryId": "cars",
+    "description": "This is a high-fidelity educational 3D model representing Cars. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 39692,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Cars. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 32
+  },
+  {
+    "id": "model-66",
+    "title": "Bikes Model 66",
+    "categoryId": "bikes",
+    "description": "This is a high-fidelity educational 3D model representing Bikes. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 47202,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Bikes. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 581
+  },
+  {
+    "id": "model-67",
+    "title": "Aircraft Model 67",
+    "categoryId": "aircraft",
+    "description": "This is a high-fidelity educational 3D model representing Aircraft. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 55939,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Aircraft. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 5
+  },
+  {
+    "id": "model-68",
+    "title": "Ships Model 68",
+    "categoryId": "ships",
+    "description": "This is a high-fidelity educational 3D model representing Ships. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 45761,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Ships. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 756
+  },
+  {
+    "id": "model-69",
+    "title": "Architecture Model 69",
+    "categoryId": "architecture",
+    "description": "This is a high-fidelity educational 3D model representing Architecture. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 56666,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Architecture. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 945
+  },
+  {
+    "id": "model-70",
+    "title": "Electronics Model 70",
+    "categoryId": "electronics",
+    "description": "This is a high-fidelity educational 3D model representing Electronics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 48164,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Electronics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 516
+  },
+  {
+    "id": "model-71",
+    "title": "Computer Parts Model 71",
+    "categoryId": "computer-parts",
+    "description": "This is a high-fidelity educational 3D model representing Computer Parts. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 46915,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Computer Parts. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 425
+  },
+  {
+    "id": "model-72",
+    "title": "Physics Model 72",
+    "categoryId": "physics",
+    "description": "This is a high-fidelity educational 3D model representing Physics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 35178,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Physics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 847
+  },
+  {
+    "id": "model-73",
+    "title": "Chemistry Model 73",
+    "categoryId": "chemistry",
+    "description": "This is a high-fidelity educational 3D model representing Chemistry. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 46303,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Chemistry. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 798
+  },
+  {
+    "id": "model-74",
+    "title": "Biology Model 74",
+    "categoryId": "biology",
+    "description": "This is a high-fidelity educational 3D model representing Biology. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 42263,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Biology. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 184
+  },
+  {
+    "id": "model-75",
+    "title": "Engineering Model 75",
+    "categoryId": "engineering",
+    "description": "This is a high-fidelity educational 3D model representing Engineering. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 56158,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Engineering. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 744
+  },
+  {
+    "id": "model-76",
+    "title": "Mathematics Model 76",
+    "categoryId": "mathematics",
+    "description": "This is a high-fidelity educational 3D model representing Mathematics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 20255,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Mathematics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 221
+  },
+  {
+    "id": "model-77",
+    "title": "History Model 77",
+    "categoryId": "history",
+    "description": "This is a high-fidelity educational 3D model representing History. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 32126,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of History. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 841
+  },
+  {
+    "id": "model-78",
+    "title": "Art Model 78",
+    "categoryId": "art",
+    "description": "This is a high-fidelity educational 3D model representing Art. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 43026,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Art. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 310
+  },
+  {
+    "id": "model-79",
+    "title": "Gaming Assets Model 79",
+    "categoryId": "gaming-assets",
+    "description": "This is a high-fidelity educational 3D model representing Gaming Assets. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 40459,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Gaming Assets. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 839
+  },
+  {
+    "id": "model-80",
+    "title": "Space Model 80",
+    "categoryId": "space",
+    "description": "This is a high-fidelity educational 3D model representing Space. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 24467,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Space. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 919
+  },
+  {
+    "id": "model-81",
+    "title": "Solar System Model 81",
+    "categoryId": "solar-system",
+    "description": "This is a high-fidelity educational 3D model representing Solar System. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 33529,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Solar System. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 35
+  },
+  {
+    "id": "model-82",
+    "title": "Earth Model 82",
+    "categoryId": "earth",
+    "description": "This is a high-fidelity educational 3D model representing Earth. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 57234,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Earth. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 760
+  },
+  {
+    "id": "model-83",
+    "title": "Human Anatomy Model 83",
+    "categoryId": "human-anatomy",
+    "description": "This is a high-fidelity educational 3D model representing Human Anatomy. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 42609,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Human Anatomy. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 742
+  },
+  {
+    "id": "model-84",
+    "title": "Animals Model 84",
+    "categoryId": "animals",
+    "description": "This is a high-fidelity educational 3D model representing Animals. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 11475,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Animals. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 493
+  },
+  {
+    "id": "model-85",
+    "title": "Cars Model 85",
+    "categoryId": "cars",
+    "description": "This is a high-fidelity educational 3D model representing Cars. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 37475,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Cars. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 922
+  },
+  {
+    "id": "model-86",
+    "title": "Bikes Model 86",
+    "categoryId": "bikes",
+    "description": "This is a high-fidelity educational 3D model representing Bikes. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 16607,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Bikes. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 962
+  },
+  {
+    "id": "model-87",
+    "title": "Aircraft Model 87",
+    "categoryId": "aircraft",
+    "description": "This is a high-fidelity educational 3D model representing Aircraft. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 26177,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Aircraft. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 594
+  },
+  {
+    "id": "model-88",
+    "title": "Ships Model 88",
+    "categoryId": "ships",
+    "description": "This is a high-fidelity educational 3D model representing Ships. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 13768,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Ships. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 422
+  },
+  {
+    "id": "model-89",
+    "title": "Architecture Model 89",
+    "categoryId": "architecture",
+    "description": "This is a high-fidelity educational 3D model representing Architecture. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 20188,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Architecture. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 883
+  },
+  {
+    "id": "model-90",
+    "title": "Electronics Model 90",
+    "categoryId": "electronics",
+    "description": "This is a high-fidelity educational 3D model representing Electronics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 41145,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Electronics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 319
+  },
+  {
+    "id": "model-91",
+    "title": "Computer Parts Model 91",
+    "categoryId": "computer-parts",
+    "description": "This is a high-fidelity educational 3D model representing Computer Parts. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 41707,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Computer Parts. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 425
+  },
+  {
+    "id": "model-92",
+    "title": "Physics Model 92",
+    "categoryId": "physics",
+    "description": "This is a high-fidelity educational 3D model representing Physics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 26757,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Physics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 161
+  },
+  {
+    "id": "model-93",
+    "title": "Chemistry Model 93",
+    "categoryId": "chemistry",
+    "description": "This is a high-fidelity educational 3D model representing Chemistry. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 58259,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Chemistry. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 838
+  },
+  {
+    "id": "model-94",
+    "title": "Biology Model 94",
+    "categoryId": "biology",
+    "description": "This is a high-fidelity educational 3D model representing Biology. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 21613,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Biology. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 769
+  },
+  {
+    "id": "model-95",
+    "title": "Engineering Model 95",
+    "categoryId": "engineering",
+    "description": "This is a high-fidelity educational 3D model representing Engineering. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 45689,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Engineering. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 87
+  },
+  {
+    "id": "model-96",
+    "title": "Mathematics Model 96",
+    "categoryId": "mathematics",
+    "description": "This is a high-fidelity educational 3D model representing Mathematics. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 36963,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Mathematics. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 513
+  },
+  {
+    "id": "model-97",
+    "title": "History Model 97",
+    "categoryId": "history",
+    "description": "This is a high-fidelity educational 3D model representing History. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 54858,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of History. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 635
+  },
+  {
+    "id": "model-98",
+    "title": "Art Model 98",
+    "categoryId": "art",
+    "description": "This is a high-fidelity educational 3D model representing Art. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 46550,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Art. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 70
+  },
+  {
+    "id": "model-99",
+    "title": "Gaming Assets Model 99",
+    "categoryId": "gaming-assets",
+    "description": "This is a high-fidelity educational 3D model representing Gaming Assets. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 27646,
+      "Materials": "PBR 4K",
+      "Animated": true
+    },
+    "educationalInfo": "Learn about the intricate details of Gaming Assets. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 363
+  },
+  {
+    "id": "model-100",
+    "title": "Space Model 100",
+    "categoryId": "space",
+    "description": "This is a high-fidelity educational 3D model representing Space. Use our interactive viewer to zoom, pan, and learn.",
+    "specifications": {
+      "Polygons": 40090,
+      "Materials": "PBR 4K",
+      "Animated": false
+    },
+    "educationalInfo": "Learn about the intricate details of Space. This model demonstrates the core principles of its structure and function.",
+    "facts": [
+      "This model uses a photorealistic PBR workflow.",
+      "It is optimized for WebGL viewing.",
+      "Real-world scaling is applied."
+    ],
+    "downloads": 291
+  }
+]

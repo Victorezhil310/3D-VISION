@@ -1,0 +1,18 @@
+{
+  "id": "model-55",
+  "title": "Engineering Model 55",
+  "categoryId": "engineering",
+  "description": "This is a high-fidelity educational 3D model representing Engineering. Use our interactive viewer to zoom, pan, and learn.",
+  "specifications": {
+    "Polygons": 41182,
+    "Materials": "PBR 4K",
+    "Animated": false
+  },
+  "educationalInfo": "Learn about the intricate details of Engineering. This model demonstrates the core principles of its structure and function.",
+  "facts": [
+    "This model uses a photorealistic PBR workflow.",
+    "It is optimized for WebGL viewing.",
+    "Real-world scaling is applied."
+  ],
+  "downloads": 517
+}

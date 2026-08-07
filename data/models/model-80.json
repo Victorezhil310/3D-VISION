@@ -1,0 +1,18 @@
+{
+  "id": "model-80",
+  "title": "Space Model 80",
+  "categoryId": "space",
+  "description": "This is a high-fidelity educational 3D model representing Space. Use our interactive viewer to zoom, pan, and learn.",
+  "specifications": {
+    "Polygons": 24467,
+    "Materials": "PBR 4K",
+    "Animated": false
+  },
+  "educationalInfo": "Learn about the intricate details of Space. This model demonstrates the core principles of its structure and function.",
+  "facts": [
+    "This model uses a photorealistic PBR workflow.",
+    "It is optimized for WebGL viewing.",
+    "Real-world scaling is applied."
+  ],
+  "downloads": 919
+}

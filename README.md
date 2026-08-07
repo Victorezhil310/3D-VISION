@@ -1,59 +1,36 @@
-# VERTEX 3D VISION 🌌
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-> **Next-Generation Hardware-Accelerated WebGL 3D Studio & World Sculptor**
+## Getting Started
 
-![VERTEX 3D VISION Studio](https://img.shields.io/badge/WebGL-2.0-00f2fe?style=for-the-badge&logo=webgl)
-![Three.js](https://img.shields.io/badge/Three.js-r128-7928ca?style=for-the-badge&logo=three.js)
-![License](https://img.shields.io/badge/License-MIT-ff007f?style=for-the-badge)
+First, run the development server:
 
-VERTEX 3D VISION is an interactive WebGL studio for rendering, sculpting, and customizing 3D models across micro and macro scales—from quantum atomic nuclei and microscopic sand grains to rocky peak terrains, cyberpunk citadels, and terraformed planetary globes.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
----
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## ✨ Features
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-- ⚛️ **Quantum Atom & Particle Swarm Engine**: Real-time rendering of glowing atomic cores, orbital electron tracks, and particle dust clouds.
-- 🏖️ **Multi-Scale Switching**:
-  - **Quantum Atom**: Atomic nucleus & orbital electron particles.
-  - **Sand Grain (Micro)**: Microscopic faceted mineral crystal.
-  - **Rock Peak (Macro)**: Procedural eroded mountain terrain via 3D simplex noise.
-  - **Cyber Citadel**: Futuristic skyscraper matrix with glowing spires.
-  - **World Sphere**: Terraformed globe with planetary rings and atmospheric glow.
-- 🎨 **PBR Material Customizer**: Real-time roughness, metalness, neon emissive glow, glass transmission opacity, and bump texture overlays (Sand Ripples, Rock Veins, Cyber Grid, Hex Mesh).
-- 💡 **Dynamic Lighting & Environment Studio**: Cyberpunk Night, Desert Gold, Deep Space, Studio White, and Volcanic Abyss presets.
-- 📐 **Shading Modes**: Photorealistic PBR, Clay Sculpting, Neon Grid Wireframe, Hologram, and Normal Vector preview.
-- 📷 **Export Suite**: High-resolution PNG snapshot generator and 3D `.OBJ` model exporter.
-- 📜 **Google AdSense & GDPR Compliance**: Integrated Privacy Policy (`privacy.html`), Terms of Service (`terms.html`), and GDPR Cookie Consent Manager.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
----
+## Learn More
 
-## 🚀 Live Demo & Installation
+To learn more about Next.js, take a look at the following resources:
 
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/Victorezhil310/3D-VISION.git
-   cd 3D-VISION
-   ```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-2. **Run Locally:**
-   Open `index.html` directly in any WebGL-enabled web browser, or serve via Python:
-   ```bash
-   python -m http.server 8080
-   ```
-   Navigate to `http://localhost:8080`.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
----
+## Deploy on Vercel
 
-## 🛠️ Technology Stack
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- **Graphics Core**: Three.js (r128), WebGL 2.0
-- **UI Framework**: Vanilla JS (ES6+), HTML5, Custom CSS3 Design System
-- **Typography**: Google Fonts (*Outfit*, *JetBrains Mono*)
-- **Icons**: Lucide Icons
-- **Procedural Algorithms**: 3D Simplex & Perlin Noise FBM, Trigonometric Deformers
-
----
-
-## 📄 License & Privacy
-
-Distributed under the MIT License. See `privacy.html` and `terms.html` for privacy disclosures and Google AdSense compliance details.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

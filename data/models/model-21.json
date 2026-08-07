@@ -1,0 +1,18 @@
+{
+  "id": "model-21",
+  "title": "Solar System Model 21",
+  "categoryId": "solar-system",
+  "description": "This is a high-fidelity educational 3D model representing Solar System. Use our interactive viewer to zoom, pan, and learn.",
+  "specifications": {
+    "Polygons": 28921,
+    "Materials": "PBR 4K",
+    "Animated": true
+  },
+  "educationalInfo": "Learn about the intricate details of Solar System. This model demonstrates the core principles of its structure and function.",
+  "facts": [
+    "This model uses a photorealistic PBR workflow.",
+    "It is optimized for WebGL viewing.",
+    "Real-world scaling is applied."
+  ],
+  "downloads": 268
+}

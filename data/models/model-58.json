@@ -1,0 +1,18 @@
+{
+  "id": "model-58",
+  "title": "Art Model 58",
+  "categoryId": "art",
+  "description": "This is a high-fidelity educational 3D model representing Art. Use our interactive viewer to zoom, pan, and learn.",
+  "specifications": {
+    "Polygons": 51804,
+    "Materials": "PBR 4K",
+    "Animated": false
+  },
+  "educationalInfo": "Learn about the intricate details of Art. This model demonstrates the core principles of its structure and function.",
+  "facts": [
+    "This model uses a photorealistic PBR workflow.",
+    "It is optimized for WebGL viewing.",
+    "Real-world scaling is applied."
+  ],
+  "downloads": 48
+}

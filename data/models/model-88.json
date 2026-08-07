@@ -1,0 +1,18 @@
+{
+  "id": "model-88",
+  "title": "Ships Model 88",
+  "categoryId": "ships",
+  "description": "This is a high-fidelity educational 3D model representing Ships. Use our interactive viewer to zoom, pan, and learn.",
+  "specifications": {
+    "Polygons": 13768,
+    "Materials": "PBR 4K",
+    "Animated": false
+  },
+  "educationalInfo": "Learn about the intricate details of Ships. This model demonstrates the core principles of its structure and function.",
+  "facts": [
+    "This model uses a photorealistic PBR workflow.",
+    "It is optimized for WebGL viewing.",
+    "Real-world scaling is applied."
+  ],
+  "downloads": 422
+}
