@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VERTEX 3D VISION - Cyber Hero Sentinel, J.A.R.V.I.S. & Bat-Tech Studio</title>
-    <meta name="description" content="View, build, sculpt, and customize high-fidelity 3D mech characters, Cyber Sentinel Hero, Android Robot, J.A.R.V.I.S. arc reactors, Dark Knight Bat-Tech armor, bionic cyber hands, AI microchips, and nanotech in WebGL.">
+    <title>VERTEX 3D VISION - Photorealistic Solar System Explorer</title>
+    <meta name="description" content="Explore a stunning, 4K/8K photorealistic 3D rendering of our Solar System. View high-definition satellite imagery of Earth, Sun, Mars, Saturn, and all planets in real-time WebGL.">
     
     <!-- Google AdSense Verification & Account Script -->
     <meta name="google-adsense-account" content="ca-pub-6751037211810646">
@@ -13,7 +13,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -21,7 +21,6 @@
     <!-- Three.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/OBJExporter.js"></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -30,53 +29,50 @@
         <!-- Fullscreen WebGL 3D Canvas -->
         <canvas id="three-canvas"></canvas>
 
+        <!-- Loading Overlay (Visible during heavy 4K texture load) -->
+        <div id="loading-overlay" class="active">
+            <div class="loader-content">
+                <i data-lucide="loader" class="spin-icon"></i>
+                <h2>Initializing 8K Solar System...</h2>
+                <div class="progress-bar-container">
+                    <div id="loading-progress" class="progress-bar"></div>
+                </div>
+                <p id="loading-text">Loading high-res satellite textures...</p>
+            </div>
+        </div>
+
         <!-- Top Navigation Bar -->
         <header class="top-nav">
             <div class="brand">
                 <div class="logo-box">
-                    <i data-lucide="bot"></i>
+                    <i data-lucide="globe-2"></i>
                 </div>
                 <div class="brand-info">
-                    <h1>VERTEX <span>3D HERO VISION</span></h1>
-                    <span class="badge"><i data-lucide="shield"></i> CYBER HERO & CHARACTERS v7.0</span>
+                    <h1>VERTEX <span>SOLAR SYSTEM</span></h1>
+                    <span class="badge"><i data-lucide="telescope"></i> 4K PHOTOREALISTIC EXPLORER</span>
                 </div>
             </div>
 
-            <!-- Model & Character Switcher Bar -->
-            <div class="model-switcher">
-                <button class="model-tab active" data-model="hero_sentinel">
-                    <i data-lucide="shield"></i> Cyber Hero
+            <!-- Planet Target Selector Bar -->
+            <div class="model-switcher scroll-hide">
+                <button class="model-tab active" data-target="overview">
+                    <i data-lucide="sun"></i> System Overview
                 </button>
-                <button class="model-tab" data-model="android_bot">
-                    <i data-lucide="bot"></i> Android Robot
-                </button>
-                <button class="model-tab" data-model="jarvis_arc">
-                    <i data-lucide="aperture"></i> J.A.R.V.I.S. Arc
-                </button>
-                <button class="model-tab" data-model="bat_symbol">
-                    <i data-lucide="shield"></i> Bat-Armor
-                </button>
-                <button class="model-tab" data-model="bionic_hand">
-                    <i data-lucide="hand"></i> Cyber Bionic Arm
-                </button>
-                <button class="model-tab" data-model="ai_chip">
-                    <i data-lucide="cpu"></i> AI Processor
-                </button>
-                <button class="model-tab" data-model="nano_grid">
-                    <i data-lucide="atom"></i> Nanotech Grid
-                </button>
+                <button class="model-tab" data-target="sun">Sun</button>
+                <button class="model-tab" data-target="mercury">Mercury</button>
+                <button class="model-tab" data-target="venus">Venus</button>
+                <button class="model-tab" data-target="earth">Earth</button>
+                <button class="model-tab" data-target="mars">Mars</button>
+                <button class="model-tab" data-target="jupiter">Jupiter</button>
+                <button class="model-tab" data-target="saturn">Saturn</button>
+                <button class="model-tab" data-target="uranus">Uranus</button>
+                <button class="model-tab" data-target="neptune">Neptune</button>
             </div>
 
             <!-- Header Quick Actions -->
             <div class="header-actions">
-                <button class="action-btn" id="btn-toggle-sound" title="Toggle Audio FX">
-                    <i data-lucide="volume-2" id="sound-icon"></i>
-                </button>
-                <button class="action-btn" id="btn-snapshot" title="Take High-Res Snapshot">
-                    <i data-lucide="camera"></i> Snapshot
-                </button>
-                <button class="action-btn btn-glow" id="btn-export-3d" title="Export 3D Model (.OBJ)">
-                    <i data-lucide="download"></i> Export OBJ
+                <button class="action-btn" id="btn-snapshot" title="Take Cosmic Snapshot">
+                    <i data-lucide="camera"></i> Screenshot
                 </button>
                 <button class="action-btn" id="btn-fullscreen" title="Fullscreen Viewport">
                     <i data-lucide="maximize-2"></i>
@@ -86,25 +82,13 @@
 
         <!-- Right Side Floating Interactive Fun Wheel -->
         <div class="fun-wheel-bar">
-            <button class="fun-btn" id="btn-jarvis-overdrive" title="Activate Overdrive Mode!">
-                <i data-lucide="zap"></i>
-                <span>Overdrive</span>
+            <button class="fun-btn active" id="btn-toggle-orbits" title="Toggle Orbital Paths">
+                <i data-lucide="git-commit"></i>
+                <span>Orbits</span>
             </button>
-            <button class="fun-btn" id="btn-rainbow" title="Toggle Holographic Prism Shift">
-                <i data-lucide="palette"></i>
-                <span>Holo-Shift</span>
-            </button>
-            <button class="fun-btn" id="fun-btn-explode" title="Disassemble Character Armor">
-                <i data-lucide="component"></i>
-                <span>Disassemble</span>
-            </button>
-            <button class="fun-btn" id="btn-supernova" title="Trigger Quantum Energy Explosion">
-                <i data-lucide="sparkles"></i>
-                <span>Quantum Burst</span>
-            </button>
-            <button class="fun-btn" id="btn-wireframe" title="Toggle Blueprint HUD">
-                <i data-lucide="grid"></i>
-                <span>Blueprint</span>
+            <button class="fun-btn" id="btn-focus-mode" title="Cinematic Auto-Tour">
+                <i data-lucide="video"></i>
+                <span>Auto-Tour</span>
             </button>
         </div>
 
@@ -115,74 +99,34 @@
             </button>
             
             <div class="drawer-content">
-                <div class="drawer-title"><i data-lucide="settings"></i> Character Specifications</div>
+                <div class="drawer-title"><i data-lucide="settings"></i> Observatory Controls</div>
 
-                <div class="control-row">
-                    <label>Armor Paint</label>
-                    <input type="color" id="picker-color" value="#00f2fe" class="color-picker">
-                </div>
-
-                <div class="control-row">
-                    <label>Visor Emissive Glow</label>
-                    <input type="color" id="picker-emissive" value="#ff007f" class="color-picker">
+                <div class="control-group">
+                    <div class="label-val">
+                        <span>Time Speed (Orbit Velocity)</span>
+                        <span id="val-orbit-speed">1.0x</span>
+                    </div>
+                    <input type="range" id="slider-orbit-speed" min="0" max="5.0" step="0.1" value="1.0">
                 </div>
 
                 <div class="control-group">
                     <div class="label-val">
-                        <span>Energy Core Intensity</span>
-                        <span id="val-emissive-power">1.5</span>
+                        <span>Planet Rotation Speed</span>
+                        <span id="val-rotation-speed">1.0x</span>
                     </div>
-                    <input type="range" id="slider-emissive" min="0.0" max="4.0" step="0.1" value="1.5">
+                    <input type="range" id="slider-rotation-speed" min="0" max="5.0" step="0.1" value="1.0">
                 </div>
 
                 <div class="control-group">
                     <div class="label-val">
-                        <span>Titanium Armor Metallic</span>
-                        <span id="val-metal">0.90</span>
+                        <span>Ambient Starlight</span>
+                        <span id="val-ambient-light">0.1</span>
                     </div>
-                    <input type="range" id="slider-metal" min="0.0" max="1.0" step="0.05" value="0.90">
-                </div>
-
-                <div class="control-group">
-                    <div class="label-val">
-                        <span>Gloss / Reflection</span>
-                        <span id="val-rough">0.15</span>
-                    </div>
-                    <input type="range" id="slider-rough" min="0.0" max="1.0" step="0.05" value="0.15">
-                </div>
-
-                <div class="control-group">
-                    <div class="label-val">
-                        <span>Sculpt Distortion</span>
-                        <span id="val-deform">0.0</span>
-                    </div>
-                    <input type="range" id="slider-deform" min="0.0" max="2.0" step="0.05" value="0.0">
-                </div>
-
-                <div class="control-group">
-                    <div class="label-val">
-                        <span>Rotational Twist</span>
-                        <span id="val-twist">0°</span>
-                    </div>
-                    <input type="range" id="slider-twist" min="-180" max="180" step="5" value="0">
-                </div>
-
-                <div class="control-group">
-                    <div class="label-val">
-                        <span>Nanotech Swarm</span>
-                        <span id="val-particles">2500</span>
-                    </div>
-                    <input type="range" id="slider-particles" min="200" max="5000" step="200" value="2500">
-                </div>
-
-                <div class="btn-group mt-2">
-                    <button class="btn btn-secondary" id="btn-random-all">
-                        <i data-lucide="dice-5"></i> Randomize Character
-                    </button>
+                    <input type="range" id="slider-ambient-light" min="0.0" max="1.0" step="0.05" value="0.1">
                 </div>
 
                 <!-- Google AdSense Exact In-Feed Fluid Ad Slot -->
-                <div class="adsense-slot-sidebar mt-3">
+                <div class="adsense-slot-sidebar mt-4">
                     <span class="ad-label">SPONSORED CONTENT</span>
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6751037211810646"
                          crossorigin="anonymous"></script>
@@ -199,36 +143,10 @@
             </div>
         </div>
 
-        <!-- Floating Diagnostic HUD Bar -->
-        <div class="hud-bar">
-            <div class="hud-item">
-                <span class="hud-label">FPS RATE</span>
-                <span class="hud-val" id="hud-fps">60</span>
-            </div>
-            <div class="hud-item">
-                <span class="hud-label">POLYGONS</span>
-                <span class="hud-val" id="hud-polys">24.8k</span>
-            </div>
-            <div class="hud-item">
-                <span class="hud-label">SYSTEM CORE</span>
-                <span class="hud-val" id="hud-jarvis">HERO ACTIVE</span>
-            </div>
-        </div>
-
         <!-- Bottom Animation & Legal Dock -->
         <footer class="bottom-dock">
-            <button class="btn-play" id="btn-play-pause">
-                <i data-lucide="pause" id="play-icon"></i>
-            </button>
             <div class="anim-info">
-                <span class="anim-label">Cyber Character 360° Diagnostic Orbit</span>
-                <span class="anim-status" id="anim-status-text">Active (0.8 RPM)</span>
-            </div>
-            <div class="speed-control">
-                <i data-lucide="gauge"></i>
-                <span>Speed:</span>
-                <input type="range" id="slider-speed" min="0.1" max="3.0" step="0.1" value="0.8">
-                <span id="val-speed">0.8x</span>
+                <span class="anim-label" id="current-target-label">Focus: Solar System Overview</span>
             </div>
             <div class="footer-legal">
                 <a href="privacy.html" target="_blank">Privacy Policy</a> • 
@@ -243,7 +161,7 @@
         <div class="modal" id="modal-snapshot">
             <div class="modal-card">
                 <div class="modal-header">
-                    <h3><i data-lucide="camera"></i> 3D Character Snapshot Captured</h3>
+                    <h3><i data-lucide="camera"></i> Cosmic Snapshot Captured</h3>
                     <button class="btn-close" id="modal-close"><i data-lucide="x"></i></button>
                 </div>
                 <div class="modal-body">
@@ -253,8 +171,8 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" id="modal-cancel">Close</button>
-                    <a id="link-download-img" class="btn btn-primary" download="cyber_hero_3d_render.png">
-                        <i data-lucide="download"></i> Save PNG Image
+                    <a id="link-download-img" class="btn btn-primary" download="solar_system_render.png">
+                        <i data-lucide="download"></i> Save High-Res PNG
                     </a>
                 </div>
             </div>
