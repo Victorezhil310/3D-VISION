@@ -1,8 +1,8 @@
 /* ==========================================================================
-   VERTEX 3D VISION - J.A.R.V.I.S. AI, Mech & Dark Knight Bat-Tech Engine (v5.0)
+   VERTEX 3D VISION - Next-Gen Real 3D Mech, J.A.R.V.I.S. & Bat-Tech Engine (v6.0)
    ========================================================================== */
 
-// --- 3D Perlin/Simplex Noise Implementation ---
+// --- 3D Perlin/Simplex Noise Generator ---
 const Noise3D = (function() {
     function grad3(hash, x, y, z) {
         const h = hash & 15;
@@ -122,10 +122,10 @@ const state = {
     modelType: 'jarvis_arc',     // jarvis_arc, bat_symbol, bionic_hand, nano_grid, ai_chip, mech_drone
     baseColor: '#00f2fe',
     emissiveColor: '#7928ca',
-    emissivePower: 1.2,
+    emissivePower: 1.5,
     metalness: 0.90,
     roughness: 0.15,
-    deform: 0.20,
+    deform: 0.0,
     twist: 0,
     particleCount: 2500,
 
@@ -143,28 +143,18 @@ const state = {
 
 // --- Three.js Globals ---
 let scene, camera, renderer, controls;
-let mainMeshGroup, mainMesh;
+let mainMeshGroup;
 let keyLight, fillLight, rimLight, ambientLight;
 let gridHelper, particleSystem;
 let jarvisRings = [];
+let animatedParts = [];
 let supernovaParticles = [];
 
 // --- Performance Tracker ---
 let lastFrameTime = performance.now();
 let frameCount = 0;
 
-// --- Initialize Application ---
-window.addEventListener('DOMContentLoaded', () => {
-    safeLucideIcons();
-    initThreeJS();
-    createEnvironment();
-    build3DModel();
-    setupEventListeners();
-    setupCookieConsent();
-    animate();
-    showToast('🤖 J.A.R.V.I.S. AI & Bat-Tech Systems Online 100%');
-});
-
+// --- Safe Lucide Helper ---
 function safeLucideIcons() {
     try {
         if (window.lucide && typeof window.lucide.createIcons === 'function') {
@@ -175,14 +165,26 @@ function safeLucideIcons() {
     }
 }
 
-// --- Three.js Setup ---
+// --- Initialize App ---
+window.addEventListener('DOMContentLoaded', () => {
+    safeLucideIcons();
+    initThreeJS();
+    createEnvironment();
+    build3DModel();
+    setupEventListeners();
+    setupCookieConsent();
+    animate();
+    showToast('🤖 J.A.R.V.I.S. & Bat-Tech Real 3D Studio Online');
+});
+
+// --- Three.js Engine Setup ---
 function initThreeJS() {
     const canvas = document.getElementById('three-canvas');
 
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 3.2, 6.5);
+    camera.position.set(0, 3.2, 6.8);
 
     renderer = new THREE.WebGLRenderer({
         canvas: canvas,
@@ -215,31 +217,31 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// --- Environment & Dynamic Lighting ---
+// --- Environment & Dynamic Studio Lighting ---
 function createEnvironment() {
     scene.background = new THREE.Color(0x04060a);
-    scene.fog = new THREE.FogExp2(0x04060a, 0.03);
+    scene.fog = new THREE.FogExp2(0x04060a, 0.025);
 
     gridHelper = new THREE.GridHelper(26, 52, 0x00f2fe, 0x121b2d);
-    gridHelper.position.y = -1.8;
+    gridHelper.position.y = -2.0;
     scene.add(gridHelper);
 
     ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
-    keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
-    keyLight.position.set(5, 8, 5);
+    keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    keyLight.position.set(6, 9, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
     scene.add(keyLight);
 
-    fillLight = new THREE.PointLight(0x00f2fe, 1.4, 25);
+    fillLight = new THREE.PointLight(0x00f2fe, 1.6, 25);
     fillLight.position.set(-6, 3, -4);
     scene.add(fillLight);
 
-    rimLight = new THREE.PointLight(0x7928ca, 1.8, 25);
-    rimLight.position.set(0, 5, -6);
+    rimLight = new THREE.PointLight(0xff007f, 2.0, 25);
+    rimLight.position.set(0, 6, -6);
     scene.add(rimLight);
 
     createNanotechParticles();
@@ -256,9 +258,9 @@ function createNanotechParticles() {
     const baseColor = new THREE.Color(state.baseColor);
 
     for (let i = 0; i < count; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * 30;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 30;
+        positions[i * 3] = (Math.random() - 0.5) * 32;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 32;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 32;
 
         colors[i * 3] = baseColor.r + (Math.random() - 0.5) * 0.2;
         colors[i * 3 + 1] = baseColor.g + (Math.random() - 0.5) * 0.2;
@@ -272,7 +274,7 @@ function createNanotechParticles() {
         size: 0.045,
         vertexColors: true,
         transparent: true,
-        opacity: 0.65,
+        opacity: 0.7,
         blending: THREE.AdditiveBlending
     });
 
@@ -280,340 +282,405 @@ function createNanotechParticles() {
     scene.add(particleSystem);
 }
 
-// --- Bulletproof Non-Indexed Geometry Merger ---
-function mergeGeometries(geometries) {
-    const list = geometries.map(g => g.index ? g.toNonIndexed() : g);
-    let totalVerts = 0;
-    list.forEach(g => totalVerts += g.attributes.position.count);
-
-    const pos = new Float32Array(totalVerts * 3);
-    let offset = 0;
-
-    list.forEach(g => {
-        const p = g.attributes.position.array;
-        pos.set(p, offset * 3);
-        offset += g.attributes.position.count;
-    });
-
-    const merged = new THREE.BufferGeometry();
-    merged.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    merged.computeVertexNormals();
-    return merged;
-}
-
-// --- Procedural 3D Model Generators ---
+// --- Main 3D Model Switcher ---
 function build3DModel() {
     jarvisRings = [];
+    animatedParts = [];
+    
+    // Clear all existing objects cleanly
     while (mainMeshGroup.children.length > 0) {
         const obj = mainMeshGroup.children[0];
-        if (obj.geometry) obj.geometry.dispose();
-        if (obj.material) {
-            if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
-            else obj.material.dispose();
-        }
+        disposeObjectTree(obj);
         mainMeshGroup.remove(obj);
     }
 
-    let geometry;
-
-    try {
-        switch (state.modelType) {
-            case 'jarvis_arc':
-                geometry = createJarvisArcGeometry();
-                break;
-            case 'bat_symbol':
-                geometry = createBatSymbolGeometry();
-                break;
-            case 'bionic_hand':
-                geometry = createBionicHandGeometry();
-                break;
-            case 'nano_grid':
-                geometry = createNanotubeGeometry();
-                break;
-            case 'ai_chip':
-                geometry = createAIChipGeometry();
-                break;
-            case 'mech_drone':
-                geometry = createMechDroneGeometry();
-                break;
-            default:
-                geometry = createJarvisArcGeometry();
-        }
-    } catch (e) {
-        console.error('Geometry build fallback:', e);
-        geometry = new THREE.IcosahedronGeometry(1.5, 2);
+    switch (state.modelType) {
+        case 'jarvis_arc':
+            buildJarvisArcReactor();
+            break;
+        case 'bat_symbol':
+            buildBatTechArmorEmblem();
+            break;
+        case 'bionic_hand':
+            buildBionicCyberArm();
+            break;
+        case 'nano_grid':
+            buildCarbonNanotechGrid();
+            break;
+        case 'ai_chip':
+            buildAIQuantumProcessor();
+            break;
+        case 'mech_drone':
+            buildTacticalStealthDrone();
+            break;
+        default:
+            buildJarvisArcReactor();
     }
 
-    applySculptDeformation(geometry);
-    geometry.computeVertexNormals();
+    updateHUDStats();
+}
 
-    const material = createMaterial();
-    mainMesh = new THREE.Mesh(geometry, material);
-    mainMesh.castShadow = true;
-    mainMesh.receiveShadow = true;
-    mainMeshGroup.add(mainMesh);
-
-    if (state.modelType === 'jarvis_arc') {
-        buildJarvisHolographicRings();
+function disposeObjectTree(obj) {
+    if (obj.geometry) obj.geometry.dispose();
+    if (obj.material) {
+        if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+        else obj.material.dispose();
     }
-
-    updateHUDStats(geometry);
-}
-
-// --- J.A.R.V.I.S. & Bat-Tech 3D Geometries ---
-function createJarvisArcGeometry() {
-    const list = [];
-
-    // Central Core Sphere
-    const core = new THREE.IcosahedronGeometry(0.85, 4);
-    list.push(core);
-
-    // Inner Containment Ring
-    const innerRing = new THREE.TorusGeometry(1.3, 0.12, 16, 64);
-    list.push(innerRing);
-
-    // Outer Armor Ring
-    const outerRing = new THREE.TorusGeometry(1.8, 0.18, 16, 64);
-    list.push(outerRing);
-
-    // Radiating Plasma Pillars
-    for (let i = 0; i < 6; i++) {
-        const angle = (i / 6) * Math.PI * 2;
-        const pillar = new THREE.CylinderGeometry(0.06, 0.06, 1.2, 8);
-        pillar.rotation.z = Math.PI / 2;
-        pillar.rotation.y = -angle;
-        pillar.translate(Math.cos(angle) * 1.3, 0, Math.sin(angle) * 1.3);
-        list.push(pillar);
+    if (obj.children) {
+        obj.children.forEach(child => disposeObjectTree(child));
     }
-
-    return mergeGeometries(list);
 }
 
-function createBatSymbolGeometry() {
-    const list = [];
+// --- High-Realism 3D Model Composites ---
 
-    // Central Bat Emblem Body
-    const chest = new THREE.BoxGeometry(0.8, 1.2, 0.4, 4, 4, 4);
-    list.push(chest);
-
-    // Left Wing
-    const wingL1 = new THREE.ConeGeometry(0.6, 2.2, 4);
-    wingL1.rotation.z = Math.PI / 3;
-    wingL1.translate(-1.1, 0.3, 0);
-    list.push(wingL1);
-
-    const wingL2 = new THREE.ConeGeometry(0.4, 1.8, 4);
-    wingL2.rotation.z = Math.PI / 2.2;
-    wingL2.translate(-2.0, -0.2, 0);
-    list.push(wingL2);
-
-    // Right Wing
-    const wingR1 = new THREE.ConeGeometry(0.6, 2.2, 4);
-    wingR1.rotation.z = -Math.PI / 3;
-    wingR1.translate(1.1, 0.3, 0);
-    list.push(wingR1);
-
-    const wingR2 = new THREE.ConeGeometry(0.4, 1.8, 4);
-    wingR2.rotation.z = -Math.PI / 2.2;
-    wingR2.translate(2.0, -0.2, 0);
-    list.push(wingR2);
-
-    // Ears
-    const earL = new THREE.ConeGeometry(0.15, 0.6, 4);
-    earL.translate(-0.35, 0.9, 0);
-    list.push(earL);
-
-    const earR = new THREE.ConeGeometry(0.15, 0.6, 4);
-    earR.translate(0.35, 0.9, 0);
-    list.push(earR);
-
-    return mergeGeometries(list);
-}
-
-function createBionicHandGeometry() {
-    const list = [];
-
-    // Metallic Palm Chassis
-    const palm = new THREE.BoxGeometry(1.2, 1.4, 0.5, 6, 6, 6);
-    palm.translate(0, 0, 0);
-    list.push(palm);
-
-    // Wrist Connector
-    const wrist = new THREE.CylinderGeometry(0.4, 0.5, 1.0, 16);
-    wrist.translate(0, -1.2, 0);
-    list.push(wrist);
-
-    // 4 Segmented Fingers
-    for (let f = 0; f < 4; f++) {
-        const xPos = -0.45 + f * 0.3;
-        for (let seg = 0; seg < 3; seg++) {
-            const joint = new THREE.CylinderGeometry(0.08, 0.08, 0.45, 8);
-            joint.translate(xPos, 0.9 + seg * 0.45, 0);
-            list.push(joint);
-
-            const knuckle = new THREE.SphereGeometry(0.1, 8, 8);
-            knuckle.translate(xPos, 0.7 + seg * 0.45, 0);
-            list.push(knuckle);
-        }
-    }
-
-    // Thumb Joint
-    const thumb1 = new THREE.CylinderGeometry(0.09, 0.09, 0.5, 8);
-    thumb1.rotation.z = Math.PI / 4;
-    thumb1.translate(-0.8, 0.1, 0.2);
-    list.push(thumb1);
-
-    return mergeGeometries(list);
-}
-
-function createNanotubeGeometry() {
-    const list = [];
-    const radius = 1.2;
-    const height = 3.6;
-
-    for (let r = 0; r < 8; r++) {
-        const y = (r / 8 - 0.5) * height;
-        const ring = new THREE.TorusGeometry(radius, 0.06, 8, 32);
-        ring.rotation.x = Math.PI / 2;
-        ring.translate(0, y, 0);
-        list.push(ring);
-    }
-
-    for (let i = 0; i < 12; i++) {
-        const angle = (i / 12) * Math.PI * 2;
-        const strut = new THREE.CylinderGeometry(0.04, 0.04, height, 8);
-        strut.translate(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-        list.push(strut);
-    }
-
-    return mergeGeometries(list);
-}
-
-function createAIChipGeometry() {
-    const list = [];
-
-    // Main Silicon Substrate
-    const substrate = new THREE.BoxGeometry(2.4, 0.2, 2.4, 8, 2, 8);
-    list.push(substrate);
-
-    // Heat Spreader Cap
-    const cap = new THREE.BoxGeometry(1.6, 0.3, 1.6, 6, 2, 6);
-    cap.translate(0, 0.2, 0);
-    list.push(cap);
-
-    // Gold Connector Pins Array
-    for (let i = -1.0; i <= 1.0; i += 0.2) {
-        const pin1 = new THREE.BoxGeometry(0.06, 0.08, 0.3);
-        pin1.translate(i, -0.12, 1.3);
-        list.push(pin1);
-
-        const pin2 = new THREE.BoxGeometry(0.06, 0.08, 0.3);
-        pin2.translate(i, -0.12, -1.3);
-        list.push(pin2);
-
-        const pin3 = new THREE.BoxGeometry(0.3, 0.08, 0.06);
-        pin3.translate(1.3, -0.12, i);
-        list.push(pin3);
-
-        const pin4 = new THREE.BoxGeometry(0.3, 0.08, 0.06);
-        pin4.translate(-1.3, -0.12, i);
-        list.push(pin4);
-    }
-
-    return mergeGeometries(list);
-}
-
-function createMechDroneGeometry() {
-    const list = [];
-
-    // Central Stealth Chassis
-    const body = new THREE.ConeGeometry(0.8, 2.6, 4);
-    body.rotation.x = Math.PI / 2;
-    list.push(body);
-
-    // Swept Delta Wings
-    const wingL = new THREE.BoxGeometry(2.2, 0.08, 1.2);
-    wingL.rotation.y = Math.PI / 6;
-    wingL.translate(-1.1, 0, 0.2);
-    list.push(wingL);
-
-    const wingR = new THREE.BoxGeometry(2.2, 0.08, 1.2);
-    wingR.rotation.y = -Math.PI / 6;
-    wingR.translate(1.1, 0, 0.2);
-    list.push(wingR);
-
-    // Dual Thrusters
-    const engine1 = new THREE.CylinderGeometry(0.25, 0.25, 1.2, 16);
-    engine1.rotation.x = Math.PI / 2;
-    engine1.translate(-0.6, 0.1, -1.1);
-    list.push(engine1);
-
-    const engine2 = new THREE.CylinderGeometry(0.25, 0.25, 1.2, 16);
-    engine2.rotation.x = Math.PI / 2;
-    engine2.translate(0.6, 0.1, -1.1);
-    list.push(engine2);
-
-    return mergeGeometries(list);
-}
-
-function buildJarvisHolographicRings() {
-    const ringMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(state.baseColor),
-        emissive: new THREE.Color(state.emissiveColor),
-        emissiveIntensity: 2.0,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.8
+// 1. J.A.R.V.I.S. Holographic Arc Reactor
+function buildJarvisArcReactor() {
+    const chromeMat = new THREE.MeshStandardMaterial({
+        color: 0xddeeff,
+        metalness: 0.95,
+        roughness: 0.1,
+        wireframe: state.wireframe
     });
 
-    for (let r = 1; r <= 3; r++) {
-        const ringGeo = new THREE.TorusGeometry(r * 0.9, 0.02, 16, 64);
-        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-        ringMesh.rotation.x = (r * Math.PI) / 4;
-        mainMeshGroup.add(ringMesh);
-        jarvisRings.push({ mesh: ringMesh, speed: 0.8 + r * 0.4 });
-    }
-}
+    const copperMat = new THREE.MeshStandardMaterial({
+        color: 0xb87333,
+        metalness: 0.9,
+        roughness: 0.25,
+        wireframe: state.wireframe
+    });
 
-function applySculptDeformation(geometry) {
-    const pos = geometry.attributes.position;
-    const v = new THREE.Vector3();
-    const amp = state.deform;
-    const twist = (state.twist * Math.PI) / 180;
-
-    for (let i = 0; i < pos.count; i++) {
-        v.fromBufferAttribute(pos, i);
-
-        if (twist !== 0) {
-            const angle = v.y * twist * 0.5;
-            const cosA = Math.cos(angle);
-            const sinA = Math.sin(angle);
-            const x = v.x * cosA - v.z * sinA;
-            const z = v.x * sinA + v.z * cosA;
-            v.x = x;
-            v.z = z;
-        }
-
-        if (amp > 0) {
-            const noiseVal = Noise3D.fbm(v.x * 2.5, v.y * 2.5, v.z * 2.5, 3);
-            const norm = v.clone().normalize();
-            v.addScaledVector(norm, noiseVal * amp);
-        }
-
-        pos.setXYZ(i, v.x, v.y, v.z);
-    }
-    geometry.computeVertexNormals();
-}
-
-function createMaterial() {
-    return new THREE.MeshStandardMaterial({
+    const emissiveMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(state.baseColor),
-        roughness: state.roughness,
-        metalness: state.metalness,
         emissive: new THREE.Color(state.emissiveColor),
         emissiveIntensity: state.emissivePower,
         wireframe: state.wireframe
     });
+
+    const glassMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        emissive: new THREE.Color(state.baseColor),
+        emissiveIntensity: 0.8,
+        transparent: true,
+        opacity: 0.45,
+        wireframe: state.wireframe
+    });
+
+    // Central Energetic Core Sphere
+    const coreMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(0.75, 4), emissiveMat);
+    coreMesh.castShadow = true;
+    mainMeshGroup.add(coreMesh);
+
+    // Inner Glass Shield
+    const glassSphere = new THREE.Mesh(new THREE.SphereGeometry(0.95, 32, 32), glassMat);
+    mainMeshGroup.add(glassSphere);
+
+    // Chrome Chassis Outer Ring
+    const outerChassis = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.12, 24, 64), chromeMat);
+    outerChassis.castShadow = true;
+    mainMeshGroup.add(outerChassis);
+
+    // 10 Copper Electromagnetic Coils around the ring
+    for (let i = 0; i < 10; i++) {
+        const angle = (i / 10) * Math.PI * 2;
+        const coil = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.08, 16, 32), copperMat);
+        coil.position.set(Math.cos(angle) * 1.8, Math.sin(angle) * 1.8, 0);
+        coil.rotation.y = Math.PI / 2;
+        coil.rotation.x = angle;
+        mainMeshGroup.add(coil);
+    }
+
+    // 3 Concentric Rotating Holographic Accelerator Rings
+    for (let r = 1; r <= 3; r++) {
+        const ringGeo = new THREE.TorusGeometry(r * 0.75, 0.03, 16, 64);
+        const ringMesh = new THREE.Mesh(ringGeo, emissiveMat);
+        ringMesh.rotation.x = (r * Math.PI) / 4;
+        mainMeshGroup.add(ringMesh);
+        jarvisRings.push({ mesh: ringMesh, speed: 0.8 + r * 0.5 });
+    }
+}
+
+// 2. Dark Knight Bat-Armor Emblem & Stealth Reactor
+function buildBatTechArmorEmblem() {
+    const titaniumMat = new THREE.MeshStandardMaterial({
+        color: 0x111318,
+        metalness: 0.95,
+        roughness: 0.2,
+        wireframe: state.wireframe
+    });
+
+    const goldAccentMat = new THREE.MeshStandardMaterial({
+        color: 0xffb703,
+        metalness: 0.9,
+        roughness: 0.15,
+        emissive: 0x332200,
+        wireframe: state.wireframe
+    });
+
+    const glowCoreMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
+    });
+
+    // Central Bat Chest Core Shield
+    const chestCore = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.4, 0.4), titaniumMat);
+    chestCore.castShadow = true;
+    mainMeshGroup.add(chestCore);
+
+    // Glowing Central Bat Reactor Emblem
+    const emblemCore = new THREE.Mesh(new THREE.IcosahedronGeometry(0.5, 3), glowCoreMat);
+    emblemCore.position.z = 0.25;
+    mainMeshGroup.add(emblemCore);
+
+    // Left Swept Wing Blade
+    const wingL1 = new THREE.Mesh(new THREE.ConeGeometry(0.7, 2.4, 4), titaniumMat);
+    wingL1.rotateZ(Math.PI / 3);
+    wingL1.position.set(-1.3, 0.4, 0);
+    mainMeshGroup.add(wingL1);
+
+    const wingL2 = new THREE.Mesh(new THREE.ConeGeometry(0.45, 2.0, 4), goldAccentMat);
+    wingL2.rotateZ(Math.PI / 2.2);
+    wingL2.position.set(-2.3, -0.2, 0);
+    mainMeshGroup.add(wingL2);
+
+    // Right Swept Wing Blade
+    const wingR1 = new THREE.Mesh(new THREE.ConeGeometry(0.7, 2.4, 4), titaniumMat);
+    wingR1.rotateZ(-Math.PI / 3);
+    wingR1.position.set(1.3, 0.4, 0);
+    mainMeshGroup.add(wingR1);
+
+    const wingR2 = new THREE.Mesh(new THREE.ConeGeometry(0.45, 2.0, 4), goldAccentMat);
+    wingR2.rotateZ(-Math.PI / 2.2);
+    wingR2.position.set(2.3, -0.2, 0);
+    mainMeshGroup.add(wingR2);
+
+    // Tactical Ears
+    const earL = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.7, 4), titaniumMat);
+    earL.position.set(-0.4, 1.0, 0);
+    mainMeshGroup.add(earL);
+
+    const earR = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.7, 4), titaniumMat);
+    earR.position.set(0.4, 1.0, 0);
+    mainMeshGroup.add(earR);
+}
+
+// 3. Cyber Bionic Arm & Segmented Hand
+function buildBionicCyberArm() {
+    const darkAlloyMat = new THREE.MeshStandardMaterial({
+        color: 0x1e2430,
+        metalness: 0.9,
+        roughness: 0.2,
+        wireframe: state.wireframe
+    });
+
+    const chromeJointMat = new THREE.MeshStandardMaterial({
+        color: 0xe0e6ed,
+        metalness: 0.95,
+        roughness: 0.1,
+        wireframe: state.wireframe
+    });
+
+    const glowNodeMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
+    });
+
+    // Main Palm Chassis
+    const palm = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.5, 0.5), darkAlloyMat);
+    palm.castShadow = true;
+    mainMeshGroup.add(palm);
+
+    // Forearm Wrist Cylinder
+    const wrist = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.55, 1.2, 16), darkAlloyMat);
+    wrist.position.y = -1.35;
+    mainMeshGroup.add(wrist);
+
+    // Wrist Glowing Conduit Ring
+    const wristRing = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.06, 16, 32), glowNodeMat);
+    wristRing.rotateX(Math.PI / 2);
+    wristRing.position.y = -1.0;
+    mainMeshGroup.add(wristRing);
+
+    // 4 Articulated Fingers
+    for (let f = 0; f < 4; f++) {
+        const xPos = -0.45 + f * 0.3;
+        for (let seg = 0; seg < 3; seg++) {
+            const joint = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.45, 12), chromeJointMat);
+            joint.position.set(xPos, 1.0 + seg * 0.45, 0);
+            mainMeshGroup.add(joint);
+
+            const node = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 12), glowNodeMat);
+            node.position.set(xPos, 0.8 + seg * 0.45, 0);
+            mainMeshGroup.add(node);
+        }
+    }
+
+    // Thumb Joint
+    const thumbSegment = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.6, 12), chromeJointMat);
+    thumbSegment.rotateZ(Math.PI / 3.5);
+    thumbSegment.position.set(-0.85, 0.15, 0.2);
+    mainMeshGroup.add(thumbSegment);
+}
+
+// 4. Carbon Nanotechnology Grid & Molecular Swarm
+function buildCarbonNanotechGrid() {
+    const nanotubeMat = new THREE.MeshStandardMaterial({
+        color: 0x151c28,
+        metalness: 0.92,
+        roughness: 0.25,
+        wireframe: true
+    });
+
+    const nodeGlowMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
+    });
+
+    const radius = 1.3;
+    const height = 3.8;
+
+    // Carbon Nanotube Cylinder Lattice Rings
+    for (let r = 0; r <= 8; r++) {
+        const y = (r / 8 - 0.5) * height;
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.06, 8, 32), nanotubeMat);
+        ring.rotateX(Math.PI / 2);
+        ring.position.y = y;
+        mainMeshGroup.add(ring);
+
+        // Glowing Molecular Nodes
+        for (let i = 0; i < 6; i++) {
+            const angle = (i / 6) * Math.PI * 2;
+            const node = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 12), nodeGlowMat);
+            node.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+            mainMeshGroup.add(node);
+        }
+    }
+
+    // Longitudinal Struts
+    for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * Math.PI * 2;
+        const strut = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, height, 8), nanotubeMat);
+        strut.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+        mainMeshGroup.add(strut);
+    }
+}
+
+// 5. AI Quantum Processor & Silicon Microchip
+function buildAIQuantumProcessor() {
+    const siliconMat = new THREE.MeshStandardMaterial({
+        color: 0x0a0f18,
+        metalness: 0.85,
+        roughness: 0.3,
+        wireframe: state.wireframe
+    });
+
+    const goldPinMat = new THREE.MeshStandardMaterial({
+        color: 0xffd700,
+        metalness: 0.98,
+        roughness: 0.1,
+        wireframe: state.wireframe
+    });
+
+    const aiCoreMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
+    });
+
+    // Main Square Silicon Board Substrate
+    const substrate = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.2, 2.6), siliconMat);
+    substrate.castShadow = true;
+    mainMeshGroup.add(substrate);
+
+    // Heat Spreader Cap
+    const cap = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.35, 1.8), siliconMat);
+    cap.position.y = 0.25;
+    mainMeshGroup.add(cap);
+
+    // Central Glowing AI Core Crystal
+    const aiCore = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.45, 1.0), aiCoreMat);
+    aiCore.position.y = 0.35;
+    mainMeshGroup.add(aiCore);
+
+    // Array of 48 Gold Contact Pins Around Board
+    for (let i = -1.1; i <= 1.1; i += 0.22) {
+        const pin1 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.35), goldPinMat);
+        pin1.position.set(i, -0.1, 1.4);
+        mainMeshGroup.add(pin1);
+
+        const pin2 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.35), goldPinMat);
+        pin2.position.set(i, -0.1, -1.4);
+        mainMeshGroup.add(pin2);
+
+        const pin3 = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.1, 0.08), goldPinMat);
+        pin3.position.set(1.4, -0.1, i);
+        mainMeshGroup.add(pin3);
+
+        const pin4 = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.1, 0.08), goldPinMat);
+        pin4.position.set(-1.4, -0.1, i);
+        mainMeshGroup.add(pin4);
+    }
+}
+
+// 6. Tactical Stealth Mech Drone
+function buildTacticalStealthDrone() {
+    const stealthMat = new THREE.MeshStandardMaterial({
+        color: 0x121720,
+        metalness: 0.95,
+        roughness: 0.2,
+        wireframe: state.wireframe
+    });
+
+    const engineGlowMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: state.emissivePower,
+        wireframe: state.wireframe
+    });
+
+    // Fuselage Chassis
+    const fuselage = new THREE.Mesh(new THREE.ConeGeometry(0.85, 2.8, 4), stealthMat);
+    fuselage.rotateX(Math.PI / 2);
+    fuselage.castShadow = true;
+    mainMeshGroup.add(fuselage);
+
+    // Swept Delta Wings
+    const wingL = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.1, 1.4), stealthMat);
+    wingL.rotateY(Math.PI / 6);
+    wingL.position.set(-1.2, 0, 0.2);
+    mainMeshGroup.add(wingL);
+
+    const wingR = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.1, 1.4), stealthMat);
+    wingR.rotateY(-Math.PI / 6);
+    wingR.position.set(1.2, 0, 0.2);
+    mainMeshGroup.add(wingR);
+
+    // Dual Plasma Thrusters
+    const engine1 = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 1.4, 16), stealthMat);
+    engine1.rotateX(Math.PI / 2);
+    engine1.position.set(-0.65, 0.1, -1.1);
+    mainMeshGroup.add(engine1);
+
+    const glow1 = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.2, 16), engineGlowMat);
+    glow1.rotateX(Math.PI / 2);
+    glow1.position.set(-0.65, 0.1, -1.8);
+    mainMeshGroup.add(glow1);
+
+    const engine2 = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 1.4, 16), stealthMat);
+    engine2.rotateX(Math.PI / 2);
+    engine2.position.set(0.65, 0.1, -1.1);
+    mainMeshGroup.add(engine2);
+
+    const glow2 = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.2, 16), engineGlowMat);
+    glow2.rotateX(Math.PI / 2);
+    glow2.position.set(0.65, 0.1, -1.8);
+    mainMeshGroup.add(glow2);
 }
 
 // --- Event Listeners Setup ---
@@ -654,9 +721,7 @@ function setupEventListeners() {
     if (pickerColor) {
         pickerColor.addEventListener('input', (e) => {
             state.baseColor = e.target.value;
-            if (mainMesh && mainMesh.material && mainMesh.material.color) {
-                mainMesh.material.color.set(state.baseColor);
-            }
+            build3DModel();
         });
     }
 
@@ -664,25 +729,23 @@ function setupEventListeners() {
     if (pickerEmissive) {
         pickerEmissive.addEventListener('input', (e) => {
             state.emissiveColor = e.target.value;
-            if (mainMesh && mainMesh.material && mainMesh.material.emissive) {
-                mainMesh.material.emissive.set(state.emissiveColor);
-            }
+            build3DModel();
         });
     }
 
     bindRange('slider-emissive', 'val-emissive-power', v => {
         state.emissivePower = parseFloat(v);
-        if (mainMesh && mainMesh.material) mainMesh.material.emissiveIntensity = state.emissivePower;
+        build3DModel();
     });
 
     bindRange('slider-metal', 'val-metal', v => {
         state.metalness = parseFloat(v);
-        if (mainMesh && mainMesh.material) mainMesh.material.metalness = state.metalness;
+        build3DModel();
     });
 
     bindRange('slider-rough', 'val-rough', v => {
         state.roughness = parseFloat(v);
-        if (mainMesh && mainMesh.material) mainMesh.material.roughness = state.roughness;
+        build3DModel();
     });
 
     bindRange('slider-deform', 'val-deform', v => {
@@ -744,7 +807,7 @@ function setupEventListeners() {
         btnWireframe.addEventListener('click', (e) => {
             state.wireframe = !state.wireframe;
             e.currentTarget.classList.toggle('active', state.wireframe);
-            if (mainMesh && mainMesh.material) mainMesh.material.wireframe = state.wireframe;
+            build3DModel();
             JarvisAudio.playJarvisBeep(520);
             showToast(state.wireframe ? 'Blueprint Wireframe ON' : 'Wireframe OFF');
         });
@@ -757,7 +820,7 @@ function setupEventListeners() {
             const randomEmissive = '#' + Math.floor(Math.random()*16777215).toString(16);
             state.baseColor = randomColor;
             state.emissiveColor = randomEmissive;
-            state.deform = parseFloat((Math.random() * 1.0).toFixed(2));
+            state.deform = parseFloat((Math.random() * 0.6).toFixed(2));
             state.twist = Math.floor(Math.random() * 360 - 180);
 
             document.getElementById('picker-color').value = randomColor;
@@ -890,14 +953,19 @@ function animate() {
         mainMeshGroup.rotation.y += delta * 0.7 * currentSpeed;
     }
 
-    if (state.rainbowMode && mainMesh && mainMesh.material) {
+    if (state.rainbowMode) {
         const hue = (state.animTime * 0.25) % 1;
-        mainMesh.material.color.setHSL(hue, 1.0, 0.5);
+        const rainbowColor = new THREE.Color().setHSL(hue, 1.0, 0.5);
+        mainMeshGroup.traverse(child => {
+            if (child.isMesh && child.material && child.material.color) {
+                child.material.color.copy(rainbowColor);
+            }
+        });
     }
 
-    if (mainMesh) {
-        const targetScale = state.isExploded ? 1.5 : 1.0;
-        mainMesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+    if (mainMeshGroup) {
+        const targetScale = state.isExploded ? 1.4 : 1.0;
+        mainMeshGroup.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
     }
 
     if (jarvisRings.length > 0) {
@@ -936,10 +1004,14 @@ function animate() {
     }
 }
 
-function updateHUDStats(geometry) {
+function updateHUDStats() {
     let polyCount = 0;
-    if (geometry.index) polyCount = geometry.index.count / 3;
-    else if (geometry.attributes.position) polyCount = geometry.attributes.position.count / 3;
+    mainMeshGroup.traverse(child => {
+        if (child.isMesh && child.geometry) {
+            if (child.geometry.index) polyCount += child.geometry.index.count / 3;
+            else if (child.geometry.attributes.position) polyCount += child.geometry.attributes.position.count / 3;
+        }
+    });
 
     const polysEl = document.getElementById('hud-polys');
     if (polysEl) polysEl.textContent = polyCount > 1000 ? (polyCount / 1000).toFixed(1) + 'k' : Math.round(polyCount);
