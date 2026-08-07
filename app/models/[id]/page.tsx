@@ -4,6 +4,76 @@ import React, { useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stage } from '@react-three/drei';
 import { useParams } from 'next/navigation';
+import { useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+
+function TransparentCoreModel() {
+  const outerRef = useRef<THREE.Mesh>(null!);
+  const innerRef = useRef<THREE.Mesh>(null!);
+  const ringRef1 = useRef<THREE.Mesh>(null!);
+  const ringRef2 = useRef<THREE.Mesh>(null!);
+
+  useFrame((state, delta) => {
+    const time = state.clock.getElapsedTime();
+    if (outerRef.current) outerRef.current.rotation.y += delta * 0.2;
+    if (innerRef.current) {
+      innerRef.current.rotation.x += delta * 0.5;
+      innerRef.current.rotation.y += delta * 0.5;
+    }
+    if (ringRef1.current) {
+      ringRef1.current.rotation.x = Math.sin(time * 0.5) * Math.PI;
+      ringRef1.current.rotation.y += delta;
+    }
+    if (ringRef2.current) {
+      ringRef2.current.rotation.z = Math.cos(time * 0.5) * Math.PI;
+      ringRef2.current.rotation.y -= delta * 1.5;
+    }
+  });
+
+  return (
+    <group>
+      {/* Outer Transparent Glass Sphere */}
+      <mesh ref={outerRef}>
+        <sphereGeometry args={[2, 64, 64]} />
+        <meshPhysicalMaterial 
+          color="#ffffff" 
+          transmission={1} 
+          opacity={1} 
+          metalness={0.1} 
+          roughness={0.05} 
+          ior={1.5} 
+          thickness={0.5} 
+          transparent={true} 
+        />
+      </mesh>
+
+      {/* Inner Glowing Core */}
+      <mesh ref={innerRef}>
+        <icosahedronGeometry args={[1, 2]} />
+        <meshStandardMaterial 
+          color="#00aaff" 
+          emissive="#0055ff" 
+          emissiveIntensity={2} 
+          wireframe={true} 
+          transparent={true}
+          opacity={0.8}
+        />
+      </mesh>
+
+      {/* Outer Metallic Rings */}
+      <mesh ref={ringRef1}>
+        <torusGeometry args={[2.5, 0.05, 16, 100]} />
+        <meshStandardMaterial color="#4fa5ff" metalness={1} roughness={0.2} />
+      </mesh>
+      
+      <mesh ref={ringRef2}>
+        <torusGeometry args={[2.8, 0.02, 16, 100]} />
+        <meshStandardMaterial color="#ffaa00" metalness={1} roughness={0.1} />
+      </mesh>
+    </group>
+  );
+}
 
 export default function SingleModelPage() {
   const { id } = useParams();
@@ -35,10 +105,7 @@ export default function SingleModelPage() {
             <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 5], fov: 50 }}>
               <color attach="background" args={['#050505']} />
               <Stage preset="rembrandt" intensity={1} environment="city">
-                <mesh>
-                  <boxGeometry args={[2, 2, 2]} />
-                  <meshStandardMaterial color="#4fa5ff" roughness={0.1} metalness={0.8} />
-                </mesh>
+                <TransparentCoreModel />
               </Stage>
               <OrbitControls autoRotate autoRotateSpeed={2} makeDefault />
             </Canvas>
