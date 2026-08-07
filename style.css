@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VERTEX 3D VISION - Premium Studio Design System (v3.0 Ultra)
+   VERTEX 3D VISION - Premium Studio Design System (v4.0 Omni)
    ========================================================================== */
 
 :root {
@@ -79,7 +79,7 @@ html, body {
 }
 
 /* ==========================================================================
-   Header Navigation Bar
+   Header Navigation & Search Bar
    ========================================================================== */
 .app-header {
     display: flex;
@@ -92,6 +92,7 @@ html, body {
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border-light);
     z-index: 100;
+    gap: 16px;
 }
 
 .brand {
@@ -134,6 +135,55 @@ html, body {
     text-transform: uppercase;
 }
 
+/* Search Bar */
+.search-bar-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 380px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+#global-3d-search {
+    width: 100%;
+    padding: 7px 36px 7px 36px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-full);
+    color: var(--text-main);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    outline: none;
+    transition: var(--transition);
+}
+
+#global-3d-search:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.search-clear-btn:hover {
+    color: #fff;
+}
+
 .header-center {
     display: flex;
     align-items: center;
@@ -152,13 +202,13 @@ html, body {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 14px;
+    padding: 6px 12px;
     background: transparent;
     border: none;
     border-radius: var(--radius-full);
     color: var(--text-muted);
     font-family: var(--font-heading);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
@@ -178,43 +228,6 @@ html, body {
     color: #000;
     font-weight: 700;
     box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
-}
-
-.preset-dropdown-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.dropdown-icon {
-    position: absolute;
-    left: 12px;
-    width: 16px;
-    height: 16px;
-    color: var(--accent-cyan);
-    pointer-events: none;
-}
-
-.custom-select {
-    padding: 7px 16px 7px 36px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-full);
-    color: var(--text-main);
-    font-family: var(--font-heading);
-    font-size: 0.85rem;
-    outline: none;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.custom-select:hover {
-    border-color: var(--accent-cyan);
-}
-
-.custom-select option {
-    background: var(--bg-panel-solid);
-    color: var(--text-main);
 }
 
 .header-actions {
@@ -404,6 +417,40 @@ html, body {
 
 .mt-2 { margin-top: 12px; }
 .mt-3 { margin-top: 20px; }
+
+/* Category Chips */
+.category-chips {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.cat-chip {
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.cat-chip:hover {
+    color: var(--text-main);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cat-chip.active {
+    background: rgba(0, 242, 254, 0.15);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
 
 /* Model Cards Grid */
 .model-cards-grid {
@@ -1114,6 +1161,9 @@ input:checked + .slider:before {
     }
     .header-center {
         display: none;
+    }
+    .search-bar-wrap {
+        max-width: 220px;
     }
     .cookie-banner {
         flex-direction: column;

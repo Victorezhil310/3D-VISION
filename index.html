@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VERTEX 3D VISION - Next-Gen 3D Studio, Quantum Atom & World Sculptor</title>
-    <meta name="description" content="View, build, sculpt, and customize high-fidelity 3D models from quantum atomic particles and microscopic sand grains to massive rocky landscapes, architectural spires, and planetary worlds in real-time WebGL.">
+    <title>VERTEX 3D VISION - Next-Gen 3D World, Nano Tech, Bio & Nature Sculptor</title>
+    <meta name="description" content="Search, view, build, sculpt, and customize high-fidelity 3D models from nanometer quantum atoms, DNA double helices, trees, fruits, and animals to technology parts, cyber citadels, and planetary worlds in real-time WebGL.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/OBJExporter.js"></script>
     
-    <!-- Google AdSense Placeholder Script Tag (Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID) -->
+    <!-- Google AdSense Placeholder Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="style.css">
@@ -31,42 +31,36 @@
                 </div>
                 <div class="brand-text">
                     <h1>VERTEX <span>3D VISION</span></h1>
-                    <span class="version-tag">STUDIO v3.0 ULTRA</span>
+                    <span class="version-tag">STUDIO v4.0 OMNI</span>
                 </div>
             </div>
 
-            <!-- Scale & Preset Quick Switchers -->
+            <!-- Global 3D Model Search Bar -->
+            <div class="search-bar-wrap">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="global-3d-search" placeholder="Search 3D models (e.g. Atom, DNA, Tree, Tech Engine, Fruit, Animal)..." autocomplete="off">
+                <button class="search-clear-btn" id="btn-clear-search" style="display:none;"><i data-lucide="x"></i></button>
+                <div class="search-results-dropdown" id="search-results-dropdown"></div>
+            </div>
+
+            <!-- Scale & Category Quick Switchers -->
             <div class="header-center">
                 <div class="pill-selector" id="scale-selector">
-                    <button class="pill-btn" data-scale="atom">
-                        <i data-lucide="atom"></i> Quantum Atom
+                    <button class="pill-btn" data-scale="nano">
+                        <i data-lucide="atom"></i> Nano / DNA
+                    </button>
+                    <button class="pill-btn" data-scale="nature">
+                        <i data-lucide="trees"></i> Bio / Nature
+                    </button>
+                    <button class="pill-btn" data-scale="tech">
+                        <i data-lucide="cpu"></i> Tech Parts
                     </button>
                     <button class="pill-btn active" data-scale="sand">
                         <i data-lucide="sparkles"></i> Sand Grain
                     </button>
-                    <button class="pill-btn" data-scale="rock">
-                        <i data-lucide="mountain"></i> Rock Peak
-                    </button>
-                    <button class="pill-btn" data-scale="citadel">
-                        <i data-lucide="building-2"></i> Cyber Citadel
-                    </button>
                     <button class="pill-btn" data-scale="planet">
                         <i data-lucide="globe"></i> World Sphere
                     </button>
-                </div>
-
-                <div class="preset-dropdown-wrap">
-                    <i data-lucide="palette" class="dropdown-icon"></i>
-                    <select id="preset-select" class="custom-select">
-                        <option value="custom">-- Presets Library --</option>
-                        <option value="quantum_atom">Quantum Atomic Core</option>
-                        <option value="quantum_sand">Quantum Sand Crystal</option>
-                        <option value="obsidian_peak">Obsidian Mountain Peak</option>
-                        <option value="neon_nexus">Neon Cyber Citadel</option>
-                        <option value="terra_globe">Terraformed Planet</option>
-                        <option value="gold_dunes">Golden Desert Rock</option>
-                        <option value="crystal_core">Hyperdimensional Core</option>
-                    </select>
                 </div>
             </div>
 
@@ -89,12 +83,12 @@
 
         <!-- Main Workspace Grid -->
         <main class="workspace">
-            <!-- Left Side Control Panel: Geometry & Sculpting -->
+            <!-- Left Side Control Panel: Geometry & Model Library -->
             <aside class="panel panel-left" id="panel-left">
                 <div class="panel-header">
                     <div class="panel-tabs">
                         <button class="tab-btn active" data-tab="tab-mesh">
-                            <i data-lucide="shapes"></i> Geometry
+                            <i data-lucide="shapes"></i> 3D Library
                         </button>
                         <button class="tab-btn" data-tab="tab-sculpt">
                             <i data-lucide="wand-2"></i> Sculpt & Noise
@@ -106,39 +100,74 @@
                 </div>
 
                 <div class="panel-content">
-                    <!-- Tab 1: Geometry & Base Models -->
+                    <!-- Tab 1: 3D Models Catalog -->
                     <div class="tab-pane active" id="tab-mesh">
-                        <div class="section-title">Base Model Preset</div>
-                        <div class="model-cards-grid">
-                            <div class="model-card" data-model="atom_core">
+                        <!-- Category Filter Chips -->
+                        <div class="category-chips">
+                            <button class="cat-chip active" data-cat="all">All</button>
+                            <button class="cat-chip" data-cat="nano">Nano/Physics</button>
+                            <button class="cat-chip" data-cat="nature">Nature/Bio</button>
+                            <button class="cat-chip" data-cat="tech">Tech/Parts</button>
+                            <button class="cat-chip" data-cat="macro">Macro/World</button>
+                        </div>
+
+                        <div class="model-cards-grid" id="model-cards-grid">
+                            <!-- Nano & Physics -->
+                            <div class="model-card" data-model="atom_core" data-cat="nano" data-tags="atom quantum physics electron particle">
                                 <div class="card-icon"><i data-lucide="atom"></i></div>
                                 <div class="card-title">Atomic Nucleus</div>
                                 <div class="card-desc">Quantum electron orbits</div>
                             </div>
-                            <div class="model-card active" data-model="sand_grain">
-                                <div class="card-icon"><i data-lucide="gem"></i></div>
-                                <div class="card-title">Sand Crystal</div>
-                                <div class="card-desc">Microscopic faceted mineral</div>
+                            <div class="model-card" data-model="dna_helix" data-cat="nano" data-tags="dna helix genetics biology nano molecule">
+                                <div class="card-icon"><i data-lucide="dna"></i></div>
+                                <div class="card-title">DNA Helix</div>
+                                <div class="card-desc">Double spiral molecule</div>
                             </div>
-                            <div class="model-card" data-model="rock_peak">
-                                <div class="card-icon"><i data-lucide="mountain-snow"></i></div>
-                                <div class="card-title">Rock Mountain</div>
-                                <div class="card-desc">Eroded peak terrain</div>
+
+                            <!-- Nature & Life (Trees, Fruits, Animals) -->
+                            <div class="model-card" data-model="tree_life" data-cat="nature" data-tags="tree forest nature plant branches trunk foliage">
+                                <div class="card-icon"><i data-lucide="trees"></i></div>
+                                <div class="card-title">Tree of Life</div>
+                                <div class="card-desc">Procedural branching canopy</div>
                             </div>
-                            <div class="model-card" data-model="cyber_citadel">
+                            <div class="model-card" data-model="fruit_mesh" data-cat="nature" data-tags="fruit apple pear organic food nature">
+                                <div class="card-icon"><i data-lucide="apple"></i></div>
+                                <div class="card-title">Organic Fruit</div>
+                                <div class="card-desc">Curved organic mesh</div>
+                            </div>
+                            <div class="model-card" data-model="animal_mesh" data-cat="nature" data-tags="animal panther wolf creature bio nature">
+                                <div class="card-icon"><i data-lucide="dog"></i></div>
+                                <div class="card-title">Faceted Animal</div>
+                                <div class="card-desc">Geometric predator head</div>
+                            </div>
+
+                            <!-- Tech Parts & Engineering -->
+                            <div class="model-card" data-model="tech_engine" data-cat="tech" data-tags="tech engine gear processor mechanical part futuristic">
+                                <div class="card-icon"><i data-lucide="cog"></i></div>
+                                <div class="card-title">Tech Engine Part</div>
+                                <div class="card-desc">Mechanical reactor core</div>
+                            </div>
+                            <div class="model-card" data-model="cyber_citadel" data-cat="tech" data-tags="cyber citadel architecture tower city tech">
                                 <div class="card-icon"><i data-lucide="landmark"></i></div>
                                 <div class="card-title">Cyber Citadel</div>
                                 <div class="card-desc">Futuristic tower matrix</div>
                             </div>
-                            <div class="model-card" data-model="planet_world">
+
+                            <!-- Macro & Sand -->
+                            <div class="model-card active" data-model="sand_grain" data-cat="macro" data-tags="sand grain mineral micro crystal rock">
+                                <div class="card-icon"><i data-lucide="gem"></i></div>
+                                <div class="card-title">Sand Crystal</div>
+                                <div class="card-desc">Microscopic faceted mineral</div>
+                            </div>
+                            <div class="model-card" data-model="rock_peak" data-cat="macro" data-tags="rock mountain peak terrain eroded macro">
+                                <div class="card-icon"><i data-lucide="mountain-snow"></i></div>
+                                <div class="card-title">Rock Mountain</div>
+                                <div class="card-desc">Eroded peak terrain</div>
+                            </div>
+                            <div class="model-card" data-model="planet_world" data-cat="macro" data-tags="planet world sphere space globe terraformed">
                                 <div class="card-icon"><i data-lucide="orbit"></i></div>
                                 <div class="card-title">Terra Planet</div>
                                 <div class="card-desc">Cosmic globe & rings</div>
-                            </div>
-                            <div class="model-card" data-model="torus_knot">
-                                <div class="card-icon"><i data-lucide="infinity"></i></div>
-                                <div class="card-title">Torus Knot</div>
-                                <div class="card-desc">Hyper-loop structure</div>
                             </div>
                         </div>
 
@@ -463,7 +492,7 @@
 
                 <div class="anim-presets-group">
                     <button class="anim-chip active" data-anim="turntable">Turntable Spin</button>
-                    <button class="anim-chip" data-anim="pulse_glow">Quantum Atomic Orbit</button>
+                    <button class="anim-chip" data-anim="pulse_glow">Quantum Pulse</button>
                     <button class="anim-chip" data-anim="vertex_wave">Vertex Wave</button>
                     <button class="anim-chip" data-anim="camera_fly">Drone Orbit</button>
                 </div>

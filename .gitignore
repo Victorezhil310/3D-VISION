@@ -1,7 +1,23 @@
-# Dependencies
-node_modules/
+# Environment & Secrets
+.env
+.env.local
+*.env
+*.pem
+*.key
 
-# OS Files
+# Sensitive & System Directories
+.gemini/
+scratch/
+.system_generated/
+.idea/
+.vscode/
+
+# Dependencies & Build Outputs
+node_modules/
+dist/
+build/
+
+# Operating System Files
 .DS_Store
 Thumbs.db
 *.log

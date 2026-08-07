@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VERTEX 3D VISION - Quantum Atom & World Sculptor Engine (v3.0 Ultra)
+   VERTEX 3D VISION - Omni 3D Studio & World Sculptor Engine (v4.0 Omni)
    ========================================================================== */
 
 // --- Simple 3D Perlin/Simplex Noise Implementation ---
@@ -61,8 +61,8 @@ const Noise3D = (function() {
 
 // --- Application State ---
 const state = {
-    modelType: 'sand_grain',      // atom_core, sand_grain, rock_peak, cyber_citadel, planet_world, torus_knot
-    scaleCategory: 'sand',        // atom, sand, rock, citadel, planet
+    modelType: 'sand_grain',      // atom_core, dna_helix, tree_life, fruit_mesh, animal_mesh, tech_engine, cyber_citadel, sand_grain, rock_peak, planet_world
+    scaleCategory: 'sand',        // nano, nature, tech, sand, planet
     subdivision: 64,
     modelScale: 1.0,
     
@@ -106,7 +106,7 @@ const state = {
 // --- Presets Library Config ---
 const PRESETS_LIBRARY = {
     quantum_atom: {
-        modelType: 'atom_core', scaleCategory: 'atom', baseColor: '#00f2fe', emissiveColor: '#ff007f',
+        modelType: 'atom_core', scaleCategory: 'nano', baseColor: '#00f2fe', emissiveColor: '#ff007f',
         noiseAmp: 0.2, noiseFreq: 3.0, roughness: 0.1, metalness: 0.95, envPreset: 'deep_space'
     },
     quantum_sand: {
@@ -114,24 +114,20 @@ const PRESETS_LIBRARY = {
         noiseAmp: 0.6, noiseFreq: 3.5, roughness: 0.15, metalness: 0.9, envPreset: 'cyberpunk'
     },
     obsidian_peak: {
-        modelType: 'rock_peak', scaleCategory: 'rock', baseColor: '#1a1d24', emissiveColor: '#ff0055',
+        modelType: 'rock_peak', scaleCategory: 'macro', baseColor: '#1a1d24', emissiveColor: '#ff0055',
         noiseAmp: 0.85, noiseFreq: 1.8, roughness: 0.45, metalness: 0.7, envPreset: 'volcanic'
     },
     neon_nexus: {
-        modelType: 'cyber_citadel', scaleCategory: 'citadel', baseColor: '#0b1021', emissiveColor: '#00f2fe',
+        modelType: 'cyber_citadel', scaleCategory: 'tech', baseColor: '#0b1021', emissiveColor: '#00f2fe',
         noiseAmp: 0.2, noiseFreq: 5.0, roughness: 0.2, metalness: 0.85, envPreset: 'cyberpunk'
     },
     terra_globe: {
-        modelType: 'planet_world', scaleCategory: 'planet', baseColor: '#1b4965', emissiveColor: '#62b6cb',
+        modelType: 'planet_world', scaleCategory: 'macro', baseColor: '#1b4965', emissiveColor: '#62b6cb',
         noiseAmp: 0.35, noiseFreq: 2.0, roughness: 0.6, metalness: 0.3, envPreset: 'deep_space'
     },
     gold_dunes: {
-        modelType: 'rock_peak', scaleCategory: 'rock', baseColor: '#e0a96d', emissiveColor: '#ffb703',
+        modelType: 'rock_peak', scaleCategory: 'macro', baseColor: '#e0a96d', emissiveColor: '#ffb703',
         noiseAmp: 0.5, noiseFreq: 2.5, roughness: 0.3, metalness: 0.4, envPreset: 'desert_sun'
-    },
-    crystal_core: {
-        modelType: 'torus_knot', scaleCategory: 'sand', baseColor: '#b5179e', emissiveColor: '#7209b7',
-        noiseAmp: 0.7, noiseFreq: 4.0, roughness: 0.1, metalness: 0.95, envPreset: 'deep_space'
     }
 };
 
@@ -156,9 +152,10 @@ window.addEventListener('DOMContentLoaded', () => {
     createEnvironment();
     build3DModel();
     setupEventListeners();
+    setupSearchFilter();
     setupCookieConsent();
     animate();
-    showToast('VERTEX 3D VISION Engine Initialized');
+    showToast('VERTEX 3D VISION v4.0 Omni Initialized');
 });
 
 // --- Three.js Setup ---
@@ -374,7 +371,7 @@ function updateEnvironmentPreset() {
     }
 }
 
-// --- Procedural 3D Mesh & Atom Generator ---
+// --- Procedural 3D Mesh Generator ---
 function build3DModel() {
     electronOrbits = [];
     while (mainMeshGroup.children.length > 0) {
@@ -394,6 +391,21 @@ function build3DModel() {
         case 'atom_core':
             geometry = new THREE.IcosahedronGeometry(0.9, Math.floor(sub / 12));
             break;
+        case 'dna_helix':
+            geometry = createDNAHelixGeometry();
+            break;
+        case 'tree_life':
+            geometry = createTreeLifeGeometry();
+            break;
+        case 'fruit_mesh':
+            geometry = createFruitGeometry();
+            break;
+        case 'animal_mesh':
+            geometry = createAnimalGeometry();
+            break;
+        case 'tech_engine':
+            geometry = createTechEngineGeometry(sub);
+            break;
         case 'sand_grain':
             geometry = new THREE.IcosahedronGeometry(1.4, Math.floor(sub / 16));
             break;
@@ -405,9 +417,6 @@ function build3DModel() {
             break;
         case 'planet_world':
             geometry = new THREE.SphereGeometry(1.6, sub, sub);
-            break;
-        case 'torus_knot':
-            geometry = new THREE.TorusKnotGeometry(1.2, 0.4, sub * 2, 16);
             break;
         default:
             geometry = new THREE.IcosahedronGeometry(1.4, 4);
@@ -422,7 +431,6 @@ function build3DModel() {
     mainMesh.receiveShadow = state.showShadows;
     mainMeshGroup.add(mainMesh);
 
-    // If Atom Core, create 3 orbital electron rings & orbiting electron spheres
     if (state.modelType === 'atom_core') {
         createAtomOrbitRings();
     }
@@ -444,47 +452,134 @@ function build3DModel() {
     updateHUDStats(geometry);
 }
 
-function createAtomOrbitRings() {
-    const ringRadius = 2.4;
-    const ringMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(state.baseColor),
-        emissive: new THREE.Color(state.emissiveColor),
-        emissiveIntensity: 1.2,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.7
-    });
+// --- Specialized Procedural Geometry Generators ---
+function createDNAHelixGeometry() {
+    const list = [];
+    const height = 4.0;
+    const radius = 1.0;
+    const turns = 2.5;
 
-    const angles = [
-        { rx: Math.PI / 4, ry: 0, rz: Math.PI / 6 },
-        { rx: -Math.PI / 4, ry: Math.PI / 3, rz: 0 },
-        { rx: 0, ry: -Math.PI / 4, rz: Math.PI / 3 }
-    ];
+    for (let i = 0; i < 40; i++) {
+        const t = i / 40;
+        const angle = t * Math.PI * 2 * turns;
+        const y = (t - 0.5) * height;
 
-    angles.forEach((rot, i) => {
-        const ringGeo = new THREE.TorusGeometry(ringRadius, 0.03, 16, 100);
-        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-        ringMesh.rotation.set(rot.rx, rot.ry, rot.rz);
-        mainMeshGroup.add(ringMesh);
+        // Strand 1
+        const s1 = new THREE.SphereGeometry(0.1, 8, 8);
+        s1.translate(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+        list.push(s1);
 
-        // Orbiting electron sphere
-        const electronGeo = new THREE.SphereGeometry(0.18, 16, 16);
-        const electronMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color('#ffffff'),
-            emissive: new THREE.Color(state.baseColor),
-            emissiveIntensity: 2.0
-        });
-        const electronMesh = new THREE.Mesh(electronGeo, electronMat);
-        mainMeshGroup.add(electronMesh);
+        // Strand 2 (180 deg opposite)
+        const s2 = new THREE.SphereGeometry(0.1, 8, 8);
+        s2.translate(Math.cos(angle + Math.PI) * radius, y, Math.sin(angle + Math.PI) * radius);
+        list.push(s2);
 
-        electronOrbits.push({
-            mesh: electronMesh,
-            radius: ringRadius,
-            rot: rot,
-            speed: 1.5 + i * 0.5,
-            offset: i * Math.PI * 0.6
-        });
-    });
+        // Connector rung every 2 steps
+        if (i % 2 === 0) {
+            const bar = new THREE.CylinderGeometry(0.03, 0.03, radius * 2, 8);
+            bar.rotation.z = Math.PI / 2;
+            bar.rotation.y = -angle;
+            bar.translate(0, y, 0);
+            list.push(bar);
+        }
+    }
+    return mergeGeometries(list);
+}
+
+function createTreeLifeGeometry() {
+    const list = [];
+    // Trunk
+    const trunk = new THREE.CylinderGeometry(0.3, 0.5, 2.5, 12);
+    trunk.translate(0, -0.25, 0);
+    list.push(trunk);
+
+    // Branches & Foliage Canopies
+    const branch1 = new THREE.CylinderGeometry(0.15, 0.25, 1.5, 8);
+    branch1.rotation.z = Math.PI / 4;
+    branch1.translate(0.5, 0.8, 0);
+    list.push(branch1);
+
+    const branch2 = new THREE.CylinderGeometry(0.15, 0.25, 1.5, 8);
+    branch2.rotation.z = -Math.PI / 4;
+    branch2.translate(-0.5, 0.8, 0);
+    list.push(branch2);
+
+    // Canopy spheres
+    const canopy1 = new THREE.IcosahedronGeometry(0.9, 2);
+    canopy1.translate(0, 1.8, 0);
+    list.push(canopy1);
+
+    const canopy2 = new THREE.IcosahedronGeometry(0.7, 2);
+    canopy2.translate(0.9, 1.4, 0.4);
+    list.push(canopy2);
+
+    const canopy3 = new THREE.IcosahedronGeometry(0.7, 2);
+    canopy3.translate(-0.9, 1.4, -0.4);
+    list.push(canopy3);
+
+    return mergeGeometries(list);
+}
+
+function createFruitGeometry() {
+    // Organic apple/pear mesh
+    const fruitGeo = new THREE.SphereGeometry(1.3, 32, 32);
+    const pos = fruitGeo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+        const y = pos.getY(i);
+        const x = pos.getX(i);
+        const z = pos.getZ(i);
+        // Dimple top and bottom
+        if (y > 0.8) pos.setY(i, y - (y - 0.8) * 0.5);
+        if (y < -0.8) pos.setY(i, y + (-0.8 - y) * 0.4);
+    }
+
+    // Stem
+    const stem = new THREE.CylinderGeometry(0.04, 0.03, 0.6, 8);
+    stem.rotation.z = 0.2;
+    stem.translate(0.05, 1.3, 0);
+
+    return mergeGeometries([fruitGeo, stem]);
+}
+
+function createAnimalGeometry() {
+    // Faceted geometric panther/creature head
+    const list = [];
+    const cranium = new THREE.IcosahedronGeometry(1.1, 1);
+    list.push(cranium);
+
+    const snout = new THREE.BoxGeometry(0.8, 0.6, 1.0, 4, 4, 4);
+    snout.translate(0, -0.2, 0.9);
+    list.push(snout);
+
+    const earL = new THREE.ConeGeometry(0.3, 0.7, 4);
+    earL.rotation.x = -0.3;
+    earL.translate(-0.6, 1.1, -0.2);
+    list.push(earL);
+
+    const earR = new THREE.ConeGeometry(0.3, 0.7, 4);
+    earR.rotation.x = -0.3;
+    earR.translate(0.6, 1.1, -0.2);
+    list.push(earR);
+
+    return mergeGeometries(list);
+}
+
+function createTechEngineGeometry(sub) {
+    const list = [];
+    // Central reactor tube
+    const core = new THREE.CylinderGeometry(0.7, 0.7, 2.5, sub / 2);
+    list.push(core);
+
+    // Gear Ring 1
+    const ring1 = new THREE.TorusGeometry(1.4, 0.2, 16, 24);
+    list.push(ring1);
+
+    // Gear Ring 2 (vertical)
+    const ring2 = new THREE.TorusGeometry(1.6, 0.15, 16, 24);
+    ring2.rotation.x = Math.PI / 2;
+    list.push(ring2);
+
+    return mergeGeometries(list);
 }
 
 function createCyberCitadelGeometry(sub) {
@@ -602,6 +697,98 @@ function createMaterial() {
     return mat;
 }
 
+function createAtomOrbitRings() {
+    const ringRadius = 2.4;
+    const ringMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(state.baseColor),
+        emissive: new THREE.Color(state.emissiveColor),
+        emissiveIntensity: 1.2,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.7
+    });
+
+    const angles = [
+        { rx: Math.PI / 4, ry: 0, rz: Math.PI / 6 },
+        { rx: -Math.PI / 4, ry: Math.PI / 3, rz: 0 },
+        { rx: 0, ry: -Math.PI / 4, rz: Math.PI / 3 }
+    ];
+
+    angles.forEach((rot, i) => {
+        const ringGeo = new THREE.TorusGeometry(ringRadius, 0.03, 16, 100);
+        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+        ringMesh.rotation.set(rot.rx, rot.ry, rot.rz);
+        mainMeshGroup.add(ringMesh);
+
+        const electronGeo = new THREE.SphereGeometry(0.18, 16, 16);
+        const electronMat = new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#ffffff'),
+            emissive: new THREE.Color(state.baseColor),
+            emissiveIntensity: 2.0
+        });
+        const electronMesh = new THREE.Mesh(electronGeo, electronMat);
+        mainMeshGroup.add(electronMesh);
+
+        electronOrbits.push({
+            mesh: electronMesh,
+            radius: ringRadius,
+            rot: rot,
+            speed: 1.5 + i * 0.5,
+            offset: i * Math.PI * 0.6
+        });
+    });
+}
+
+// --- Live Search & Filter Bar Logic ---
+function setupSearchFilter() {
+    const searchInput = document.getElementById('global-3d-search');
+    const clearBtn = document.getElementById('btn-clear-search');
+    const cards = document.querySelectorAll('.model-card');
+    const catChips = document.querySelectorAll('.cat-chip');
+
+    // Live search input handler
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+
+        cards.forEach(card => {
+            const title = card.querySelector('.card-title').textContent.toLowerCase();
+            const desc = card.querySelector('.card-desc').textContent.toLowerCase();
+            const tags = card.dataset.tags || '';
+
+            if (query === '' || title.includes(query) || desc.includes(query) || tags.includes(query)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        clearBtn.style.display = 'none';
+        cards.forEach(card => card.style.display = 'flex');
+    });
+
+    // Category filter chips
+    catChips.forEach(chip => {
+        chip.addEventListener('click', (e) => {
+            catChips.forEach(c => c.classList.remove('active'));
+            const target = e.currentTarget;
+            target.classList.add('active');
+            const cat = target.dataset.cat;
+
+            cards.forEach(card => {
+                if (cat === 'all' || card.dataset.cat === cat) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+}
+
 // --- Event Listeners Setup ---
 function setupEventListeners() {
     document.querySelectorAll('#scale-selector .pill-btn').forEach(btn => {
@@ -611,15 +798,15 @@ function setupEventListeners() {
             target.classList.add('active');
             state.scaleCategory = target.dataset.scale;
 
-            if (state.scaleCategory === 'atom') state.modelType = 'atom_core';
+            if (state.scaleCategory === 'nano') state.modelType = 'dna_helix';
+            else if (state.scaleCategory === 'nature') state.modelType = 'tree_life';
+            else if (state.scaleCategory === 'tech') state.modelType = 'tech_engine';
             else if (state.scaleCategory === 'sand') state.modelType = 'sand_grain';
-            else if (state.scaleCategory === 'rock') state.modelType = 'rock_peak';
-            else if (state.scaleCategory === 'citadel') state.modelType = 'cyber_citadel';
             else if (state.scaleCategory === 'planet') state.modelType = 'planet_world';
 
             syncModelCardUI();
             build3DModel();
-            showToast(`Scale Switched to: ${target.textContent.trim()}`);
+            showToast(`Category Switched: ${target.textContent.trim()}`);
         });
     });
 
@@ -982,7 +1169,6 @@ function animate() {
         }
     }
 
-    // Animate Electron Orbits
     if (electronOrbits.length > 0) {
         electronOrbits.forEach((orb) => {
             const angle = state.animTime * orb.speed + orb.offset;
