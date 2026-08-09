@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, Suspense } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import { CameraControls, Stars, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -22,8 +22,8 @@ function Planet({ data, setFocusTarget }: { data: any, setFocusTarget: (name: st
   const groupRef = useRef<THREE.Group>(null!);
   const [angle, setAngle] = useState(Math.random() * Math.PI * 2);
   
-  // Load Texture
-  const texture = useLoader(THREE.TextureLoader, data.url);
+  // Load Texture with explicit type cast
+  const texture = useLoader(THREE.TextureLoader, data.url) as THREE.Texture;
 
   useFrame((_, delta) => {
     // 120 FPS frame independent rotation
@@ -71,11 +71,9 @@ function OrbitPaths() {
           pts.push(new THREE.Vector3(Math.cos(a) * p.distance, 0, Math.sin(a) * p.distance));
         }
         const geom = new THREE.BufferGeometry().setFromPoints(pts);
-        return (
-          <line key={i} geometry={geom}>
-            <lineBasicMaterial color="#ffffff" transparent opacity={0.1} />
-          </line>
-        );
+        const mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.1 });
+        const line = new THREE.Line(geom, mat);
+        return <primitive key={i} object={line} />;
       })}
     </group>
   );
@@ -111,7 +109,7 @@ function CinematicCamera({ focusTarget }: { focusTarget: string | null }) {
 }
 
 function Sun({ setFocusTarget }: { setFocusTarget: (name: string | null) => void }) {
-  const sunTexture = useLoader(THREE.TextureLoader, 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/sunmap.jpg');
+  const sunTexture = useLoader(THREE.TextureLoader, 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/sunmap.jpg') as THREE.Texture;
   return (
     <group onClick={(e) => { e.stopPropagation(); setFocusTarget('Sun'); }}>
       <mesh>
