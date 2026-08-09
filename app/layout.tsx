@@ -55,6 +55,8 @@ export default function RootLayout({
               © {new Date().getFullYear()} 3D Vision Education. All rights reserved.
             </div>
             <div className="flex gap-4 text-sm text-slate-400">
+              <a href="/about" className="hover:text-primary">About Us</a>
+              <a href="/contact" className="hover:text-primary">Contact Us</a>
               <a href="/privacy" className="hover:text-primary">Privacy Policy</a>
               <a href="/terms" className="hover:text-primary">Terms of Service</a>
               <a href="/disclaimer" className="hover:text-primary">Disclaimer</a>
