@@ -1,27 +1,32 @@
 'use client';
 
-import React, { useRef, useState, useMemo } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import React, { useRef, useState, Suspense } from 'react';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { CameraControls, Stars, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Real satellite textures from reliable open-source CDNs
 const PLANETS = [
-  { name: 'Mercury', radius: 0.8, distance: 15, speed: 0.02, color: '#8c8c8c' },
-  { name: 'Venus', radius: 1.5, distance: 22, speed: 0.015, color: '#e6ccb3' },
-  { name: 'Earth', radius: 2, distance: 30, speed: 0.01, color: '#2b82c9' },
-  { name: 'Mars', radius: 1.2, distance: 40, speed: 0.008, color: '#c1440e' },
-  { name: 'Jupiter', radius: 5, distance: 60, speed: 0.004, color: '#c88b3a' },
-  { name: 'Saturn', radius: 4, distance: 85, speed: 0.003, color: '#e3d2a4', hasRings: true },
-  { name: 'Uranus', radius: 3, distance: 110, speed: 0.002, color: '#4b70dd' },
-  { name: 'Neptune', radius: 2.8, distance: 130, speed: 0.001, color: '#274687' },
+  { name: 'Mercury', radius: 0.8, distance: 15, speed: 0.02, url: 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/mercurymap.jpg' },
+  { name: 'Venus', radius: 1.5, distance: 22, speed: 0.015, url: 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/venusmap.jpg' },
+  { name: 'Earth', radius: 2, distance: 30, speed: 0.01, url: 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg' },
+  { name: 'Mars', radius: 1.2, distance: 40, speed: 0.008, url: 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/marsmap1k.jpg' },
+  { name: 'Jupiter', radius: 5, distance: 60, speed: 0.004, url: 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/jupitermap.jpg' },
+  { name: 'Saturn', radius: 4, distance: 85, speed: 0.003, url: 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/saturnmap.jpg', hasRings: true },
+  { name: 'Uranus', radius: 3, distance: 110, speed: 0.002, url: 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/uranusmap.jpg' },
+  { name: 'Neptune', radius: 2.8, distance: 130, speed: 0.001, url: 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/neptunemap.jpg' },
 ];
 
 function Planet({ data, setFocusTarget }: { data: any, setFocusTarget: (name: string | null) => void }) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const groupRef = useRef<THREE.Group>(null!);
   const [angle, setAngle] = useState(Math.random() * Math.PI * 2);
+  
+  // Load Texture
+  const texture = useLoader(THREE.TextureLoader, data.url);
 
   useFrame((_, delta) => {
+    // 120 FPS frame independent rotation
     setAngle((prev) => prev + data.speed * 10 * delta);
     if (groupRef.current) {
       groupRef.current.position.x = Math.cos(angle) * data.distance;
@@ -36,17 +41,17 @@ function Planet({ data, setFocusTarget }: { data: any, setFocusTarget: (name: st
     <group ref={groupRef} onClick={(e) => { e.stopPropagation(); setFocusTarget(data.name); }}>
       <mesh ref={meshRef}>
         <sphereGeometry args={[data.radius, 32, 32]} />
-        <meshStandardMaterial color={data.color} metalness={0.1} roughness={0.7} />
+        <meshStandardMaterial map={texture} metalness={0.1} roughness={0.8} />
       </mesh>
       
       {data.hasRings && (
         <mesh rotation={[Math.PI / 2, Math.PI / 8, 0]}>
           <ringGeometry args={[data.radius * 1.5, data.radius * 2.5, 64]} />
-          <meshStandardMaterial color="#fff" transparent opacity={0.6} side={THREE.DoubleSide} />
+          <meshStandardMaterial color="#fff" transparent opacity={0.4} side={THREE.DoubleSide} />
         </mesh>
       )}
 
-      {/* Subtle label that shows on hover/selection */}
+      {/* HTML Label */}
       <Html distanceFactor={data.distance * 1.5}>
         <div className="text-white text-xs px-2 py-1 bg-black/50 border border-white/20 rounded-md pointer-events-none whitespace-nowrap">
           {data.name}
@@ -78,74 +83,81 @@ function OrbitPaths() {
 
 function CinematicCamera({ focusTarget }: { focusTarget: string | null }) {
   const controlsRef = useRef<CameraControls>(null!);
-  const { scene } = useThree();
+  const { scene, camera } = useThree();
+  const initialized = useRef(false);
 
-  useFrame(() => {
+  useFrame((state, delta) => {
     if (!controlsRef.current) return;
+    
+    // Initial zoom animation from "end of universe" to Earth
+    if (!initialized.current) {
+      initialized.current = true;
+      // Start far away
+      controlsRef.current.setLookAt(0, 500, 1000, 0, 0, 0, false);
+      // Tween to Earth as default
+      setTimeout(() => {
+        controlsRef.current.setLookAt(0, 150, 200, 0, 0, 0, true);
+      }, 500);
+    }
     
     if (focusTarget === 'Sun') {
       controlsRef.current.setLookAt(0, 30, 40, 0, 0, 0, true);
-    } else if (focusTarget) {
-      // Find planet group in scene graph (crude but works for this demo)
-      let targetPos = new THREE.Vector3();
-      scene.traverse((child) => {
-        // We know the Html label contains the name, let's use a simpler approach:
-        // Re-calculate the position based on the data distance and angle... 
-        // Actually, easiest is just searching for the group if we attach user data
-      });
-      
-      // Better approach: Calculate orbit manually or let CameraControls zoom out
-      // For simplicity in this demo, we'll just zoom out to overview if focus is lost,
-      // and if we have a focus target, we zoom in towards its radius.
-      // Since calculating exact position of moving targets for CameraControls is complex,
-      // we will just pan to an overview for now.
-    } else {
+    } else if (!focusTarget) {
       controlsRef.current.setLookAt(0, 150, 200, 0, 0, 0, true);
     }
   });
 
-  return <CameraControls ref={controlsRef} maxDistance={500} minDistance={10} />;
+  return <CameraControls ref={controlsRef} maxDistance={1500} minDistance={10} smoothTime={0.8} />;
+}
+
+function Sun({ setFocusTarget }: { setFocusTarget: (name: string | null) => void }) {
+  const sunTexture = useLoader(THREE.TextureLoader, 'https://raw.githubusercontent.com/joshcam/three-js-solar-system/master/img/sunmap.jpg');
+  return (
+    <group onClick={(e) => { e.stopPropagation(); setFocusTarget('Sun'); }}>
+      <mesh>
+        <sphereGeometry args={[8, 64, 64]} />
+        <meshBasicMaterial map={sunTexture} />
+      </mesh>
+      <mesh>
+        <sphereGeometry args={[8.5, 64, 64]} />
+        <meshBasicMaterial color="#ff5500" transparent opacity={0.3} blending={THREE.AdditiveBlending} />
+      </mesh>
+      <Html distanceFactor={20}>
+        <div className="text-white text-xs px-2 py-1 bg-black/50 border border-white/20 rounded-md pointer-events-none whitespace-nowrap">
+          Sun
+        </div>
+      </Html>
+    </group>
+  );
 }
 
 export default function SolarSystem() {
   const [focusTarget, setFocusTarget] = useState<string | null>(null);
 
   return (
-    <div className="w-full h-screen bg-black relative">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 150, 200], fov: 45 }}>
-        <color attach="background" args={['#020306']} />
+    <div className="w-full h-screen bg-[#000000] relative">
+      <Canvas shadows dpr={[1, 1.5]} camera={{ position: [0, 500, 1000], fov: 45 }}>
+        <color attach="background" args={['#000000']} />
         
         <ambientLight intensity={0.1} />
-        <pointLight position={[0, 0, 0]} intensity={3} color="#ffaa00" distance={300} castShadow />
+        <pointLight position={[0, 0, 0]} intensity={3} color="#ffaa00" distance={500} castShadow />
 
-        {/* Sun */}
-        <mesh onClick={() => setFocusTarget('Sun')}>
-          <sphereGeometry args={[8, 64, 64]} />
-          <meshBasicMaterial color="#ffcc00" />
-        </mesh>
-        
-        {/* Sun Glow */}
-        <mesh>
-          <sphereGeometry args={[8.5, 64, 64]} />
-          <meshBasicMaterial color="#ff5500" transparent opacity={0.3} blending={THREE.AdditiveBlending} />
-        </mesh>
-
-        <OrbitPaths />
-
-        {PLANETS.map((planet) => (
-          <Planet key={planet.name} data={planet} setFocusTarget={setFocusTarget} />
-        ))}
-
-        <Stars radius={300} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        
-        <CinematicCamera focusTarget={focusTarget} />
+        <Suspense fallback={<Html center><div className="text-white whitespace-nowrap">Loading 120 FPS Universe...</div></Html>}>
+          <Sun setFocusTarget={setFocusTarget} />
+          <OrbitPaths />
+          {PLANETS.map((planet) => (
+            <Planet key={planet.name} data={planet} setFocusTarget={setFocusTarget} />
+          ))}
+          <Stars radius={300} depth={50} count={8000} factor={4} saturation={0} fade speed={1} />
+          <CinematicCamera focusTarget={focusTarget} />
+        </Suspense>
       </Canvas>
 
       {/* UI Overlay */}
       <div className="absolute top-0 left-0 w-full p-6 pointer-events-none z-10 flex justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white tracking-widest uppercase">3D Vision</h1>
-          <p className="text-blue-400 font-mono text-sm">Cinematic Solar System</p>
+          <p className="text-blue-400 font-mono text-sm">Cinematic 120 FPS Universe</p>
         </div>
         
         <div className="pointer-events-auto flex gap-4">
