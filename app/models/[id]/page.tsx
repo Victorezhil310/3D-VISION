@@ -78,10 +78,10 @@ function TransparentCoreModel() {
 export default function SingleModelPage() {
   const { id } = useParams();
   const [modelData, setModelData] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // In a real app, this would be a fetch to an API.
-    // For this static generation, we fetch the index.json and find the model.
+    setMounted(true);
     fetch('/_next/data/models-will-be-fetched-statically')
       .catch(e => {
         // Fallback dummy load since we are client side.
@@ -101,14 +101,18 @@ export default function SingleModelPage() {
         
         {/* 3D Viewer Section */}
         <div className="w-full lg:w-2/3">
-          <div className="glass-panel w-full h-[60vh] md:h-[75vh] relative rounded-2xl overflow-hidden border border-white/10 bg-black">
-            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 5], fov: 50 }}>
-              <color attach="background" args={['#050505']} />
-              <Stage preset="rembrandt" intensity={1} environment="city">
-                <TransparentCoreModel />
-              </Stage>
-              <OrbitControls autoRotate autoRotateSpeed={2} makeDefault />
-            </Canvas>
+          <div className="glass-panel w-full h-[60vh] md:h-[75vh] relative rounded-2xl overflow-hidden border border-white/10 bg-black flex items-center justify-center">
+            {mounted ? (
+              <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 5], fov: 50 }}>
+                <color attach="background" args={['#050505']} />
+                <Stage preset="rembrandt" intensity={1} environment="city">
+                  <TransparentCoreModel />
+                </Stage>
+                <OrbitControls autoRotate autoRotateSpeed={2} makeDefault />
+              </Canvas>
+            ) : (
+              <div className="text-cyan-400 font-mono text-sm tracking-wider animate-pulse">Loading 3D Canvas...</div>
+            )}
             <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded-full text-xs backdrop-blur-md">
               Interact to Rotate & Zoom
             </div>

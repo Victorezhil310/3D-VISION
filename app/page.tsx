@@ -1,4 +1,4 @@
-import SolarSystem from './components/SolarSystem';
+import SolarSystemWrapper from './components/SolarSystemWrapper';
 
 export const metadata = {
   title: '3D Vision - Interstellar Multiverse & 3D Universe Explorer',
@@ -8,7 +8,7 @@ export const metadata = {
 export default function Home() {
   return (
     <main className="w-full h-screen overflow-hidden bg-black">
-      <SolarSystem />
+      <SolarSystemWrapper />
     </main>
   );
 }
