@@ -1,8 +1,8 @@
 import SolarSystem from './components/SolarSystem';
 
 export const metadata = {
-  title: '3D Vision - Cinematic Solar System',
-  description: 'Explore a photorealistic 3D rendering of our Solar System with full clarity.',
+  title: '3D Vision - Interstellar Multiverse & 3D Universe Explorer',
+  description: 'Explore the Multiverse, Gargantua Black Hole, and Solar System in real 3D with photorealistic satellite imagery and interactive science facts.',
 };
 
 export default function Home() {
